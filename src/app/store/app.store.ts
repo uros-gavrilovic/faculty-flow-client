@@ -8,7 +8,9 @@ export interface AppState {
 	user: User;
 }
 
-export const INITIAL_APP_STATE: AppState = {
+export const INITIAL_APP_STATE: AppState =
+	// JSON.parse(localStorage.getItem(APP_STATE_KEY)) ||
+	{
 	token: null,
 	user: null,
 };

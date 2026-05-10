@@ -2,8 +2,9 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { UserApiService } from '../service/user-api.service';
 import * as AppAction from './app.action';
-import { catchError, switchMap, map, of, tap, forkJoin, exhaustMap } from 'rxjs';
+import { catchError, switchMap, map, tap } from 'rxjs';
 import { LoginResponse } from '../model/response/response.model';
+import { Router } from '@angular/router';
 
 export const loginEffect = createEffect(
 	() => {
@@ -27,6 +28,19 @@ export const loginEffect = createEffect(
 	{ functional: true },
 );
 
+export const loginRedirectEffect = createEffect(
+	() => {
+		const actions$: Actions = inject(Actions);
+		const router: Router = inject(Router);
+
+		return actions$.pipe(
+			ofType(AppAction.loginUserSuccess),
+			tap(() => router.navigate(['/app'])),
+		);
+	},
+	{ functional: true, dispatch: false },
+);
+
 export const getUserEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);
@@ -34,7 +48,6 @@ export const getUserEffect = createEffect(
 
 		return actions$.pipe(
 			ofType(AppAction.getUser),
-			tap(() => console.log('getUserEffect triggered')),
 			switchMap((payload) =>
 				userApi.getUser({username: payload.username})
 					.pipe(
