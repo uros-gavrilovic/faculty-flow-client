@@ -1,2 +1,27 @@
+<div class="login-wrapper">
+	<div class="login-card">
+		<h2 class="title">Faculty<i>Flow</i></h2>
+
+		<input pInputText
+				 type="text"
+				 [placeholder]="'auth.username' | translate"
+				 class="input" />
+
+		<input pInputText
+				 type="password"
+				 [placeholder]="'auth.password' | translate"
+				 class="input" />
+
+		<p-button
+			styleClass="w-full"
+			[label]="'auth.sign-in' | translate"
+			[raised]="true"
+			(onClick)="onLogin()">
+			<ng-template pTemplate="icon">
+				<i class="material-icons">login</i>
+			</ng-template>
+		</p-button>
+	</div>
+</div>
+
 <app-background />
-<button (click)="onLogin()">Log In</button>

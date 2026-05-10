@@ -1,6 +1,5 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
 import { appReducer } from './store/app.reducer';
 import { provideStore } from '@ngrx/store';
@@ -10,6 +9,11 @@ import * as AppEffects from './store/app.effect';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptor/auth.interceptor';
 import { APP_STATE_KEY } from './store/app.store';
+import { providePrimeNG } from 'primeng/config';
+import Aura from '@primeuix/themes/aura';
+import { provideTranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -19,5 +23,21 @@ export const appConfig: ApplicationConfig = {
 		provideEffects(AppEffects),
 		provideStoreDevtools({ maxAge: 25, logOnly: true }),
 		provideHttpClient(withInterceptors([authInterceptor])),
+		provideTranslateService({
+			fallbackLang: 'en',
+			loader: {
+				provide: TranslateLoader,
+				useClass: TranslateHttpLoader,
+			},
+		}),
+		...provideTranslateHttpLoader({
+			prefix: './assets/i18n/',
+			suffix: '.json',
+		}),
+		providePrimeNG({
+			theme: {
+				preset: Aura,
+			},
+		}),
 	],
 };
