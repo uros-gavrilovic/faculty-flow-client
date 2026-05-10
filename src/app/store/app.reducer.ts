@@ -1,15 +1,22 @@
 import { AppState, INITIAL_APP_STATE } from './app.store';
 import { createReducer, on } from '@ngrx/store';
-import { loginUserSuccess } from './app.action';
-import { User } from '../model/user.model';
+import { getUserSuccess, loginUserSuccess } from './app.action';
 
 export const appReducer = createReducer(
 	INITIAL_APP_STATE,
 
-	on(loginUserSuccess, (state: AppState, { user }): AppState => {
+	on(loginUserSuccess, (state: AppState, { loginResponse }): AppState => {
 		return {
 			...state,
-			user,
+			token: loginResponse,
+		};
+	}),
+	on(getUserSuccess, (state: AppState, { user }): AppState => {
+		console.log('getUserSuccess reducer triggered with user:', user);
+
+		return {
+			...state,
+			user: user,
 		};
 	}),
 );

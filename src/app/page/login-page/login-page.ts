@@ -3,7 +3,7 @@ import { BackgroundComponent } from '../../component/background/background.compo
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.store';
 import * as AppActions from '../../store/app.action';
-import { LoginRequest } from '../../model/request/auth.model';
+import { LoginRequest } from '../../model/request/request.model';
 
 @Component({
 	selector: 'app-login-page',

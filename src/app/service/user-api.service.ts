@@ -1,20 +1,31 @@
 import { Inject, Injectable } from '@angular/core';
-import { LoginRequest } from '../model/request/auth.model';
+import { LoginRequest } from '../model/request/request.model';
 import { User } from '../model/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
+import { LoginResponse } from '../model/response/response.model';
 
 @Injectable({
-	providedIn: 'root'
+	providedIn: 'root',
 })
 export class UserApiService {
 
-	constructor(
-		private httpClient: HttpClient,
-	) { }
+	readonly AUTH_API: string = environment.authApi;
+	readonly USER_API: string = environment.userApi;
 
-	login(request: LoginRequest): Observable<User> {
-		return this.httpClient.post<User>(`${environment.authApi}/login`, request)
+	constructor(private httpClient: HttpClient) {}
+
+	login(request: LoginRequest): Observable<LoginResponse> {
+		return this.httpClient.post<LoginResponse>(`${this.AUTH_API}/login`, request);
+	}
+
+	getUser(request: { uuid?: string; username?: string }): Observable<User> {
+		return this.httpClient.get<User>(`${this.USER_API}`, {
+			params: {
+				...(request.uuid ? { uuid: request.uuid } : {}),
+				...(request.username ? { username: request.username } : {}),
+			},
+		});
 	}
 }
