@@ -43,6 +43,7 @@
 	}
 	&.active {
 		color: var(--p-text-color);
+		transform: scale(1.15);
 		border-bottom-color: var(--p-primary-color);
 	}
 
