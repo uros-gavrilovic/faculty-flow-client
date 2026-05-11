@@ -8,9 +8,15 @@ export interface AppState {
 	user: User;
 }
 
-export const INITIAL_APP_STATE: AppState =
-	// JSON.parse(localStorage.getItem(APP_STATE_KEY)) ||
-	{
-	token: null,
-	user: null,
-};
+export const INITIAL_APP_STATE: AppState = (() => {
+	const stored: string = localStorage.getItem(APP_STATE_KEY);
+	if (stored) {
+		localStorage.removeItem(APP_STATE_KEY);
+		return JSON.parse(stored);
+	}
+
+	return {
+		token: null,
+		user: null
+	};
+})();

@@ -1,0 +1,51 @@
+<div class="app-toolbar">
+	<p-toolbar>
+		<ng-template #start>
+			<div class="toolbar-start">
+				<div class="brand">
+					<svg width="20" height="20" viewBox="0 -960 960 960" xmlns="http://www.w3.org/2000/svg">
+						<path
+							d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Zm80 240v-80h400v80H280Zm0 160v-80h280v80H280Z"
+							fill="var(--p-primary-color)"/>
+					</svg>
+					<span class="brand-name">Faculty<i>Flow</i></span>
+				</div>
+			</div>
+		</ng-template>
+
+		<ng-template #center>
+			<nav class="nav-tabs">
+				@for (item of navItems; track item.route) {
+					<button
+						class="nav-tab"
+						[class.active]="activeRoute === item.route"
+						(click)="navigate(item.route)">
+						<i [class]="'pi ' + item.icon"></i>
+						{{ item.label }}
+					</button>
+				}
+			</nav>
+		</ng-template>
+
+		<ng-template #end>
+			<div class="toolbar-end">
+				<p-avatar
+					image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
+					[style]="{ width: '32px', height: '32px', cursor: 'pointer' }"
+					(click)="userMenu.toggle($event)" />
+
+				<p-popover #userMenu styleClass="user-menu-panel">
+					<div class="menu-header">
+						<span class="menu-name">{{ `${loggedUser().firstName} ${loggedUser().lastName}`}}</span>
+						<span class="menu-email">{{ `${loggedUser().email}` }}</span>
+					</div>
+					<hr>
+					<div class="menu-divider"></div>
+					<div class="menu-item danger" (click)="onLogout()">
+						<i class="pi pi-sign-out"></i> Log out
+					</div>
+				</p-popover>
+			</div>
+		</ng-template>
+	</p-toolbar>
+</div>

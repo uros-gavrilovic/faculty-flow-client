@@ -3,18 +3,16 @@ import { Router, RouterOutlet } from '@angular/router';
 import { APP_STATE_KEY, AppState } from './store/app.store';
 import { Store } from '@ngrx/store';
 import { selectAppState } from './store/app.selector';
+import { PRIMENG_MODULES } from './modules/ui.module';
 
 @Component({
 	selector: 'app-root',
-	imports: [RouterOutlet],
+	imports: [RouterOutlet, ...PRIMENG_MODULES],
 	templateUrl: './app.html',
 	styleUrl: './app.scss',
 })
 export class App implements OnInit, OnDestroy {
-
-	constructor(
-		private store: Store<AppState>,
-	) {}
+	constructor(private store: Store<AppState>) {}
 
 	ngOnInit(): void {
 		window.addEventListener('beforeunload', this.onBeforeUnload);

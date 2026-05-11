@@ -3,6 +3,7 @@ import { inject, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Token } from '../model/token.model';
 import { selectToken } from '../store/app.selector';
+import { PageUrl } from '../constant/page-url.constant';
 
 const isTokenValid = (): boolean => {
 	const store: Store = inject(Store);
@@ -16,15 +17,15 @@ const isTokenValid = (): boolean => {
 
 export const authRedirectGuard: CanActivateFn = (): UrlTree => {
 	const router: Router = inject(Router);
-	return router.createUrlTree([isTokenValid() ? '/app' : '/login']);
+	return router.createUrlTree([isTokenValid() ? PageUrl.SCHEDULE : PageUrl.LOGIN]);
 };
 
 export const loginGuard: CanActivateFn = (): boolean | UrlTree => {
 	const router: Router = inject(Router);
-	return isTokenValid() ? router.createUrlTree(['/app']) : true;
+	return isTokenValid() ? router.createUrlTree([PageUrl.SCHEDULE]) : true;
 };
 
 export const authGuard: CanActivateFn = (): boolean | UrlTree => {
 	const router: Router = inject(Router);
-	return isTokenValid() || router.createUrlTree(['/login']);
+	return isTokenValid() || router.createUrlTree([PageUrl.LOGIN]);
 };

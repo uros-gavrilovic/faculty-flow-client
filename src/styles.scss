@@ -1,2 +1,36 @@
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
+
+.user-menu-panel {
+	min-width: 200px;
+
+	.menu-header {
+		padding: 0.75rem 1rem;
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+
+		.menu-name  { font-size: 14px; font-weight: 500; }
+		.menu-email { font-size: 12px; color: var(--p-text-muted-color); }
+	}
+
+	.menu-divider {
+		margin: 4px 0;
+	}
+
+	.menu-item {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 10px 1rem;
+		font-size: 14px;
+		color: var(--p-text-muted-color);
+		cursor: pointer;
+		transition: background 0.1s, color 0.1s;
+
+		&:hover { background: var(--p-content-hover-background); color: var(--p-text-color); }
+		&.danger { color: var(--p-red-500); &:hover { background: var(--p-red-50); } }
+
+		i { font-size: 16px; }
+	}
+}

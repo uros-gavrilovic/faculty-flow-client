@@ -3,5 +3,17 @@
 		"sign-in": "Sign In",
 		"username": "Username",
 		"password": "Password"
+	},
+	"messages": {
+		"auth": {
+			"login": {
+				"title": "Logged In",
+				"message": "Nice to have you back!"
+			},
+			"logout": {
+				"title": "Logged Out",
+				"message": "See you later!"
+			}
+		}
 	}
 }
