@@ -4,6 +4,26 @@
 		"username": "Username",
 		"password": "Password"
 	},
+	"reservation": {
+		"title": "Title",
+		"room": "Room",
+		"requested-by": "Requested by",
+		"start": "Start time",
+		"end": "End time",
+		"note": "Note"
+	},
+	"modal": {
+		"request-reservation": {
+			"title": "Request a reservation",
+			"submit": "Submit request"
+		}
+	},
+	"common": {
+		"cancel": "Cancel"
+	},
+	"validation": {
+		"required-field": "This field is required"
+	},
 	"messages": {
 		"auth": {
 			"login": {

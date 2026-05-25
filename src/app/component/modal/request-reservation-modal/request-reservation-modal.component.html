@@ -1,0 +1,85 @@
+<form [formGroup]="form" class="request-form p-fluid">
+	<div class="grid formgrid">
+		<div class="field col-12">
+			<p-floatlabel variant="in" class="w-full">
+				<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" />
+				<label for="name">{{ 'reservation.title' | translate | required }}</label>
+			</p-floatlabel>
+			@if (form.get('name')?.invalid && form.get('name')?.touched) {
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<p-select
+					inputId="room"
+					[options]="rooms()"
+					formControlName="room"
+					optionLabel="name"
+					optionValue="code"
+					[filter]="true"
+					filterBy="name"
+					[showClear]="true"
+					class="w-full"
+				>
+					<ng-template pTemplate="selectedItem" let-room>
+						@if (room) {<div>{{ room.name }}</div>}
+					</ng-template>
+					<ng-template pTemplate="item" let-room>
+						<div>{{ room.name }}</div>
+					</ng-template>
+				</p-select>
+
+				<label for="room">
+					{{ 'reservation.room' | translate | required }}
+				</label>
+			</p-floatlabel>
+			@if (form.get('room')?.invalid && form.get('room')?.touched) {
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<input pInputText id="reservedBy" formControlName="reservedBy" autocomplete="off" />
+				<label for="reservedBy">{{ 'reservation.requested-by' | translate | required }}</label>
+			</p-floatlabel>
+			@if (form.get('reservedBy')?.invalid && form.get('reservedBy')?.touched) {
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<input type="datetime-local" pInputText id="startTime" formControlName="startTime" />
+				<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
+			</p-floatlabel>
+			@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<input type="datetime-local" pInputText id="endTime" formControlName="endTime" />
+				<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
+			</p-floatlabel>
+			@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field col-12">
+			<p-floatlabel variant="in" class="w-full">
+				<textarea pTextarea id="note" formControlName="note" rows="3" class="w-full" [autoResize]="true"></textarea>
+				<label for="note">{{ 'reservation.note' | translate }}</label>
+			</p-floatlabel>
+		</div>
+	</div>
+
+	<div class="flex justify-content-end gap-2 mt-3">
+		<p-button severity="secondary" [label]="'common.cancel' | translate" (onClick)="onCancel()" />
+		<p-button [label]="'modal.request-reservation.submit' | translate" [loading]="submitting" (onClick)="onSubmit()" />
+	</div>
+</form>

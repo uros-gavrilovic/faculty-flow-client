@@ -1,16 +1,14 @@
 import { Inject, Injectable } from '@angular/core';
-import { LoginRequest } from '../model/request/request.model';
 import { User } from '../model/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
-import { LoginResponse } from '../model/response/response.model';
+import { LoginRequest, LoginResponse } from '../model/login.model';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class UserApiService {
-
 	readonly AUTH_API: string = environment.authApi;
 	readonly USER_API: string = environment.userApi;
 

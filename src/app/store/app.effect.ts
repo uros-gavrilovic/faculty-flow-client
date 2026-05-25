@@ -3,11 +3,14 @@ import { inject } from '@angular/core';
 import { UserApiService } from '../service/user-api.service';
 import * as AppAction from './app.action';
 import { catchError, switchMap, map, tap } from 'rxjs';
-import { LoginResponse } from '../model/response/response.model';
 import { Router } from '@angular/router';
 import { MessageService } from '../service/message.service';
 import { MessageSeverity } from '../model/message-severity.model';
 import { PageUrl } from '../constant/page-url.constant';
+import { ReservationApiService } from '../service/reservation-api.service';
+import { Reservation } from '../model/reservation.model';
+import { LoginResponse } from '../model/login.model';
+import { RoomApiService } from '../service/room-api.service';
 
 export const loginEffect = createEffect(
 	() => {
@@ -81,10 +84,76 @@ export const getUserEffect = createEffect(
 		return actions$.pipe(
 			ofType(AppAction.getUser),
 			switchMap((payload) =>
-				userApi.getUser({username: payload.username})
+				userApi
+					.getUser({ username: payload.username })
+					.pipe(map((user) => AppAction.getUserSuccess({ user }))),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const getRoomsEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const roomApi = inject(RoomApiService)
+
+		return actions$.pipe(
+			ofType(AppAction.getRooms),
+			switchMap(() => roomApi.getRooms().pipe(map((rooms) => AppAction.getRoomsSuccess({ rooms })))),
+		)},
+		{functional: true}
+);
+
+export const loadReservationsEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const reservationApi = inject(ReservationApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.loadReservations),
+			switchMap(({ start, end }) =>
+				reservationApi
+					.getReservations(start, end)
+					.pipe(map((reservations) => AppAction.loadReservationsSuccess({ reservations }))),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const requestReservationEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const reservationApi = inject(ReservationApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.requestReservation),
+			switchMap((payload) =>
+				reservationApi
+					.requestReservation(payload.request)
 					.pipe(
-						map((user) => AppAction.getUserSuccess({ user }))
+						map((reservation: Reservation) =>
+							AppAction.requestReservationSuccess({ reservation }),
+						),
 					),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const reviewReservationEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const reservationApi = inject(ReservationApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.reviewReservation),
+			switchMap(({ review }) =>
+				reservationApi
+					.reviewReservation(review)
+					.pipe(map((reservation) => AppAction.reviewReservationSuccess({ reservation }))),
 			),
 		);
 	},

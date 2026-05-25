@@ -7,6 +7,9 @@ import { AvatarModule } from 'primeng/avatar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { PopoverModule } from 'primeng/popover';
 import { Toast } from 'primeng/toast';
+import { ConfirmDialog } from 'primeng/confirmdialog';
+import { Textarea } from 'primeng/textarea';
+import { Select } from 'primeng/select';
 
 export const PRIMENG_MODULES = [
 	InputTextModule,
@@ -20,4 +23,7 @@ export const PRIMENG_MODULES = [
 	ToolbarModule,
 	PopoverModule,
 	Toast,
+	ConfirmDialog,
+	Textarea,
+	Select,
 ];

@@ -1,11 +1,15 @@
 import { User } from '../model/user.model';
 import { Token } from '../model/token.model';
+import { Reservation } from '../model/reservation.model';
+import { Room } from '../model/room.model';
 
 export const APP_STATE_KEY: string = 'app';
 
 export interface AppState {
 	token: Token;
 	user: User;
+	rooms: Room[];
+	reservations: Reservation[];
 }
 
 export const INITIAL_APP_STATE: AppState = (() => {
@@ -17,6 +21,8 @@ export const INITIAL_APP_STATE: AppState = (() => {
 
 	return {
 		token: null,
-		user: null
+		user: null,
+		rooms: null,
+		reservations: null,
 	};
 })();

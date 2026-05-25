@@ -14,7 +14,8 @@ import Aura from '@primeuix/themes/aura';
 import { provideTranslateService, TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -41,5 +42,7 @@ export const appConfig: ApplicationConfig = {
 			},
 		}),
 		MessageService,
+		DialogService,
+		ConfirmationService,
 	],
 };

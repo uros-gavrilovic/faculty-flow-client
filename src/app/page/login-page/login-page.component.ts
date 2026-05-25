@@ -3,15 +3,15 @@ import { BackgroundComponent } from '../../component/background/background.compo
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.store';
 import * as AppActions from '../../store/app.action';
-import { LoginRequest } from '../../model/request/request.model';
 import { PRIMENG_MODULES } from '../../modules/ui.module';
-import { COMMON_MODULES } from '../../modules/forms.module';
+import { COMMON_MODULES } from '../../modules/common.module';
 import {
 	FormBuilder,
 	FormControl,
 	FormGroup,
 	Validators,
 } from '@angular/forms';
+import { LoginRequest } from '../../model/login.model';
 
 @Component({
 	selector: 'app-login-page',

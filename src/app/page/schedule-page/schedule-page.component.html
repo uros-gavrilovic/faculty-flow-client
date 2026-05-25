@@ -1,1 +1,15 @@
-<p>schedule-page works!</p>
+<ejs-schedule
+	#scheduleObj
+	[eventSettings]="eventSettings"
+	(created)="onCreated()"
+	(navigating)="onNavigating()"
+	(cellClick)="onCellClick($event)"
+	(eventClick)="onEventClick($event)"
+	(popupOpen)="onPopupOpen($event)"
+	(actionBegin)="onActionBegin($event)"
+>
+	<e-views>
+		<e-view option="Week" startHour="08:00" endHour="18:00"></e-view>
+		<e-view option="Month" [showWeekend]="false"></e-view>
+	</e-views>
+</ejs-schedule>

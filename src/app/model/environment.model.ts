@@ -5,4 +5,5 @@ export interface AppEnvironment {
 	userApi: string;
 	roomApi: string;
 	reservationApi: string;
+	syncfusionLicense: string;
 }

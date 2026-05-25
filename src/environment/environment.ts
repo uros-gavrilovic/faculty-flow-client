@@ -9,4 +9,6 @@ export const environment: AppEnvironment = {
 	userApi: `${baseUrl}/api/user`,
 	roomApi: `${baseUrl}/api/room`,
 	reservationApi: `${baseUrl}/api/reservation`,
+	syncfusionLicense:
+		'Ngo9BigBOggjGyl/VkV+XU9AclRDX3xKf0x/TGpQb19xflBPallYVBYiSV9jS3hTc0RgWHpfd3VdQ2dfWE91XA=='
 };
