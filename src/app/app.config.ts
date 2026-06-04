@@ -27,14 +27,11 @@ export const appConfig: ApplicationConfig = {
 		provideHttpClient(withInterceptors([authInterceptor])),
 		provideTranslateService({
 			fallbackLang: 'en',
-			loader: {
-				provide: TranslateLoader,
-				useClass: TranslateHttpLoader,
-			},
-		}),
-		...provideTranslateHttpLoader({
-			prefix: './assets/i18n/',
-			suffix: '.json',
+			lang: 'en',
+			loader: provideTranslateHttpLoader({
+				prefix: './i18n/',
+				suffix: '.json',
+			}),
 		}),
 		providePrimeNG({
 			theme: {
