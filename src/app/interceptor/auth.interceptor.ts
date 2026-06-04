@@ -10,6 +10,9 @@ import { Token } from '../model/token.model';
 import { Store } from '@ngrx/store';
 import { inject, Signal } from '@angular/core';
 import { selectToken } from '../store/app.selector';
+import { MessageService } from '../service/message.service';
+import { MessageSeverity } from '../model/message-severity.model';
+import { Router } from '@angular/router';
 
 export const authInterceptor: HttpInterceptorFn = (
 	request: HttpRequest<unknown>,
@@ -32,8 +35,23 @@ export const authInterceptor: HttpInterceptorFn = (
 
 	return next(modifiedRequest).pipe(
 		catchError((error: HttpErrorResponse) => {
+			const messageService: MessageService = inject(MessageService);
+
 			if (error.status === 401) {
-				console.error(error); // TODO
+				messageService.showMessage(
+					MessageSeverity.WARN,
+					'messages.auth.token-expired.title',
+					'messages.auth.token-expired.message',
+				);
+
+				const router: Router = inject(Router);
+				router.navigate(['/login']);
+			} else if (error.status === 403) {
+				messageService.showMessage(
+					MessageSeverity.WARN,
+					'messages.auth.insufficient-privileges.title',
+					'messages.auth.insufficient-privileges.message',
+				);
 			}
 
 			return throwError(() => error);

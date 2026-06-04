@@ -65,6 +65,14 @@
 			"logout": {
 				"title": "Logged Out",
 				"message": "See you later!"
+			},
+			"token-expired": {
+				"title": "Session Expired",
+				"message": "Your session has expired. Please log in again."
+			},
+			"insufficient-privileges": {
+				"title": "Access Denied",
+				"message": "You do not have sufficient privileges to access this resource."
 			}
 		},
 		"user-management": {

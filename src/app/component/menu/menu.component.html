@@ -15,11 +15,12 @@
 
 		<ng-template #center>
 			<nav class="nav-tabs">
-				@for (item of navItems; track item.route) {
+				@for (item of visibleNavItems(); track item.route) {
 					<button
 						class="nav-tab"
-						[class.active]="activeRoute === item.route"
-						(click)="navigate(item.route)">
+						[routerLink]="item.route"
+						routerLinkActive="active"
+						[routerLinkActiveOptions]="{ exact: false }">
 						<i [class]="'pi ' + item.icon"></i>
 						{{ item.label }}
 					</button>
@@ -30,14 +31,15 @@
 		<ng-template #end>
 			<div class="toolbar-end">
 				<p-avatar
-					image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png"
-					[style]="{ width: '32px', height: '32px', cursor: 'pointer' }"
+					[label]="currentUserInitials()"
+					[style]="{ 'background-color': '#ece9fc', color: '#2a1261', width: '32px', height: '32px', cursor: 'pointer' }"
+					[shape]="'circle'"
 					(click)="userMenu.toggle($event)" />
 
 				<p-popover #userMenu styleClass="user-menu-panel">
 					<div class="menu-header">
-						<span class="menu-name">{{ `${loggedUser()?.firstName} ${loggedUser()?.lastName}`}}</span>
-						<span class="menu-email">{{ `${loggedUser()?.email}` }}</span>
+						<span class="menu-name">{{ `${currentUser()?.firstName} ${currentUser()?.lastName}`}}</span>
+						<span class="menu-email">{{ `${currentUser()?.email}` }}</span>
 					</div>
 					<hr>
 					<div class="menu-divider"></div>

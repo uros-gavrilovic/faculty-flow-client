@@ -25,7 +25,7 @@ export const loginGuard: CanActivateFn = (): boolean | UrlTree => {
 	return isTokenValid() ? router.createUrlTree([PageUrl.SCHEDULE]) : true;
 };
 
-export const authGuard: CanActivateFn = (): boolean | UrlTree => {
+export const authenticationGuard: CanActivateFn = (): boolean | UrlTree => {
 	const router: Router = inject(Router);
 	return isTokenValid() || router.createUrlTree([PageUrl.LOGIN]);
 };

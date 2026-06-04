@@ -1,9 +1,9 @@
-import { Component, Signal } from '@angular/core';
+import { Component, computed, Signal } from '@angular/core';
 import { PRIMENG_MODULES } from '../../modules/ui.module';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.store';
-import { User } from '../../model/user.model';
+import { User, UserRole } from '../../model/user.model';
 import * as AppSelector from '../../store/app.selector';
 import * as AppAction from '../../store/app.action';
 
@@ -11,26 +11,40 @@ interface NavItem {
 	label: string;
 	route: string;
 	icon: string;
+	allowedRoles?: UserRole[],
 }
 
 @Component({
 	selector: 'app-menu',
-	imports: [...PRIMENG_MODULES],
+	imports: [...PRIMENG_MODULES, RouterLink, RouterLinkActive],
 	templateUrl: './menu.component.html',
 	styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
+
+
 	navItems: NavItem[] = [
 		{ label: 'Schedule', route: '/schedule', icon: 'pi-calendar' },
 		{ label: 'Reservations', route: '/reservations', icon: 'pi-bookmark' },
-		{ label: 'Employees', route: '/employees', icon: 'pi-users' },
+		{
+			label: 'Employees',
+			route: '/employees',
+			icon: 'pi-users',
+			allowedRoles: [UserRole.ADMINISTRATOR],
+		},
 	];
 
-	loggedUser: Signal<User>;
+	currentUser: Signal<User>;
 
-	get activeRoute(): string {
-		return this.router.url;
-	}
+	readonly visibleNavItems: Signal<NavItem[]> = computed(() => {
+		const userRoles: UserRole[] = this.currentUser()?.roles ?? [];
+		return this.navItems.filter(
+			(item) => !item.allowedRoles || item.allowedRoles.some((role) => userRoles.includes(role)),
+		);
+	});
+	readonly currentUserInitials: Signal<string> = computed(() => {
+		return this.currentUser() ? `${this.currentUser()?.firstName[0]}${this.currentUser()?.lastName[0]}` : '';
+	})
 
 	constructor(
 		private router: Router,
@@ -39,19 +53,11 @@ export class MenuComponent {
 		this.initSelectors();
 	}
 
-	navigate(route: string): void {
-		this.router.navigate([route]);
-	}
-
-	navigateTo(route: string): void {
-		this.router.navigate([route]);
+	private initSelectors(): void {
+		this.currentUser = this.store.selectSignal(AppSelector.selectCurrentUser);
 	}
 
 	onLogout(): void {
 		this.store.dispatch(AppAction.logoutUser());
-	}
-
-	private initSelectors(): void {
-		this.loggedUser = this.store.selectSignal(AppSelector.selectCurrentUser);
 	}
 }
