@@ -10,6 +10,15 @@ import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Textarea } from 'primeng/textarea';
 import { Select } from 'primeng/select';
+import { Divider } from 'primeng/divider';
+import { TableModule } from 'primeng/table';
+import { Panel } from 'primeng/panel';
+import { Menu } from 'primeng/menu';
+import { Card } from 'primeng/card';
+import { Tag } from 'primeng/tag';
+import { Checkbox } from 'primeng/checkbox';
+import { Dialog } from 'primeng/dialog';
+import { Chip } from 'primeng/chip';
 
 export const PRIMENG_MODULES = [
 	InputTextModule,
@@ -18,6 +27,10 @@ export const PRIMENG_MODULES = [
 	ButtonDirective,
 	InputText,
 	FloatLabel,
+	Tag,
+	Checkbox,
+	Dialog,
+	Chip,
 	FloatLabelModule,
 	AvatarModule,
 	ToolbarModule,
@@ -26,4 +39,9 @@ export const PRIMENG_MODULES = [
 	ConfirmDialog,
 	Textarea,
 	Select,
+	Divider,
+	Menu,
+	Card,
+	TableModule,
+	Panel,
 ];

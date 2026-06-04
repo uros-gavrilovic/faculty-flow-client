@@ -48,11 +48,10 @@ export class MenuComponent {
 	}
 
 	onLogout(): void {
-		console.log('ovde');
 		this.store.dispatch(AppAction.logoutUser());
 	}
 
 	private initSelectors(): void {
-		this.loggedUser = this.store.selectSignal(AppSelector.selectLoggedUser);
+		this.loggedUser = this.store.selectSignal(AppSelector.selectCurrentUser);
 	}
 }

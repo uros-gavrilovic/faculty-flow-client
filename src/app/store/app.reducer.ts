@@ -1,6 +1,7 @@
 import { AppState, INITIAL_APP_STATE } from './app.store';
 import { createReducer, on } from '@ngrx/store';
 import * as AppAction from './app.action';
+import { User } from '../model/user.model';
 
 export const appReducer = createReducer(
 	INITIAL_APP_STATE,
@@ -11,19 +12,43 @@ export const appReducer = createReducer(
 			token: loginResponse,
 		};
 	}),
+	on(AppAction.getCurrentUserSuccess, (state: AppState, { user }): AppState => {
+		return {
+			...state,
+			currentUser: user,
+		};
+	}),
 	on(AppAction.logoutUser, (state: AppState): AppState => {
 		return {
 			...state,
-			user: null,
+			currentUser: null,
 			token: null,
 		};
 	}),
+
 	on(AppAction.getUserSuccess, (state: AppState, { user }): AppState => {
 		return {
 			...state,
 			user: user,
 		};
 	}),
+	on(AppAction.searchUsersSuccess, (state: AppState, { searchResponse }): AppState => {
+		return {
+			...state,
+			users: searchResponse,
+		};
+	}),
+	on(AppAction.updateUserSuccess, (state: AppState, { user }): AppState => {
+		return {
+			...state,
+			user: user,
+			users: {
+				...state.users,
+				data: state.users.data.map((u: User) => (u.uuid === user.uuid ? user : u)),
+			},
+		};
+	}),
+
 
 	on(AppAction.getRoomsSuccess, (state, { rooms }) => ({
 		...state,

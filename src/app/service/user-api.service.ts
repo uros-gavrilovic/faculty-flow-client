@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
 import { LoginRequest, LoginResponse } from '../model/login.model';
+import { SearchRequest, SearchResponse } from '../model/search.model';
 
 @Injectable({
 	providedIn: 'root',
@@ -25,5 +26,20 @@ export class UserApiService {
 				...(request.username ? { username: request.username } : {}),
 			},
 		});
+	}
+
+	searchUsers(searchRequest: SearchRequest): Observable<SearchResponse<User>> {
+		const params = {
+			page: searchRequest.page,
+			size: searchRequest.size,
+			sortBy: searchRequest.sort ?? 'lastName',
+			direction: searchRequest.order ?? 'asc',
+		};
+
+		return this.httpClient.get<SearchResponse<User>>(`${this.USER_API}/search`, { params });
+	}
+
+	updateUser(user: User): Observable<User> {
+		return this.httpClient.put<User>(`${this.USER_API}`, user);
 	}
 }

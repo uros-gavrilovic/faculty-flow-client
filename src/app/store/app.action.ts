@@ -3,14 +3,23 @@ import { User } from '../model/user.model';
 import { Reservation, ReservationRequest, ReservationReview } from '../model/reservation.model';
 import { LoginRequest, LoginResponse } from '../model/login.model';
 import { Room } from '../model/room.model';
+import { SearchRequest, SearchResponse } from '../model/search.model';
 
 enum AppActionType {
 	// Auth
 	LOG_IN = '[AUTH] Log In',
 	LOG_IN_SUCCESS = '[AUTH] Log In Success',
+	GET_CURRENT_USER = '[AUTH] Get Current User',
+	GET_CURRENT_USER_SUCCESS = '[AUTH] Get Current User Success',
 	LOG_OUT = '[AUTH] Log Out',
 	GET_USER = '[AUTH] Get User',
 	GET_USER_SUCCESS = '[AUTH] Get User Success',
+
+	// User
+	SEARCH_USERS = '[USER] Search Users',
+	SEARCH_USERS_SUCCESS = '[USER] Search Users Success',
+	UPDATE_USER = '[USER] Update User',
+	UPDATE_USER_SUCCESS = '[USER] Update User Success',
 
 	// Room
 	GET_ROOMS = '[ROOM] Get Rooms',
@@ -26,16 +35,17 @@ enum AppActionType {
 }
 
 export const loginUser = createAction(AppActionType.LOG_IN, props<{ request: LoginRequest }>());
-export const loginUserSuccess = createAction(
-	AppActionType.LOG_IN_SUCCESS,
-	props<{ loginResponse: LoginResponse }>(),
-);
+export const loginUserSuccess = createAction(AppActionType.LOG_IN_SUCCESS, props<{ loginResponse: LoginResponse }>(),);
+export const getCurrentUser = createAction(AppActionType.GET_CURRENT_USER, props<{ username: string }>());
+export const getCurrentUserSuccess = createAction(AppActionType.GET_CURRENT_USER_SUCCESS, props<{ user: User }>());
 export const logoutUser = createAction(AppActionType.LOG_OUT);
-export const getUser = createAction(
-	AppActionType.GET_USER,
-	props<{ uuid?: string; username?: string }>(),
-);
+
+export const getUser = createAction(AppActionType.GET_USER, props<{ uuid?: string; username?: string }>(),);
 export const getUserSuccess = createAction(AppActionType.GET_USER_SUCCESS, props<{ user: User }>());
+export const searchUsers = createAction(AppActionType.SEARCH_USERS, props<{searchRequest: SearchRequest}>());
+export const searchUsersSuccess = createAction(AppActionType.SEARCH_USERS_SUCCESS, props<{ searchResponse: SearchResponse<User> }>());
+export const updateUser = createAction(AppActionType.UPDATE_USER, props<{user: User}>());
+export const updateUserSuccess = createAction(AppActionType.UPDATE_USER_SUCCESS, props<{user: User}>());
 
 export const getRooms = createAction(AppActionType.GET_ROOMS);
 export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>(),);

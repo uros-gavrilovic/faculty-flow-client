@@ -6,7 +6,7 @@ import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import { Store } from '@ngrx/store';
 import * as AppAction from '../../../store/app.action';
 import { COMMON_MODULES } from '../../../modules/common.module';
-import { selectLoggedUser, selectRooms } from '../../../store/app.selector';
+import { selectCurrentUser, selectRooms } from '../../../store/app.selector';
 import { Room } from '../../../model/room.model';
 import { User } from '../../../model/user.model';
 import * as UtilFunction from '../../../util/util-functions';
@@ -43,12 +43,12 @@ export class RequestReservationModalComponent implements OnInit {
 	}
 
 	private initDispatch(): void {
-		this.loggedUser = this.store.selectSignal(selectLoggedUser);
+		this.loggedUser = this.store.selectSignal(selectCurrentUser);
 		this.rooms = this.store.selectSignal(selectRooms);
 
 		effect(() => {
 			const availableRooms: Room[] = this.rooms();
-			if (!availableRooms.length) this.store.dispatch(AppAction.getRooms());
+			if (!availableRooms?.length) this.store.dispatch(AppAction.getRooms());
 		});
 	}
 

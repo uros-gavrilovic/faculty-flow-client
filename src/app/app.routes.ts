@@ -6,6 +6,7 @@ import { SchedulePageComponent } from './page/schedule-page/schedule-page.compon
 import { ReservationsPageComponent } from './page/reservations-page/reservations-page.component';
 import { EmployeesPageComponent } from './page/employees-page/employees-page.component';
 import { NotFoundPageComponent } from './page/not-found-page/not-found-page.component';
+import { UserTableComponent } from './component/user/user-table/user-table.component';
 
 export const routes: Routes = [
 	{ path: '', canActivate: [authRedirectGuard], pathMatch: 'full', component: LoginPageComponent },
@@ -17,7 +18,14 @@ export const routes: Routes = [
 		children: [
 			{ path: 'schedule', component: SchedulePageComponent },
 			{ path: 'reservations', component: ReservationsPageComponent },
-			{ path: 'employees', component: EmployeesPageComponent },
+			{
+				path: 'employees',
+				component: EmployeesPageComponent,
+				children: [
+					{ path: '', component: UserTableComponent },
+					{ path: ':uuid', component: UserTableComponent },
+				],
+			},
 		],
 	},
 	{ path: '**', component: NotFoundPageComponent },

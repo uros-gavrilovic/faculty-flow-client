@@ -25,9 +25,26 @@ export const loginEffect = createEffect(
 					.pipe(
 						switchMap((loginResponse: LoginResponse) => [
 							AppAction.loginUserSuccess({ loginResponse }),
-							AppAction.getUser({ username: request.username }),
+							AppAction.getCurrentUser({ username: request.username }),
 						]),
 					),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const getCurrentUserEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const userApi = inject(UserApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.getCurrentUser),
+			switchMap(({ username }) =>
+				userApi
+					.getUser({ username })
+					.pipe(map((user) => AppAction.getCurrentUserSuccess({ user }))),
 			),
 		);
 	},
@@ -84,9 +101,47 @@ export const getUserEffect = createEffect(
 		return actions$.pipe(
 			ofType(AppAction.getUser),
 			switchMap((payload) =>
-				userApi
-					.getUser({ username: payload.username })
-					.pipe(map((user) => AppAction.getUserSuccess({ user }))),
+				userApi.getUser({ username: payload.username, uuid: payload.uuid }).pipe(map((user) => AppAction.getUserSuccess({ user })),),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const getUsersEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const userApi = inject(UserApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.searchUsers),
+			switchMap((payload) => userApi.searchUsers(payload.searchRequest).pipe(
+				map((searchResponse) => AppAction.searchUsersSuccess({ searchResponse })))
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const updateUserEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const userApi = inject(UserApiService);
+		const messageService = inject(MessageService);
+
+		return actions$.pipe(
+			ofType(AppAction.updateUser),
+			switchMap((payload) =>
+				userApi.updateUser(payload.user).pipe(
+					tap(() =>
+						messageService.showMessage(
+							MessageSeverity.SUCCESS,
+							'messages.user-management.user-updated.title',
+							'messages.user-management.user-updated.message',
+						),
+					),
+					map((user) => AppAction.updateUserSuccess({ user })),
+				),
 			),
 		);
 	},

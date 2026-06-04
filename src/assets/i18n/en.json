@@ -12,17 +12,49 @@
 		"end": "End time",
 		"note": "Note"
 	},
+	"employee": {
+		"first-name": "First Name",
+		"last-name": "Last Name",
+		"email": "Email"
+	},
+	"user-management": {
+		"title": "User Management",
+		"users-count": "{{count}} users",
+		"name": "First Name",
+		"surname": "Last Name",
+		"username": "Username",
+		"email": "Email",
+		"roles": "Roles",
+		"actions": "Actions",
+		"no-roles": "No roles assigned",
+		"settings": "User Settings",
+		"showing-users": "Showing {first} to {last} of {totalRecords} users",
+		"save": "Save"
+	},
 	"modal": {
 		"request-reservation": {
 			"title": "Request a reservation",
 			"submit": "Submit request"
+		},
+		"edit-employee": {
+			"title": "Edit employee information",
+			"submit": "Update employee"
 		}
 	},
 	"common": {
-		"cancel": "Cancel"
+		"actions": "Actions",
+		"cancel": "Cancel",
+		"submit": "Submit",
+		"save": "Save",
+		"edit": "Edit",
+		"delete": "Delete",
+		"confirm": "Confirm",
+		"yes": "Yes",
+		"no": "No"
 	},
 	"validation": {
-		"required-field": "This field is required"
+		"required-field": "This field is required",
+		"invalid-email": "Please enter a valid email address"
 	},
 	"messages": {
 		"auth": {
@@ -33,6 +65,12 @@
 			"logout": {
 				"title": "Logged Out",
 				"message": "See you later!"
+			}
+		},
+		"user-management": {
+			"user-updated": {
+				"title": "User Updated",
+				"message": "User settings have been successfully saved."
 			}
 		}
 	}
