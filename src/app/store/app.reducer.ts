@@ -55,6 +55,10 @@ export const appReducer = createReducer(
 		rooms,
 	})),
 
+	on(AppAction.searchReservationsSuccess, (state, { searchResponse }) => ({
+		...state,
+		reservationsSearch: searchResponse,
+	})),
 	on(AppAction.loadReservationsSuccess, (state, { reservations }) => ({
 		...state,
 		reservations,

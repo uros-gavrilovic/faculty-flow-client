@@ -160,6 +160,23 @@ export const getRoomsEffect = createEffect(
 		{functional: true}
 );
 
+export const searchReservationsEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const reservationApi = inject(ReservationApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.searchReservations),
+			switchMap(({ searchRequest }) =>
+				reservationApi
+					.searchReservations(searchRequest)
+					.pipe(map((searchResponse) => AppAction.searchReservationsSuccess({ searchResponse }))),
+			),
+		);
+	},
+	{ functional: true },
+);
+
 export const loadReservationsEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);

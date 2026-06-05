@@ -14,3 +14,4 @@ export const selectUser = createSelector(selectAppState, (state: AppState): User
 export const selectUsers = createSelector(selectAppState, (state: AppState): SearchResponse<User> => state.users);
 export const selectRooms = createSelector(selectAppState, (state: AppState): Room[] => state.rooms);
 export const selectReservations = createSelector(selectAppState, (state): Reservation[] => state.reservations);
+export const selectReservationsSearch = createSelector(selectAppState, (state): SearchResponse<Reservation> => state.reservationsSearch);

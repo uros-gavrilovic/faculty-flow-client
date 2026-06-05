@@ -7,7 +7,7 @@ import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideEffects } from '@ngrx/effects';
 import * as AppEffects from './store/app.effect';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
-import { authInterceptor } from './interceptor/auth.interceptor';
+import { authorizationInterceptor } from './interceptor/authorization.interceptor';
 import { APP_STATE_KEY } from './store/app.store';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeuix/themes/aura';
@@ -24,7 +24,7 @@ export const appConfig: ApplicationConfig = {
 		provideStore({ [APP_STATE_KEY]: appReducer }),
 		provideEffects(AppEffects),
 		provideStoreDevtools({ maxAge: 25, logOnly: true }),
-		provideHttpClient(withInterceptors([authInterceptor])),
+		provideHttpClient(withInterceptors([authorizationInterceptor])),
 		provideTranslateService({
 			fallbackLang: 'en',
 			lang: 'en',

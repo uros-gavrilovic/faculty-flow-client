@@ -150,7 +150,7 @@ export class SchedulePageComponent implements OnInit {
 	onEventClick(args: EventClickArgs): void {
 		const event = args.event as ScheduleEvent;
 
-		if (event.Status !== 'PENDING') return;
+		if (event.Status != ReservationStatus.PENDING) return;
 
 		this.confirmationService.confirm({
 			message: 'Are you sure you want to cancel this pending reservation request?',
@@ -164,7 +164,7 @@ export class SchedulePageComponent implements OnInit {
 					AppAction.reviewReservation({
 						review: {
 							uuid: event.Id,
-							status: ReservationStatus.REJECTED,
+							status: ReservationStatus.CANCELED,
 						},
 					}),
 				);

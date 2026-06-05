@@ -1,0 +1,23 @@
+.selection-hint {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	color: var(--text-color-secondary);
+	font-style: italic;
+}
+
+.cell-empty {
+	color: var(--text-color-secondary);
+	font-style: italic;
+}
+
+.cell-truncate {
+	display: inline-block;
+	max-width: 180px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	vertical-align: bottom;
+	cursor: help;
+}

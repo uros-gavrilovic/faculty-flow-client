@@ -14,7 +14,7 @@ import { MessageService } from '../service/message.service';
 import { MessageSeverity } from '../model/message-severity.model';
 import { Router } from '@angular/router';
 
-export const authInterceptor: HttpInterceptorFn = (
+export const authorizationInterceptor: HttpInterceptorFn = (
 	request: HttpRequest<unknown>,
 	next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> => {
@@ -39,8 +39,8 @@ export const authInterceptor: HttpInterceptorFn = (
 			if (error.status === 401) {
 				messageService.showMessage(
 					MessageSeverity.WARN,
-					'messages.auth.token-expired.title',
-					'messages.auth.token-expired.message',
+					'messages.auth.login-failed.title',
+					'messages.auth.login-failed.message',
 				);
 				router.navigate(['/login']);
 			} else if (error.status === 403) {

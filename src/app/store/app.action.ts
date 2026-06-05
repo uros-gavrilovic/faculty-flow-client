@@ -26,6 +26,8 @@ enum AppActionType {
 	GET_ROOMS_SUCCESS = '[ROOM] Get Rooms Success',
 
 	// Reservation
+	SEARCH_RESERVATIONS = '[ROOM] Search Reservations',
+	SEARCH_RESERVATIONS_SUCCESS = '[ROOM] Search reservations Success',
 	LOAD_RESERVATIONS = '[RESV] Load Reservations',
 	LOAD_RESERVATIONS_SUCCESS = '[RESV] Load Reservations Success',
 	REQUEST_RESERVATION = '[RESV] Request Reservation',
@@ -50,6 +52,8 @@ export const updateUserSuccess = createAction(AppActionType.UPDATE_USER_SUCCESS,
 export const getRooms = createAction(AppActionType.GET_ROOMS);
 export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>(),);
 
+export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest }>());
+export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>(),);
 export const loadReservations = createAction(AppActionType.LOAD_RESERVATIONS, props<{ start: Date; end: Date }>(),);
 export const loadReservationsSuccess = createAction(AppActionType.LOAD_RESERVATIONS_SUCCESS, props<{ reservations: Reservation[] }>(),);
 export const requestReservation = createAction(AppActionType.REQUEST_RESERVATION, props<{ request: ReservationRequest }>(),);

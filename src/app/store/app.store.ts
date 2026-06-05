@@ -13,6 +13,7 @@ export interface AppState {
 	users: SearchResponse<User>;
 	rooms: Room[];
 	reservations: Reservation[];
+	reservationsSearch: SearchResponse<Reservation>;
 }
 
 export const INITIAL_APP_STATE: AppState = (() => {
@@ -29,5 +30,6 @@ export const INITIAL_APP_STATE: AppState = (() => {
 		users: null,
 		rooms: null,
 		reservations: null,
+		reservationsSearch: null,
 	};
 })();
