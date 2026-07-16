@@ -1,0 +1,26 @@
+<form [formGroup]="form" class="request-form p-fluid grid">
+	<div class="field col-12 w-full">
+		<label>{{ 'user-management.roles' | translate }}</label>
+
+		<p-multiSelect
+			formControlName="roles"
+			[options]="allRoles"
+			[showClear]="true"
+			placeholder="Select Roles"
+			class="w-full"
+			appendTo="body"
+		>
+			<ng-template #item let-role>
+				<p-tag [value]="role" [severity]="getRoleSeverity(role)" />
+			</ng-template>
+
+			<ng-template #selecteditems let-values>
+				<div class="flex flex-wrap gap-3 m-1">
+					@for (role of values; track role) {
+						<p-chip [styleClass]="'chip chip-' + getRoleSeverity(role)" [label]="role" [removable]="true" (onRemove)="onRemoveRole(role)" />
+					}
+				</div>
+			</ng-template>
+		</p-multiSelect>
+	</div>
+</form>

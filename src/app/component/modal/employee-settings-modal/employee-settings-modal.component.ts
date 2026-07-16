@@ -7,9 +7,9 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { COMMON_MODULES } from '../../../modules/common.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as AppSelector from '../../../store/app.selector';
-import { Severity } from '../../../model/ui.model';
-import {roleTagSeverityMap} from '../../../constant/severity.constant';
-import { RegisterRequest } from '../../../model/auth.model';
+import { PanelStepperComponent } from '../../misc/panel-stepper/panel-stepper.component';
+import { UserFormComponent } from '../../user/user-form/user-form.component';
+import { RoleFormComponent } from '../../user/role-form/role-form.component';
 
 export interface EmployeeSettingsModalData {
 	uuid: string;
@@ -17,7 +17,13 @@ export interface EmployeeSettingsModalData {
 
 @Component({
 	selector: 'app-employee-settings-modal',
-	imports: [COMMON_MODULES, PRIMENG_MODULES],
+	imports: [
+		COMMON_MODULES,
+		PRIMENG_MODULES,
+		PanelStepperComponent,
+		UserFormComponent,
+		RoleFormComponent,
+	],
 	templateUrl: './employee-settings-modal.component.html',
 	styleUrl: './employee-settings-modal.component.scss',
 })
@@ -27,8 +33,6 @@ export class EmployeeSettingsModalComponent implements OnInit {
 	form!: FormGroup;
 	isEditMode: boolean;
 
-	readonly allRoles: UserRole[] = Object.values(UserRole);
-
 	constructor(
 		private store: Store,
 		private fb: FormBuilder,
@@ -36,9 +40,6 @@ export class EmployeeSettingsModalComponent implements OnInit {
 		private config: DynamicDialogConfig,
 	) {
 		this.user = this.store.selectSignal(AppSelector.selectUser);
-		effect(() => {
-			if (this.user()) this.patchForm(this.user());
-		});
 	}
 
 	ngOnInit(): void {
@@ -53,27 +54,7 @@ export class EmployeeSettingsModalComponent implements OnInit {
 	}
 
 	private initForm(): void {
-		this.form = this.fb.group({
-			firstName: [null, Validators.required],
-			lastName: [null, Validators.required],
-			email: [null, [Validators.required, Validators.email]],
-			username: [null, Validators.required],
-			roles: this.fb.group(Object.fromEntries(this.allRoles.map((role) => [role, [false]]))),
-		});
-
-		if (!this.isEditMode) {
-			this.form.addControl('password', this.fb.control(null, Validators.required));
-		}
-	}
-
-	private patchForm(user: User): void {
-		this.form.patchValue({
-			firstName: user.firstName,
-			lastName: user.lastName,
-			email: user.email,
-			username: user.username,
-			roles: Object.fromEntries(this.allRoles.map((role) => [role, user.roles.includes(role)])),
-		});
+		this.form = this.fb.group({});
 	}
 
 	onSubmit(): void {
@@ -87,7 +68,7 @@ export class EmployeeSettingsModalComponent implements OnInit {
 			email: v.email,
 			username: v.username,
 			...(this.isEditMode ? {} : { password: v.password }),
-			roles: this.allRoles.filter((role) => v.roles[role]),
+			roles: v.roles,
 		};
 
 		if (this.isEditMode) {
@@ -100,10 +81,7 @@ export class EmployeeSettingsModalComponent implements OnInit {
 	}
 
 	onCancel(): void {
+		this.store.dispatch(AppAction.clearUser());
 		this.ref.close();
-	}
-
-	getRoleSeverity(role: UserRole): Severity {
-		return roleTagSeverityMap[role];
 	}
 }

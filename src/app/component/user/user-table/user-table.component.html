@@ -62,11 +62,13 @@
 			</td>
 
 			<td>
-				@if (user.roles.length > 0) {
-					@for (role of user.roles; track role) {
-						<p-tag [value]="role" [severity]="getRoleSeverity(role)" />
+				<div class="flex flex-wrap gap-3 m-1">
+					@if (user.roles.length > 0) {
+						@for (role of user.roles; track role) {
+							<p-tag [value]="role" [severity]="getRoleSeverity(role)" />
+						}
 					}
-				}
+				</div>
 			</td>
 
 			<td style="text-align: center">

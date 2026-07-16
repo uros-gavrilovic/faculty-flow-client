@@ -25,6 +25,8 @@ import { PrimeTemplate } from 'primeng/api';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { Tooltip } from 'primeng/tooltip';
+import { Fieldset } from 'primeng/fieldset';
+import { MultiSelect } from 'primeng/multiselect';
 
 export const PRIMENG_MODULES = [
 	InputTextModule,
@@ -57,4 +59,6 @@ export const PRIMENG_MODULES = [
 	PrimeTemplate,
 	Toolbar,
 	Tooltip,
+	Fieldset,
+	MultiSelect,
 ];

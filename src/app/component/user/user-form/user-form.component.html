@@ -1,0 +1,56 @@
+<form [formGroup]="form" class="request-form p-fluid grid">
+	<div class="field col-12 md:col-6">
+		<p-floatlabel variant="in" class="w-full">
+			<input pInputText id="firstName" formControlName="firstName" autocomplete="off" class="w-full" />
+			<label for="firstName">{{ 'employee.first-name' | translate }} *</label>
+		</p-floatlabel>
+		@if (form.get('firstName')?.invalid && form.get('firstName')?.touched) {
+			<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+		}
+	</div>
+
+	<div class="field col-12 md:col-6">
+		<p-floatlabel variant="in" class="w-full">
+			<input pInputText id="lastName" formControlName="lastName" autocomplete="off" class="w-full" />
+			<label for="lastName">{{ 'employee.last-name' | translate }} *</label>
+		</p-floatlabel>
+		@if (form.get('lastName')?.invalid && form.get('lastName')?.touched) {
+			<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+		}
+	</div>
+
+	<div class="field col-12 md:col-6">
+		<p-floatlabel variant="in" class="w-full">
+			<input pInputText id="email" formControlName="email" autocomplete="off" class="w-full" />
+			<label for="email">{{ 'employee.email' | translate }} *</label>
+		</p-floatlabel>
+		@if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+			<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+		}
+		@if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+			<small class="p-error">{{ 'validation.invalid-email' | translate }}</small>
+		}
+	</div>
+
+	<div class="field col-12 md:col-6">
+		<p-floatlabel variant="in" class="w-full">
+			<input pInputText id="username" formControlName="username" autocomplete="off" class="w-full" />
+			<label for="username">{{ 'user-management.username' | translate }} *</label>
+		</p-floatlabel>
+		@if (form.get('username')?.invalid && form.get('username')?.touched) {
+			<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+		}
+	</div>
+
+	@if (!isEditMode) {
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in" class="w-full">
+				<input pInputText id="password" formControlName="password" autocomplete="off" type="password" class="w-full" />
+				<label for="password">{{ 'user-management.password' | translate }} *</label>
+			</p-floatlabel>
+			@if (form.get('password')?.invalid && form.get('password')?.touched) {
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+		</div>
+	}
+</form>
