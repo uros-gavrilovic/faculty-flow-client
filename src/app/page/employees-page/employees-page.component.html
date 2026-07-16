@@ -1,3 +1,21 @@
 <p-card>
-	<app-user-table/>
+   <p-toolbar >
+      <ng-template pTemplate="start">
+         <div class="panel-toolbar">
+            <h1>{{ 'employee.panel-title' | translate }}</h1>
+            <p>{{ 'employee.panel-description' | translate }}</p>
+         </div>
+      </ng-template>
+
+      <ng-template pTemplate="end">
+         <p-button
+            label="{{ 'user-management.add-user' | translate }}"
+            icon="pi pi-plus"
+            styleClass="add-employee-btn"
+            (onClick)="onAddEmployee()"
+         />
+      </ng-template>
+   </p-toolbar>
+
+   <app-user-table />
 </p-card>

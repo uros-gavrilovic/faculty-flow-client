@@ -1,12 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { User } from '../model/user.model';
-import {
-	Reservation,
-	ReservationFilter,
-	ReservationRequest,
-	ReservationReview,
-} from '../model/reservation.model';
-import { LoginRequest, LoginResponse } from '../model/login.model';
+import { Reservation, ReservationFilter, ReservationRequest, ReservationReview } from '../model/reservation.model';
+import { LoginRequest, LoginResponse, RegisterRequest } from '../model/auth.model';
 import { Room } from '../model/room.model';
 import { SearchRequest, SearchResponse } from '../model/search.model';
 
@@ -17,10 +12,12 @@ enum AppActionType {
 	GET_CURRENT_USER = '[AUTH] Get Current User',
 	GET_CURRENT_USER_SUCCESS = '[AUTH] Get Current User Success',
 	LOG_OUT = '[AUTH] Log Out',
-	GET_USER = '[AUTH] Get User',
-	GET_USER_SUCCESS = '[AUTH] Get User Success',
+	REGISTER_USER = '[AUTH] Register User',
 
 	// User
+	CLEAR_USER = '[USER] Clear User',
+	GET_USER = '[USER] Get User',
+	GET_USER_SUCCESS = '[USER] Get User Success',
 	SEARCH_USERS = '[USER] Search Users',
 	SEARCH_USERS_SUCCESS = '[USER] Search Users Success',
 	UPDATE_USER = '[USER] Update User',
@@ -44,9 +41,11 @@ export const loginUserSuccess = createAction(AppActionType.LOG_IN_SUCCESS, props
 export const getCurrentUser = createAction(AppActionType.GET_CURRENT_USER, props<{ username: string }>());
 export const getCurrentUserSuccess = createAction(AppActionType.GET_CURRENT_USER_SUCCESS, props<{ user: User }>());
 export const logoutUser = createAction(AppActionType.LOG_OUT);
+export const registerUser = createAction(AppActionType.REGISTER_USER, props<{ request: RegisterRequest }>());
 
 export const getUser = createAction(AppActionType.GET_USER, props<{ uuid?: string; username?: string }>(),);
 export const getUserSuccess = createAction(AppActionType.GET_USER_SUCCESS, props<{ user: User }>());
+export const clearUser = createAction(AppActionType.CLEAR_USER);
 export const searchUsers = createAction(AppActionType.SEARCH_USERS, props<{searchRequest: SearchRequest}>());
 export const searchUsersSuccess = createAction(AppActionType.SEARCH_USERS_SUCCESS, props<{ searchResponse: SearchResponse<User> }>());
 export const updateUser = createAction(AppActionType.UPDATE_USER, props<{user: User}>());

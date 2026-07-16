@@ -3,7 +3,7 @@ import { User } from '../model/user.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environment/environment';
-import { LoginRequest, LoginResponse } from '../model/login.model';
+import { LoginRequest, LoginResponse, RegisterRequest } from '../model/auth.model';
 import { SearchRequest, SearchResponse } from '../model/search.model';
 
 @Injectable({
@@ -17,6 +17,10 @@ export class UserApiService {
 
 	login(request: LoginRequest): Observable<LoginResponse> {
 		return this.httpClient.post<LoginResponse>(`${this.AUTH_API}/login`, request);
+	}
+
+	register(request: RegisterRequest): Observable<User> {
+		return this.httpClient.post<User>(`${this.AUTH_API}/register`, request);
 	}
 
 	getUser(request: { uuid?: string; username?: string }): Observable<User> {

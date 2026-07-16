@@ -1,4 +1,4 @@
-import { Component, OnInit, Signal } from '@angular/core';
+import { Component, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
@@ -15,10 +15,13 @@ import * as AppSelector from '../../../store/app.selector';
 import * as AppAction from '../../../store/app.action';
 import { Tooltip } from 'primeng/tooltip';
 import { User, UserRole } from '../../../model/user.model';
+import { Severity } from '../../../model/ui.model';
+import {reservationStatusSeverityMap} from '../../../constant/severity.constant';
+import { COMMON_MODULES } from '../../../modules/common.module';
 
 @Component({
 	selector: 'app-reservation-table',
-	imports: [PRIMENG_MODULES, TranslatePipe, DatePipe, Tooltip],
+	imports: [PRIMENG_MODULES, COMMON_MODULES],
 	templateUrl: './reservation-table.component.html',
 	styleUrl: './reservation-table.component.scss',
 })
@@ -31,13 +34,6 @@ export class ReservationTableComponent {
 	reservations: Signal<SearchResponse<Reservation>>;
 
 	protected readonly ReservationStatus = ReservationStatus;
-
-	readonly statusSeverityMap: Record<ReservationStatus, 'warn' | 'success' | 'danger' | 'secondary'> = {
-		[ReservationStatus.PENDING]: 'secondary',
-		[ReservationStatus.CANCELED]: 'warn',
-		[ReservationStatus.ACCEPTED]: 'success',
-		[ReservationStatus.REJECTED]: 'danger',
-	};
 
 	constructor(
 		private store: Store,
@@ -67,12 +63,12 @@ export class ReservationTableComponent {
 		this.store.dispatch(AppAction.searchReservations({ searchRequest: this.searchRequest }));
 	}
 
-	getStatusSeverity(status: ReservationStatus): 'warn' | 'success' | 'danger' | 'secondary' {
-		return this.statusSeverityMap[status];
+	getStatusSeverity(status: ReservationStatus): Severity {
+		return reservationStatusSeverityMap[status];
 	}
 
 	approveSelected(): void {
-		this.selectedReservations.forEach((reservation: Reservation) => {
+		this.selectedReservations.forEach((reservation: Reservation): void => {
 			const review: ReservationReview = {
 				uuid: reservation.uuid,
 				status: ReservationStatus.ACCEPTED,
@@ -83,7 +79,7 @@ export class ReservationTableComponent {
 	}
 
 	rejectSelected(): void {
-		this.selectedReservations.forEach((reservation: Reservation) => {
+		this.selectedReservations.forEach((reservation: Reservation): void => {
 			const review: ReservationReview = {
 				uuid: reservation.uuid,
 				status: ReservationStatus.REJECTED,

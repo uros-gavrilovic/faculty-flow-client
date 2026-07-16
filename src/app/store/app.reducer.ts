@@ -26,6 +26,12 @@ export const appReducer = createReducer(
 		};
 	}),
 
+	on(AppAction.clearUser, (state: AppState): AppState => {
+		return {
+			...state,
+			user: null,
+		};
+	}),
 	on(AppAction.getUserSuccess, (state: AppState, { user }): AppState => {
 		return {
 			...state,

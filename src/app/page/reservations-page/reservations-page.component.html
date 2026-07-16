@@ -1,3 +1,15 @@
 <p-card>
+	<p-toolbar >
+		<ng-template pTemplate="start">
+			<div class="panel-toolbar">
+				<h1>{{ 'reservation.panel-title' | translate }}</h1>
+				<p>{{ 'reservation.panel-description' | translate }}</p>
+			</div>
+		</ng-template>
+
+		<ng-template pTemplate="end">
+		</ng-template>
+	</p-toolbar>
+
 	<app-reservation-table/>
 </p-card>

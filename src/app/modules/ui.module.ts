@@ -4,7 +4,7 @@ import { PasswordModule } from 'primeng/password';
 import { FloatLabel } from 'primeng/floatlabel';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { AvatarModule } from 'primeng/avatar';
-import { ToolbarModule } from 'primeng/toolbar';
+import { Toolbar, ToolbarModule } from 'primeng/toolbar';
 import { PopoverModule } from 'primeng/popover';
 import { Toast } from 'primeng/toast';
 import { ConfirmDialog } from 'primeng/confirmdialog';
@@ -19,8 +19,12 @@ import { Tag } from 'primeng/tag';
 import { Checkbox } from 'primeng/checkbox';
 import { Dialog } from 'primeng/dialog';
 import { Chip } from 'primeng/chip';
+import { Drawer } from 'primeng/drawer';
+import { SpeedDial } from 'primeng/speeddial';
+import { PrimeTemplate } from 'primeng/api';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { Tooltip } from 'primeng/tooltip';
 
 export const PRIMENG_MODULES = [
 	InputTextModule,
@@ -48,5 +52,9 @@ export const PRIMENG_MODULES = [
 	Panel,
 	IconField,
 	InputIcon,
-	InputText,
+	Drawer,
+	SpeedDial,
+	PrimeTemplate,
+	Toolbar,
+	Tooltip,
 ];

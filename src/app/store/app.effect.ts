@@ -9,7 +9,8 @@ import { MessageService } from '../service/message.service';
 import { MessageSeverity } from '../model/message-severity.model';
 import { PageUrl } from '../constant/page-url.constant';
 import { ReservationApiService } from '../service/reservation-api.service';
-import { LoginResponse } from '../model/login.model';
+import { Reservation } from '../model/reservation.model';
+import { LoginResponse } from '../model/auth.model';
 import { RoomApiService } from '../service/room-api.service';
 import { Store } from '@ngrx/store';
 
@@ -122,6 +123,32 @@ export const getUsersEffect = createEffect(
 	}, { functional: true },
 );
 
+export const createUserEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const userApi = inject(UserApiService);
+		const messageService = inject(MessageService);
+
+		return actions$.pipe(
+			ofType(AppAction.registerUser),
+			switchMap((payload) =>
+				userApi
+					.register(payload.request)
+					.pipe(
+						tap(() =>
+							messageService.showMessage(
+								MessageSeverity.SUCCESS,
+								'messages.user-management.user-created.title',
+								'messages.user-management.user-created.message',
+							),
+						),
+					),
+			),
+		);
+	},
+	{ functional: true, dispatch: false },
+);
+
 export const updateUserEffect = createEffect(
 	() => {
 		const store = inject(Store);
@@ -171,7 +198,9 @@ export const searchReservationsEffect = createEffect(
 			switchMap(({ searchRequest }) =>
 				reservationApi
 					.searchReservations(searchRequest)
-					.pipe(map((searchResponse) => AppAction.searchReservationsSuccess({ searchResponse })),),
+					.pipe(
+						map((searchResponse) => AppAction.searchReservationsSuccess({ searchResponse })),
+					),
 			),
 		);
 	}, { functional: true },

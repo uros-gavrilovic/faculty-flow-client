@@ -1,3 +1,29 @@
+.avatar-success {
+  background-color: color-mix(in srgb, var(--p-green-500) 15%, transparent);
+  color: var(--p-green-500);
+}
+
+.avatar-info {
+  background-color: color-mix(in srgb, var(--p-blue-500) 15%, transparent);
+  color: var(--p-blue-500);
+}
+
+.avatar-warn {
+  background-color: color-mix(in srgb, var(--p-orange-500) 15%, transparent);
+  color: var(--p-orange-500);
+}
+
+.avatar-danger {
+  background-color: color-mix(in srgb, var(--p-red-500) 15%, transparent);
+  color: var(--p-red-500);
+}
+
+.avatar-undefined {
+  background-color: color-mix(in srgb, var(--p-surface-500) 15%, transparent);
+  color: var(--p-surface-700);
+}
+
+
 // ─── Toolbar ────────────────────────────────────────────────────────────────
 
 .um-toolbar {

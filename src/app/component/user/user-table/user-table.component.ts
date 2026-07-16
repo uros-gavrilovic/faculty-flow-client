@@ -10,8 +10,10 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { ModalService } from '../../../service/modal.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { EmployeeSettingsModalComponent, EmployeeSettingsModalData, } from '../../modal/employee-settings-modal/employee-settings-modal.component';
+import { EmployeeSettingsModalComponent } from '../../modal/employee-settings-modal/employee-settings-modal.component';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { Severity } from '../../../model/ui.model';
+import {getAvatarSeverity, roleTagSeverityMap} from '../../../constant/severity.constant';
 
 @Component({
 	selector: 'app-user-table',
@@ -23,11 +25,6 @@ import { DynamicDialogRef } from 'primeng/dynamicdialog';
 export class UserTableComponent implements OnInit {
 
 	users: Signal<SearchResponse<User>>;
-
-	readonly roleTagSeverityMap: Record<UserRole, 'danger' | 'secondary'> = {
-		[UserRole.ADMINISTRATOR]: 'danger',
-		[UserRole.USER]: 'secondary',
-	};
 
 	constructor(
 		private store: Store,
@@ -53,11 +50,7 @@ export class UserTableComponent implements OnInit {
 		const modalRef: DynamicDialogRef<EmployeeSettingsModalComponent> = this.modalService.openEmployeeSettingsDialog({ uuid });
 		modalRef.onClose
 			.pipe(takeUntilDestroyed(this.destroyRef))
-			.subscribe(() => {
-			this.router.navigate(['/employees']);
-		});
-
-		this.modalService.openEmployeeSettingsDialog({ uuid } as EmployeeSettingsModalData);
+			.subscribe(() => this.router.navigate(['/employees']));
 	}
 
 	loadUsers(page: number, size: number): void {
@@ -66,16 +59,25 @@ export class UserTableComponent implements OnInit {
 	}
 
 	onPage(event: TableLazyLoadEvent): void {
-		const page: number = event.first / event.rows;
-		const size: number = event.rows;
-		this.loadUsers(page, size);
-	}
-
-	getRoleSeverity(role: UserRole): 'danger' | 'secondary' {
-		return this.roleTagSeverityMap[role];
+		this.loadUsers(
+			event.first / event.rows,
+			event.rows
+		);
 	}
 
 	onEditEmployee(user: User): void {
 		this.router.navigate(['/employees'], { queryParams: { uuid: user.uuid } });
+	}
+
+	getUserInitials(user: User): string {
+		return `${user.firstName?.[0]}${user.lastName?.[0]}`;
+	}
+
+	getRoleSeverity(role: UserRole): Severity {
+		return roleTagSeverityMap[role];
+	}
+
+	getAvatarSeverity(user: User): string {
+		return getAvatarSeverity(user);
 	}
 }

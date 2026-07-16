@@ -44,6 +44,18 @@
 			}
 		</div>
 
+		@if (!isEditMode) {
+			<div class="field col-12 md:col-6">
+				<p-floatlabel variant="in" class="w-full">
+					<input pInputText id="password" formControlName="password" autocomplete="off" type="password" class="w-full" />
+					<label for="password">{{ 'user-management.password' | translate }} *</label>
+				</p-floatlabel>
+				@if (form.get('password')?.invalid && form.get('password')?.touched) {
+					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+				}
+			</div>
+		}
+
 		<div class="field col-12">
 			<div formGroupName="roles" class="flex flex-column gap-2">
 				<span class="text-sm font-medium">{{ 'user-management.roles' | translate }}</span>
@@ -72,7 +84,7 @@
 			(onClick)="onCancel()"
 		/>
 		<p-button
-			[label]="'modal.edit-employee.submit' | translate"
+			[label]="(isEditMode ? 'modal.edit-employee.submit' : 'modal.add-employee.submit') | translate"
 			icon="pi pi-check"
 			[disabled]="form.invalid"
 			(onClick)="onSubmit()"

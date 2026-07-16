@@ -11,7 +11,7 @@ import {
 	FormGroup,
 	Validators,
 } from '@angular/forms';
-import { LoginRequest } from '../../model/login.model';
+import { LoginRequest } from '../../model/auth.model';
 
 @Component({
 	selector: 'app-login-page',

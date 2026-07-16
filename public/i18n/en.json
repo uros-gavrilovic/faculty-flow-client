@@ -5,7 +5,9 @@
 		"password": "Password"
 	},
 	"reservation": {
-		"title": "Title",
+		"panel-title": "Reservations",
+		"panel-description": "Manage room reservations, approvals and requests",
+		"title": "Reservation title",
 		"name": "Name",
 		"room": "Room",
 		"start": "Start time",
@@ -24,6 +26,8 @@
 		"pagination": "Showing {first} to {last} of {totalRecords} reservations"
 	},
 	"employee": {
+		"panel-title": "Employees",
+		"panel-description": "Manage faculty staff, permissions and accounts",
 		"first-name": "First Name",
 		"last-name": "Last Name",
 		"email": "Email"
@@ -40,6 +44,7 @@
 		"no-roles": "No roles assigned",
 		"settings": "User Settings",
 		"showing-users": "Showing {first} to {last} of {totalRecords} users",
+		"add-user": "Add Employee",
 		"save": "Save"
 	},
 	"modal": {
@@ -50,6 +55,10 @@
 		"edit-employee": {
 			"title": "Edit employee information",
 			"submit": "Update employee"
+		},
+		"add-employee": {
+			"title": "Add new employee",
+			"submit": "Add employee"
 		}
 	},
 	"common": {

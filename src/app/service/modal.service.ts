@@ -25,9 +25,11 @@ export class ModalService {
 		return this.dialogRef;
 	}
 
-	openEmployeeSettingsDialog(data: EmployeeSettingsModalData): DynamicDialogRef {
+	openEmployeeSettingsDialog(data?: EmployeeSettingsModalData): DynamicDialogRef {
+		const isEditMode: boolean = !!data;
+
 		this.dialogRef = this.dialogService.open(EmployeeSettingsModalComponent, {
-			header: this.translateService.instant('modal.edit-employee.title'),
+			header: this.translateService.instant(isEditMode ? 'modal.edit-employee.title' : 'modal.add-employee.title'),
 			closable: true,
 			dismissableMask: true,
 			draggable: false,

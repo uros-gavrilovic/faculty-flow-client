@@ -12,6 +12,8 @@
 >
 	<ng-template pTemplate="header">
 		<tr>
+         <th></th>
+
 			<th pSortableColumn="firstName">
 				{{ 'employee.first-name' | translate }}
 				<p-sortIcon field="firstName" />
@@ -27,9 +29,8 @@
 				<p-sortIcon field="username" />
 			</th>
 
-			<th pSortableColumn="email">
+			<th>
 				{{ 'employee.email' | translate }}
-				<p-sortIcon field="email" />
 			</th>
 
 			<th>{{ 'user-management.roles' | translate }}</th>
@@ -42,6 +43,10 @@
 
 	<ng-template pTemplate="body" let-user>
 		<tr>
+         <td>
+            <p-avatar [label]="getUserInitials(user)" [class]="'avatar-' + getAvatarSeverity(user)" size="large" shape="circle" />
+         </td>
+
 			<td>
 				{{ user.firstName }}
 			</td>
@@ -59,21 +64,13 @@
 			<td>
 				@if (user.roles.length > 0) {
 					@for (role of user.roles; track role) {
-						<p-tag
-							[value]="role"
-							[severity]="getRoleSeverity(role)"
-						/>
+						<p-tag [value]="role" [severity]="getRoleSeverity(role)" />
 					}
 				}
 			</td>
 
 			<td style="text-align: center">
-				<p-button
-					icon="pi pi-cog"
-					[rounded]="true"
-					[text]="true"
-					severity="secondary"
-					(onClick)="onEditEmployee(user)"
+				<p-button icon="pi pi-cog" [rounded]="true" [text]="true" severity="secondary" (onClick)="onEditEmployee(user)"
 				/>
 			</td>
 		</tr>
