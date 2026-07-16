@@ -23,7 +23,9 @@ import { User, UserRole } from '../../../model/user.model';
 	styleUrl: './reservation-table.component.scss',
 })
 export class ReservationTableComponent {
+
 	selectedReservations: Reservation[] = [];
+	searchRequest: SearchRequest<ReservationFilter>;
 
 	currentUser: Signal<User>;
 	reservations: Signal<SearchResponse<Reservation>>;
@@ -43,16 +45,26 @@ export class ReservationTableComponent {
 	) {}
 
 	ngOnInit(): void {
-		this.store.dispatch(AppAction.searchReservations({ searchRequest: { page: 0, size: 10 } }));
-		this.reservations = this.store.selectSignal(AppSelector.selectReservationsSearch);
+		this.reservations = this.store.selectSignal(AppSelector.selectReservations);
 		this.currentUser = this.store.selectSignal(AppSelector.selectCurrentUser);
+		this.searchRequest = {
+			page: 0,
+			size: 10,
+			filter: {
+				reservedBy: this.currentUser()?.roles.includes(UserRole.ADMINISTRATOR) ?
+					undefined :
+					this.currentUser()?.username,
+			}
+		};
+		this.store.dispatch(AppAction.searchReservations({searchRequest: this.searchRequest}));
 	}
 
 	onPage(event: TableLazyLoadEvent): void {
 		const page: number = event.first / event.rows;
 		const size: number = event.rows;
-		const searchRequest: SearchRequest = { page, size };
-		this.store.dispatch(AppAction.searchReservations({ searchRequest }));
+		this.searchRequest = {...this.searchRequest, page, size};
+
+		this.store.dispatch(AppAction.searchReservations({ searchRequest: this.searchRequest }));
 	}
 
 	getStatusSeverity(status: ReservationStatus): 'warn' | 'success' | 'danger' | 'secondary' {

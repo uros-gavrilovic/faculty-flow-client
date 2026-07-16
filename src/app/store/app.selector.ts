@@ -4,7 +4,7 @@ import { Token } from '../model/token.model';
 import { User } from '../model/user.model';
 import { Room } from '../model/room.model';
 import { Reservation } from '../model/reservation.model';
-import { SearchResponse } from '../model/search.model';
+import { SearchRequest, SearchResponse } from '../model/search.model';
 
 export const selectAppState = createFeatureSelector<AppState>(APP_STATE_KEY);
 
@@ -13,5 +13,5 @@ export const selectCurrentUser = createSelector(selectAppState, (state: AppState
 export const selectUser = createSelector(selectAppState, (state: AppState): User => state.user);
 export const selectUsers = createSelector(selectAppState, (state: AppState): SearchResponse<User> => state.users);
 export const selectRooms = createSelector(selectAppState, (state: AppState): Room[] => state.rooms);
-export const selectReservations = createSelector(selectAppState, (state): Reservation[] => state.reservations);
-export const selectReservationsSearch = createSelector(selectAppState, (state): SearchResponse<Reservation> => state.reservationsSearch);
+export const selectReservations = createSelector(selectAppState, (state: AppState): SearchResponse<Reservation> => state.reservations);
+export const selectSearchRequest = createSelector(selectAppState, (state: AppState): SearchRequest<any> => state.searchRequest);

@@ -49,26 +49,18 @@ export const appReducer = createReducer(
 		};
 	}),
 
-
 	on(AppAction.getRoomsSuccess, (state, { rooms }) => ({
 		...state,
 		rooms,
 	})),
 
-	on(AppAction.searchReservationsSuccess, (state, { searchResponse }) => ({
+	on(AppAction.searchReservationsSuccess, (state: AppState, { searchResponse }) => ({
 		...state,
-		reservationsSearch: searchResponse,
+		reservations: searchResponse,
 	})),
-	on(AppAction.loadReservationsSuccess, (state, { reservations }) => ({
+
+	on(AppAction.saveSearchRequest, (state, { searchRequest }) => ({
 		...state,
-		reservations,
-	})),
-	on(AppAction.requestReservationSuccess, (state, { reservation }) => ({
-		...state,
-		reservations: [...state.reservations, reservation],
-	})),
-	on(AppAction.reviewReservationSuccess, (state, { reservation }) => ({
-		...state,
-		reservations: state.reservations.map((r) => (r.uuid === reservation.uuid ? reservation : r)),
+		searchRequest
 	})),
 );

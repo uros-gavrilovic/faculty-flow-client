@@ -21,9 +21,9 @@ import {
 import { Reservation, ReservationFilter, ReservationStatus } from '../../model/reservation.model';
 import { ConfirmationService } from 'primeng/api';
 import { ModalService } from '../../service/modal.service';
-import { selectReservations, selectReservationsSearch } from '../../store/app.selector';
 import { Store } from '@ngrx/store';
 import * as AppAction from '../../store/app.action';
+import * as AppSelector from '../../store/app.selector';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {ScheduleEvent} from '../../model/scheduler.model';
 import { ScheduleFilterComponent } from '../../component/schedule/schedule-filter/schedule-filter.component';
@@ -81,7 +81,7 @@ export class SchedulePageComponent implements OnInit {
 
 	initSelectors(): void {
 		this.store
-			.select(selectReservationsSearch)
+			.select(AppSelector.selectReservations)
 			.pipe(takeUntilDestroyed(this.destroyRef))
 			.subscribe((response: SearchResponse<Reservation>): void => {
 				this.mergeEvents(response);
@@ -127,8 +127,7 @@ export class SchedulePageComponent implements OnInit {
 			(r: Reservation): ScheduleEvent => this.toScheduleEvent(r),
 		);
 
-		if (this.scheduleObj)
-			this.scheduleObj.eventSettings = { ...this.eventSettings, dataSource: events };
+		if (this.scheduleObj) this.scheduleObj.eventSettings = { ...this.eventSettings, dataSource: events };
 	}
 
 	private toScheduleEvent(r: Reservation): ScheduleEvent {

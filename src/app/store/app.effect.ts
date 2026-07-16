@@ -2,15 +2,16 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
 import { UserApiService } from '../service/user-api.service';
 import * as AppAction from './app.action';
-import { catchError, switchMap, map, tap } from 'rxjs';
+import * as AppSelector from './app.selector';
+import { catchError, switchMap, map, tap, withLatestFrom, take, pipe } from 'rxjs';
 import { Router } from '@angular/router';
 import { MessageService } from '../service/message.service';
 import { MessageSeverity } from '../model/message-severity.model';
 import { PageUrl } from '../constant/page-url.constant';
 import { ReservationApiService } from '../service/reservation-api.service';
-import { Reservation } from '../model/reservation.model';
 import { LoginResponse } from '../model/login.model';
 import { RoomApiService } from '../service/room-api.service';
+import { Store } from '@ngrx/store';
 
 export const loginEffect = createEffect(
 	() => {
@@ -30,8 +31,7 @@ export const loginEffect = createEffect(
 					),
 			),
 		);
-	},
-	{ functional: true },
+	}, { functional: true },
 );
 
 export const getCurrentUserEffect = createEffect(
@@ -47,8 +47,7 @@ export const getCurrentUserEffect = createEffect(
 					.pipe(map((user) => AppAction.getCurrentUserSuccess({ user }))),
 			),
 		);
-	},
-	{ functional: true },
+	}, { functional: true },
 );
 
 export const loginRedirectEffect = createEffect(
@@ -68,8 +67,7 @@ export const loginRedirectEffect = createEffect(
 				router.navigate([PageUrl.SCHEDULE]);
 			}),
 		);
-	},
-	{ functional: true, dispatch: false },
+	}, { functional: true, dispatch: false },
 );
 
 export const logoutRedirectEffect = createEffect(
@@ -89,8 +87,7 @@ export const logoutRedirectEffect = createEffect(
 				router.navigate([PageUrl.LOGIN]);
 			}),
 		);
-	},
-	{ functional: true, dispatch: false },
+	}, { functional: true, dispatch: false },
 );
 
 export const getUserEffect = createEffect(
@@ -101,11 +98,12 @@ export const getUserEffect = createEffect(
 		return actions$.pipe(
 			ofType(AppAction.getUser),
 			switchMap((payload) =>
-				userApi.getUser({ username: payload.username, uuid: payload.uuid }).pipe(map((user) => AppAction.getUserSuccess({ user })),),
+				userApi
+					.getUser({ username: payload.username, uuid: payload.uuid })
+					.pipe(map((user) => AppAction.getUserSuccess({ user }))),
 			),
 		);
-	},
-	{ functional: true },
+	}, { functional: true },
 );
 
 export const getUsersEffect = createEffect(
@@ -115,23 +113,26 @@ export const getUsersEffect = createEffect(
 
 		return actions$.pipe(
 			ofType(AppAction.searchUsers),
-			switchMap((payload) => userApi.searchUsers(payload.searchRequest).pipe(
-				map((searchResponse) => AppAction.searchUsersSuccess({ searchResponse })))
+			switchMap((payload) =>
+				userApi
+					.searchUsers(payload.searchRequest)
+					.pipe(map((searchResponse) => AppAction.searchUsersSuccess({ searchResponse }))),
 			),
 		);
-	},
-	{ functional: true },
+	}, { functional: true },
 );
 
 export const updateUserEffect = createEffect(
 	() => {
+		const store = inject(Store);
 		const actions$ = inject(Actions);
 		const userApi = inject(UserApiService);
 		const messageService = inject(MessageService);
 
 		return actions$.pipe(
 			ofType(AppAction.updateUser),
-			switchMap((payload) =>
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([payload, searchRequest]) =>
 				userApi.updateUser(payload.user).pipe(
 					tap(() =>
 						messageService.showMessage(
@@ -140,7 +141,7 @@ export const updateUserEffect = createEffect(
 							'messages.user-management.user-updated.message',
 						),
 					),
-					map((user) => AppAction.updateUserSuccess({ user })),
+					pipe(map(() => AppAction.searchUsers({ searchRequest }))),
 				),
 			),
 		);
@@ -151,7 +152,7 @@ export const updateUserEffect = createEffect(
 export const getRoomsEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);
-		const roomApi = inject(RoomApiService)
+		const roomApi = inject(RoomApiService);
 
 		return actions$.pipe(
 			ofType(AppAction.getRooms),
@@ -170,45 +171,25 @@ export const searchReservationsEffect = createEffect(
 			switchMap(({ searchRequest }) =>
 				reservationApi
 					.searchReservations(searchRequest)
-					.pipe(map((searchResponse) => AppAction.searchReservationsSuccess({ searchResponse }))),
+					.pipe(map((searchResponse) => AppAction.searchReservationsSuccess({ searchResponse })),),
 			),
 		);
-	},
-	{ functional: true },
-);
-
-export const loadReservationsEffect = createEffect(
-	() => {
-		const actions$ = inject(Actions);
-		const reservationApi = inject(ReservationApiService);
-
-		return actions$.pipe(
-			ofType(AppAction.loadReservations),
-			switchMap(({ start, end }) =>
-				reservationApi
-					.getReservations(start, end)
-					.pipe(map((reservations) => AppAction.loadReservationsSuccess({ reservations }))),
-			),
-		);
-	},
-	{ functional: true },
+	}, { functional: true },
 );
 
 export const requestReservationEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);
 		const reservationApi = inject(ReservationApiService);
+		const store = inject(Store);
 
 		return actions$.pipe(
 			ofType(AppAction.requestReservation),
-			switchMap((payload) =>
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([{ request }, searchRequest]) =>
 				reservationApi
-					.requestReservation(payload.request)
-					.pipe(
-						map((reservation: Reservation) =>
-							AppAction.requestReservationSuccess({ reservation }),
-						),
-					),
+					.requestReservation(request)
+					.pipe(map(() => AppAction.searchReservations({ searchRequest }))),
 			),
 		);
 	},
@@ -217,17 +198,29 @@ export const requestReservationEffect = createEffect(
 
 export const reviewReservationEffect = createEffect(
 	() => {
+		const store = inject(Store);
 		const actions$ = inject(Actions);
 		const reservationApi = inject(ReservationApiService);
 
 		return actions$.pipe(
 			ofType(AppAction.reviewReservation),
-			switchMap(({ review }) =>
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([{ review }, searchRequest]) =>
 				reservationApi
 					.reviewReservation(review)
-					.pipe(map((reservation) => AppAction.reviewReservationSuccess({ reservation }))),
+					.pipe(map(() => AppAction.searchReservations({ searchRequest }))),
 			),
 		);
-	},
-	{ functional: true },
+	}, { functional: true },
+);
+
+export const saveSearchRequestEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+
+		return actions$.pipe(
+			ofType(AppAction.searchReservations, AppAction.searchUsers),
+			map(({ searchRequest }) => AppAction.saveSearchRequest({ searchRequest })),
+		);
+	}, { functional: true },
 );

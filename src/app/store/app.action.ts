@@ -33,12 +33,10 @@ enum AppActionType {
 	// Reservation
 	SEARCH_RESERVATIONS = '[ROOM] Search Reservations',
 	SEARCH_RESERVATIONS_SUCCESS = '[ROOM] Search reservations Success',
-	LOAD_RESERVATIONS = '[RESV] Load Reservations',
-	LOAD_RESERVATIONS_SUCCESS = '[RESV] Load Reservations Success',
 	REQUEST_RESERVATION = '[RESV] Request Reservation',
-	REQUEST_RESERVATION_SUCCESS = '[RESV] Request Reservation Success',
 	REVIEW_RESERVATION = '[RESV] Review Reservation',
-	REVIEW_RESERVATION_SUCCESS = '[RESV] Review Reservation Success',
+
+	SAVE_SEARCH_REQUEST = '[SEARCH] Save Search Request',
 }
 
 export const loginUser = createAction(AppActionType.LOG_IN, props<{ request: LoginRequest }>());
@@ -59,9 +57,7 @@ export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, pro
 
 export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest<ReservationFilter> }>());
 export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>(),);
-export const loadReservations = createAction(AppActionType.LOAD_RESERVATIONS, props<{ start: Date; end: Date }>(),);
-export const loadReservationsSuccess = createAction(AppActionType.LOAD_RESERVATIONS_SUCCESS, props<{ reservations: Reservation[] }>(),);
 export const requestReservation = createAction(AppActionType.REQUEST_RESERVATION, props<{ request: ReservationRequest }>(),);
-export const requestReservationSuccess = createAction(AppActionType.REQUEST_RESERVATION_SUCCESS, props<{ reservation: Reservation }>(),);
 export const reviewReservation = createAction(AppActionType.REVIEW_RESERVATION, props<{ review: ReservationReview }>(),);
-export const reviewReservationSuccess = createAction(AppActionType.REVIEW_RESERVATION_SUCCESS, props<{ reservation: Reservation }>(),);
+
+export const saveSearchRequest = createAction(AppActionType.SAVE_SEARCH_REQUEST, props<{ searchRequest: SearchRequest<any> }>(),);

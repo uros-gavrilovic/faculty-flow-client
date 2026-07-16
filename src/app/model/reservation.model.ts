@@ -20,13 +20,13 @@ export interface Reservation {
 }
 
 export interface ReservationFilter {
-	name: string;
-	room: string;
-	startTime: Date;
-	endTime: Date;
-	reservedBy: string;
-	reviewedBy: string;
-	status: ReservationStatus;
+	name?: string;
+	room?: string;
+	startTime?: Date;
+	endTime?: Date;
+	reservedBy?: string;
+	reviewedBy?: string;
+	status?: ReservationStatus;
 }
 
 export interface ReservationRequest {

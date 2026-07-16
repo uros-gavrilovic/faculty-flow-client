@@ -2,18 +2,18 @@ import { User } from '../model/user.model';
 import { Token } from '../model/token.model';
 import { Reservation } from '../model/reservation.model';
 import { Room } from '../model/room.model';
-import { SearchResponse } from '../model/search.model';
+import { SearchRequest, SearchResponse } from '../model/search.model';
 
 export const APP_STATE_KEY: string = 'app';
 
-export interface AppState {
+export interface AppState<F = unknown> {
 	token: Token;
 	currentUser: User;
 	user: User;
 	users: SearchResponse<User>;
 	rooms: Room[];
-	reservations: Reservation[];
-	reservationsSearch: SearchResponse<Reservation>;
+	reservations: SearchResponse<Reservation>;
+	searchRequest: SearchRequest<F>;
 }
 
 export const INITIAL_APP_STATE: AppState = (() => {
@@ -30,6 +30,6 @@ export const INITIAL_APP_STATE: AppState = (() => {
 		users: null,
 		rooms: null,
 		reservations: null,
-		reservationsSearch: null,
+		searchRequest: null,
 	};
 })();
