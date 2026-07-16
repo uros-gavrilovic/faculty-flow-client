@@ -1,0 +1,56 @@
+<form [formGroup]="form"  class="grid gap-3 p-3">
+	<div class="col-12 md:col-3">
+		<p-iconfield class="w-full">
+			<p-inputicon class="pi pi-search" />
+			<input
+				pInputText
+				class="w-full"
+				formControlName="name"
+				placeholder="Reservation name">
+		</p-iconfield>
+	</div>
+
+	<div class="col-12 md:col-3">
+		<p-select
+			class="w-full"
+			formControlName="room"
+			[options]="rooms()"
+			optionLabel="name"
+			optionValue="code"
+			placeholder="Room"
+			[filter]="true"
+			filterBy="name"
+			[showClear]="true">
+		</p-select>
+	</div>
+
+	<div class="col-12 md:col-2">
+		<p-select
+			class="w-full"
+			formControlName="status"
+			[options]="statuses"
+			placeholder="Status"
+			[showClear]="true">
+		</p-select>
+	</div>
+
+	<div class="col-12 md:col-2">
+		<input
+			pInputText
+			class="w-full"
+			formControlName="reservedBy"
+			placeholder="Reserved by">
+	</div>
+
+	<div class="col-12 md:col-1">
+		<p-button
+			styleClass="w-full"
+			icon="pi pi-filter-slash"
+ 			label="Clear"
+			severity="secondary"
+			(click)="onClear()">
+		</p-button>
+	</div>
+
+
+</form>

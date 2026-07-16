@@ -32,8 +32,8 @@ export class UserApiService {
 		const params = {
 			page: searchRequest.page,
 			size: searchRequest.size,
-			sortBy: searchRequest.sort ?? 'lastName',
-			direction: searchRequest.order ?? 'asc',
+			sortBy: searchRequest.sortBy ?? 'lastName',
+			direction: searchRequest.direction ?? 'asc',
 		};
 
 		return this.httpClient.get<SearchResponse<User>>(`${this.USER_API}/search`, { params });

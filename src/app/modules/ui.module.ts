@@ -19,6 +19,8 @@ import { Tag } from 'primeng/tag';
 import { Checkbox } from 'primeng/checkbox';
 import { Dialog } from 'primeng/dialog';
 import { Chip } from 'primeng/chip';
+import { IconField } from 'primeng/iconfield';
+import { InputIcon } from 'primeng/inputicon';
 
 export const PRIMENG_MODULES = [
 	InputTextModule,
@@ -44,4 +46,7 @@ export const PRIMENG_MODULES = [
 	Card,
 	TableModule,
 	Panel,
+	IconField,
+	InputIcon,
+	InputText,
 ];

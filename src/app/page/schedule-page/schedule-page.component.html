@@ -1,6 +1,11 @@
+<app-schedule-filter
+	(filterChange)="onFilterChange($event)"
+></app-schedule-filter>
+
 <ejs-schedule
 	#scheduleObj
 	[eventSettings]="eventSettings"
+	(eventRendered)="onEventRendered($event)"
 	(created)="onCreated()"
 	(navigating)="onNavigating()"
 	(cellClick)="onCellClick($event)"
@@ -8,8 +13,38 @@
 	(popupOpen)="onPopupOpen($event)"
 	(actionBegin)="onActionBegin($event)"
 >
+	<ng-template #eventSettingsTemplate let-data>
+		<div class="event-content">
+			<div class="text-lg mt-3">
+				<b>{{ data.Subject }}</b>
+			</div>
+
+			<div class="row ml-1">
+				<div class="col-3">
+					<i class="pi pi-map-marker mr-1"></i>
+					<b>{{ data.Location }}</b>
+				</div>
+				<div class="col-6">
+					<i class="pi pi-clock mr-1"></i>
+					<b>{{ data.StartTime | date: 'HH:mm' }} - {{ data.EndTime | date: 'HH:mm' }}</b>
+				</div>
+			</div>
+
+			<div class="col-12">
+				<i class="pi pi-user"></i>
+				{{ data.ReservedBy }}
+			</div>
+
+			@if (data.Note) {
+				<div class="col-12">
+					<i class="pi pi-info-circle"></i>
+					{{ data.Note }}
+				</div>
+			}
+		</div>
+	</ng-template>
 	<e-views>
-		<e-view option="Week" startHour="08:00" endHour="18:00"></e-view>
+		<e-view option="Week" startHour="08:00" endHour="18:00" [showWeekend]="false"></e-view>
 		<e-view option="Month" [showWeekend]="false"></e-view>
 	</e-views>
 </ejs-schedule>

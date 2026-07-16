@@ -5,9 +5,10 @@ export interface SearchResponse<T> {
 	size: number;
 }
 
-export interface SearchRequest {
+export interface SearchRequest<F = undefined> {
 	page: number;
 	size: number;
-	sort?: string;
-	order?: 'asc' | 'desc';
+	sortBy?: string;
+	direction?: 'asc' | 'desc';
+	filter?: F;
 }

@@ -1,6 +1,11 @@
 import { createAction, props } from '@ngrx/store';
 import { User } from '../model/user.model';
-import { Reservation, ReservationRequest, ReservationReview } from '../model/reservation.model';
+import {
+	Reservation,
+	ReservationFilter,
+	ReservationRequest,
+	ReservationReview,
+} from '../model/reservation.model';
 import { LoginRequest, LoginResponse } from '../model/login.model';
 import { Room } from '../model/room.model';
 import { SearchRequest, SearchResponse } from '../model/search.model';
@@ -52,7 +57,7 @@ export const updateUserSuccess = createAction(AppActionType.UPDATE_USER_SUCCESS,
 export const getRooms = createAction(AppActionType.GET_ROOMS);
 export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>(),);
 
-export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest }>());
+export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest<ReservationFilter> }>());
 export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>(),);
 export const loadReservations = createAction(AppActionType.LOAD_RESERVATIONS, props<{ start: Date; end: Date }>(),);
 export const loadReservationsSuccess = createAction(AppActionType.LOAD_RESERVATIONS_SUCCESS, props<{ reservations: Reservation[] }>(),);

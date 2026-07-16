@@ -4,7 +4,12 @@ import { TableLazyLoadEvent } from 'primeng/table';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { DatePipe } from '@angular/common';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
-import { Reservation, ReservationReview, ReservationStatus, } from '../../../model/reservation.model';
+import {
+	Reservation,
+	ReservationFilter,
+	ReservationReview,
+	ReservationStatus,
+} from '../../../model/reservation.model';
 import { SearchRequest, SearchResponse } from '../../../model/search.model';
 import * as AppSelector from '../../../store/app.selector';
 import * as AppAction from '../../../store/app.action';

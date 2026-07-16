@@ -5,7 +5,7 @@ export interface ScheduleEvent {
 	Subject: string;
 	StartTime: Date;
 	EndTime: Date;
-	Room: string;
+	Location: string;
 	ReservedBy: string;
 	Status: ReservationStatus;
 	Note: string;

@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Reservation, ReservationRequest, ReservationReview } from '../model/reservation.model';
+import {
+	Reservation,
+	ReservationFilter,
+	ReservationRequest,
+	ReservationReview,
+} from '../model/reservation.model';
 import { environment } from '../../environment/environment';
 import { SearchRequest, SearchResponse } from '../model/search.model';
 import { User } from '../model/user.model';
@@ -22,15 +27,8 @@ export class ReservationApiService {
 			.set('end', this.toLocalDateTime(end));
 	}
 
-	searchReservations(searchRequest: SearchRequest): Observable<SearchResponse<Reservation>> {
-		const params = {
-			page: searchRequest.page,
-			size: searchRequest.size,
-			sortBy: searchRequest.sort ?? 'startTime',
-			direction: searchRequest.order ?? 'asc',
-		};
-
-		return this.httpClient.get<SearchResponse<Reservation>>(`${this.RESERVATION_API}/search`, { params });
+	searchReservations(searchRequest: SearchRequest<ReservationFilter>): Observable<SearchResponse<Reservation>> {
+		return this.httpClient.post<SearchResponse<Reservation>>(`${this.RESERVATION_API}/search`, searchRequest);
 	}
 	getReservations(start: Date, end: Date): Observable<Reservation[]> {
 		return this.httpClient.get<Reservation[]>(this.RESERVATION_API, {

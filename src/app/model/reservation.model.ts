@@ -19,6 +19,16 @@ export interface Reservation {
 	comment: string | null;
 }
 
+export interface ReservationFilter {
+	name: string;
+	room: string;
+	startTime: Date;
+	endTime: Date;
+	reservedBy: string;
+	reviewedBy: string;
+	status: ReservationStatus;
+}
+
 export interface ReservationRequest {
 	name: string;
 	roomCode: string;

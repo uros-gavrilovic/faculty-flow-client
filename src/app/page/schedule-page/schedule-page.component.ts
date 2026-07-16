@@ -5,6 +5,7 @@ import {
 	CellClickEventArgs,
 	DayService,
 	EventClickArgs,
+	EventRenderedArgs,
 	EventSettingsModel,
 	MonthAgendaService,
 	MonthService,
@@ -17,18 +18,21 @@ import {
 	WeekService,
 	WorkWeekService,
 } from '@syncfusion/ej2-angular-schedule';
-import { Reservation, ReservationStatus } from '../../model/reservation.model';
+import { Reservation, ReservationFilter, ReservationStatus } from '../../model/reservation.model';
 import { ConfirmationService } from 'primeng/api';
 import { ModalService } from '../../service/modal.service';
-import { selectReservations } from '../../store/app.selector';
+import { selectReservations, selectReservationsSearch } from '../../store/app.selector';
 import { Store } from '@ngrx/store';
 import * as AppAction from '../../store/app.action';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {ScheduleEvent} from '../../model/scheduler.model';
+import { ScheduleFilterComponent } from '../../component/schedule/schedule-filter/schedule-filter.component';
+import { SearchResponse } from '../../model/search.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
 	selector: 'app-schedule-page',
-	imports: [ScheduleModule],
+	imports: [ScheduleModule, ScheduleFilterComponent, DatePipe],
 	providers: [
 		DayService,
 		WeekService,
@@ -44,11 +48,12 @@ import {ScheduleEvent} from '../../model/scheduler.model';
 	styleUrl: './schedule-page.component.scss',
 })
 export class SchedulePageComponent implements OnInit {
+	filter: ReservationFilter;
 	eventSettings: EventSettingsModel;
 
-	@ViewChild('scheduleObj') scheduleObj!: ScheduleComponent;
-
 	reservations: Signal<Reservation[]>;
+
+	@ViewChild('scheduleObj') scheduleObj!: ScheduleComponent;
 
 	constructor(
 		private store: Store,
@@ -65,6 +70,7 @@ export class SchedulePageComponent implements OnInit {
 				subject: { name: 'Subject' },
 				startTime: { name: 'StartTime' },
 				endTime: { name: 'EndTime' },
+				location: { name: 'Location' },
 				description: { name: 'Note' },
 				isReadonly: 'IsReadonly',
 			},
@@ -73,13 +79,12 @@ export class SchedulePageComponent implements OnInit {
 		this.initSelectors();
 	}
 
-
 	initSelectors(): void {
 		this.store
-			.select(selectReservations)
+			.select(selectReservationsSearch)
 			.pipe(takeUntilDestroyed(this.destroyRef))
-			.subscribe((res) => {
-				this.mergeEvents(res);
+			.subscribe((response: SearchResponse<Reservation>): void => {
+				this.mergeEvents(response);
 			});
 	}
 
@@ -102,29 +107,41 @@ export class SchedulePageComponent implements OnInit {
 		const end = new Date(dates[dates.length - 1]);
 		end.setHours(23, 59, 59, 999);
 
-		this.store.dispatch(AppAction.loadReservations({ start, end }));
+		this.store.dispatch(
+			AppAction.searchReservations({
+				searchRequest: {
+					page: 0,
+					size: 1000,
+					filter: {
+						...this.filter,
+						startTime: start,
+						endTime: end,
+					},
+				},
+			}),
+		);
 	}
 
-	private mergeEvents(reservations: Reservation[]): void {
-		const events: ScheduleEvent[] = reservations.map(
+	private mergeEvents(response: SearchResponse<Reservation>): void {
+		const events: ScheduleEvent[] = response.data?.map(
 			(r: Reservation): ScheduleEvent => this.toScheduleEvent(r),
 		);
 
-		if (this.scheduleObj) this.scheduleObj.eventSettings = { ...this.eventSettings, dataSource: events };
+		if (this.scheduleObj)
+			this.scheduleObj.eventSettings = { ...this.eventSettings, dataSource: events };
 	}
 
 	private toScheduleEvent(r: Reservation): ScheduleEvent {
 		return {
 			Id: r.uuid,
 			Subject: r.name,
-			StartTime: r.startTime,
-			EndTime: r.endTime,
-			Room: r.room,
+			StartTime: new Date(r.startTime),
+			EndTime: new Date(r.endTime),
+			Location: r.room,
 			ReservedBy: r.reservedBy,
 			Status: r.status,
 			Note: r.note ?? '',
-			IsReadonly: r.status !== 'PENDING',
-			CssClass: `event-status-${r.status.toLowerCase()}`,
+			IsReadonly: r.status !== ReservationStatus.PENDING,
 		};
 	}
 
@@ -171,4 +188,46 @@ export class SchedulePageComponent implements OnInit {
 			},
 		});
 	}
+
+	protected onFilterChange(filter: ReservationFilter): void {
+		this.filter = filter;
+		this.loadEvents();
+	}
+
+	onEventRendered(args: EventRenderedArgs): void {
+		const event = args.data as ScheduleEvent;
+		const colors = this.statusColorMap[event.Status];
+
+		if (!colors) return;
+
+		args.element.style.background = colors.background;
+		args.element.style.borderLeft = `3px solid ${colors.border}`;
+		args.element.style.color = colors.color;
+	}
+
+	readonly statusColorMap: Record<
+		ReservationStatus,
+		{ background: string; border: string; color: string }
+	> = {
+		[ReservationStatus.PENDING]: {
+			background: '#f1f5f9', // secondary
+			border: '#94a3b8',
+			color: '#475569',
+		},
+		[ReservationStatus.CANCELED]: {
+			background: '#fef3c7', // warn
+			border: '#d97706',
+			color: '#92400e',
+		},
+		[ReservationStatus.ACCEPTED]: {
+			background: '#dcfce7', // success
+			border: '#16a34a',
+			color: '#14532d',
+		},
+		[ReservationStatus.REJECTED]: {
+			background: '#fee2e2', // danger
+			border: '#dc2626',
+			color: '#7f1d1d',
+		},
+	};
 }

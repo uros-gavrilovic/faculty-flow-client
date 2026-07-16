@@ -29,39 +29,61 @@
 
 :host ::ng-deep {
 
+	.e-appointment {
+		overflow: hidden;
+
+		.e-appointment-details {
+			overflow: hidden;
+			width: 100%;
+			box-sizing: border-box;
+		}
+	}
+
 	.e-appointment.event-status-pending {
 		background: #fef3c7 !important;
-		border-left: 3px solid #d97706 !important;
-		color: #92400e !important;
+		border-left: 4px solid #d97706 !important;
 
-		.e-appointment-details { color: #92400e; }
+		.e-appointment-details,
+		.e-subject,
+		.e-time {
+			color: #92400e !important;
+		}
 	}
 
 	.e-appointment.event-status-approved {
 		background: #dcfce7 !important;
-		border-left: 3px solid #16a34a !important;
-		color: #14532d !important;
+		border-left: 4px solid #16a34a !important;
 
-		.e-appointment-details { color: #14532d; }
+		.e-appointment-details,
+		.e-subject,
+		.e-time {
+			color: #14532d !important;
+		}
 	}
 
 	.e-appointment.event-status-rejected {
 		background: #fee2e2 !important;
-		border-left: 3px solid #dc2626 !important;
-		color: #7f1d1d !important;
+		border-left: 4px solid #dc2626 !important;
 		opacity: 0.75;
 
-		.e-appointment-details { color: #7f1d1d; }
+		.e-appointment-details,
+		.e-subject,
+		.e-time {
+			color: #7f1d1d !important;
+		}
 	}
 
-	.e-appointment.event-status-cancelled {
+	.e-appointment.event-status-canceled {
 		background: #f1f5f9 !important;
-		border-left: 3px solid #94a3b8 !important;
-		color: #64748b !important;
+		border-left: 4px solid #94a3b8 !important;
 		opacity: 0.6;
-		text-decoration: line-through;
 
-		.e-appointment-details { color: #64748b; }
+		.e-appointment-details,
+		.e-subject,
+		.e-time {
+			color: #64748b !important;
+			text-decoration: line-through;
+		}
 	}
 }
 
