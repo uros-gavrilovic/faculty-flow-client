@@ -1,5 +1,8 @@
 	<app-panel-stepper [title]="'user-management.user-information'" [icon]="'pi pi-user'">
-		<app-user-form [form]=form [user]="user"/>
+		<app-user-form
+			[form]=form [user]="user"
+			[isEditMode]="isEditMode"
+		/>
 	</app-panel-stepper>
 
 	@if (isEditMode) {
@@ -7,7 +10,10 @@
 	}
 
 	<app-panel-stepper title="user-management.role-and-permissions" icon="pi pi-shield" [iconStyleClass]="'chip chip-danger'">
-		<app-role-form [form]="form" [user]="user" />
+		<app-role-form
+			[form]="form"
+			[user]="user"
+		/>
 	</app-panel-stepper>
 
 	<div class="flex justify-content-end gap-2 mt-3">
@@ -18,9 +24,8 @@
 			(onClick)="onCancel()"
 		/>
 		<p-button
-			[label]="(isEditMode ? 'modal.edit-employee.submit' : 'modal.add-employee.submit') | translate"
 			icon="pi pi-check"
-			[disabled]="form.invalid"
+			[label]="(isEditMode ? 'modal.edit-employee.submit' : 'modal.add-employee.submit') | translate"
 			(onClick)="onSubmit()"
 		/>
 	</div>

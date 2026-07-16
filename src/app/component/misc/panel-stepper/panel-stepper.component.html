@@ -1,11 +1,11 @@
 <p-fieldset [toggleable]=toggleable>
 	<ng-template #header>
-		<div class="flex items-center gap-2 px-2">
+		<div class="flex items-center gap-2 px-2 mt-1">
 			<p-avatar [icon]="icon" [styleClass]="iconStyleClass" shape="circle" />
 			<span>{{ title | translate }}</span>
 		</div>
 	</ng-template>
-	<div class="grid formgrid m-3">
+	<div class="grid formgrid m-1">
 		<ng-content />
 	</div>
 </p-fieldset>

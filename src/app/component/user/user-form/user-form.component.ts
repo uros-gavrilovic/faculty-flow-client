@@ -9,11 +9,12 @@ import {
 } from '@angular/forms';
 import { InputText } from 'primeng/inputtext';
 import { TranslatePipe } from '@ngx-translate/core';
-import { User, UserRole } from '../../../model/user.model';
+import { User } from '../../../model/user.model';
+import { NgClass } from '@angular/common';
 
 @Component({
 	selector: 'app-user-form',
-	imports: [FloatLabel, FormsModule, InputText, ReactiveFormsModule, TranslatePipe],
+	imports: [FloatLabel, FormsModule, InputText, ReactiveFormsModule, TranslatePipe, NgClass],
 	templateUrl: './user-form.component.html',
 	styleUrl: './user-form.component.scss',
 })
@@ -21,12 +22,9 @@ export class UserFormComponent implements OnInit {
 
 	@Input() user: Signal<User>;
 	@Input() form: FormGroup;
+	@Input() isEditMode: boolean;
 
-	isEditMode: boolean;
-
-	constructor(
-		private formBuilder: FormBuilder
-	) {
+	constructor(private formBuilder: FormBuilder) {
 		effect(() => {
 			if (this.user()) this.patchForm(this.user());
 		});
@@ -34,7 +32,6 @@ export class UserFormComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.initForm();
-		this.isEditMode = !!this.user;
 	}
 
 	private initForm(): void {
@@ -43,7 +40,7 @@ export class UserFormComponent implements OnInit {
 		this.form.addControl('email', this.formBuilder.control(null, [Validators.required, Validators.email]),);
 		this.form.addControl('username', this.formBuilder.control(null, Validators.required));
 
-		if (!this.user()) {
+		if (!this.isEditMode) {
 			this.form.addControl('password', this.formBuilder.control(null, Validators.required));
 		}
 	}

@@ -1,26 +1,41 @@
-<form [formGroup]="form" class="request-form p-fluid grid">
-	<div class="field col-12 w-full">
-		<label>{{ 'user-management.roles' | translate }}</label>
+<form [formGroup]="form" class="p-fluid grid">
+	<div class="field col-12">
+		<p-floatlabel variant="in" class="w-full">
+			<p-multiSelect
+				inputId="roles"
+				formControlName="roles"
+				[options]="allRoles"
+				[showClear]="true"
+				appendTo="body"
+				styleClass="w-full"
+			>
+				<ng-template #item let-role>
+					<p-tag [value]="role" [styleClass]="'chip chip-' + getRoleSeverity(role)" />
+				</ng-template>
 
-		<p-multiSelect
-			formControlName="roles"
-			[options]="allRoles"
-			[showClear]="true"
-			placeholder="Select Roles"
-			class="w-full"
-			appendTo="body"
-		>
-			<ng-template #item let-role>
-				<p-tag [value]="role" [severity]="getRoleSeverity(role)" />
-			</ng-template>
+				<ng-template #selecteditems let-values>
+					<div class="flex flex-wrap gap-3 m-1">
+						@for (role of values; track role) {
+							<p-chip
+								[styleClass]="'chip chip-' + getRoleSeverity(role)"
+								[label]="role"
+								[removable]="true"
+								(onRemove)="onRemoveRole(role)"
+							/>
+						}
+					</div>
+				</ng-template>
+			</p-multiSelect>
 
-			<ng-template #selecteditems let-values>
-				<div class="flex flex-wrap gap-3 m-1">
-					@for (role of values; track role) {
-						<p-chip [styleClass]="'chip chip-' + getRoleSeverity(role)" [label]="role" [removable]="true" (onRemove)="onRemoveRole(role)" />
-					}
-				</div>
-			</ng-template>
-		</p-multiSelect>
+			<label for="roles">
+				{{ 'user-management.roles' | translate }}
+			</label>
+		</p-floatlabel>
+
+		@if (form.get('roles')?.invalid && form.get('roles')?.touched) {
+			<small class="p-error">
+				{{ 'validation.required-field' | translate }}
+			</small>
+		}
 	</div>
 </form>

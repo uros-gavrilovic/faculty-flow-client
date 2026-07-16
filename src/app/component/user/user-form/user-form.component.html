@@ -19,7 +19,7 @@
 		}
 	</div>
 
-	<div class="field col-12 md:col-6">
+	<div class="field col-12">
 		<p-floatlabel variant="in" class="w-full">
 			<input pInputText id="email" formControlName="email" autocomplete="off" class="w-full" />
 			<label for="email">{{ 'employee.email' | translate }} *</label>
@@ -32,9 +32,9 @@
 		}
 	</div>
 
-	<div class="field col-12 md:col-6">
+	<div class="field" [ngClass]="isEditMode ? 'col-12' : 'col-12 md:col-6'">
 		<p-floatlabel variant="in" class="w-full">
-			<input pInputText id="username" formControlName="username" autocomplete="off" class="w-full" />
+			<input pInputText id="username" formControlName="username" autocomplete="off" class="w-full" [readonly]="isEditMode"/>
 			<label for="username">{{ 'user-management.username' | translate }} *</label>
 		</p-floatlabel>
 		@if (form.get('username')?.invalid && form.get('username')?.touched) {

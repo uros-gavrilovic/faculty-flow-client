@@ -1,15 +1,16 @@
-import { Component, computed, effect, input, OnInit, output, Signal, signal } from '@angular/core';
+import { Component, OnInit, Signal } from '@angular/core';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
-import { User, UserRole } from '../../../model/user.model';
+import { User } from '../../../model/user.model';
 import { Store } from '@ngrx/store';
 import * as AppAction from '../../../store/app.action';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { COMMON_MODULES } from '../../../modules/common.module';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import * as AppSelector from '../../../store/app.selector';
 import { PanelStepperComponent } from '../../misc/panel-stepper/panel-stepper.component';
 import { UserFormComponent } from '../../user/user-form/user-form.component';
 import { RoleFormComponent } from '../../user/role-form/role-form.component';
+import { RegisterRequest } from '../../../model/auth.model';
 
 export interface EmployeeSettingsModalData {
 	uuid: string;
@@ -28,6 +29,7 @@ export interface EmployeeSettingsModalData {
 	styleUrl: './employee-settings-modal.component.scss',
 })
 export class EmployeeSettingsModalComponent implements OnInit {
+
 	user?: Signal<User | null>;
 
 	form!: FormGroup;
@@ -35,7 +37,7 @@ export class EmployeeSettingsModalComponent implements OnInit {
 
 	constructor(
 		private store: Store,
-		private fb: FormBuilder,
+		private formBuilder: FormBuilder,
 		private ref: DynamicDialogRef,
 		private config: DynamicDialogConfig,
 	) {
@@ -54,11 +56,14 @@ export class EmployeeSettingsModalComponent implements OnInit {
 	}
 
 	private initForm(): void {
-		this.form = this.fb.group({});
+		this.form = this.formBuilder.group({});
 	}
 
 	onSubmit(): void {
-		if (this.form.invalid) return;
+		if (this.form.invalid) {
+			this.form.markAllAsTouched();
+			return;
+		}
 
 		const v = this.form.value;
 		const user: User = {
@@ -74,7 +79,7 @@ export class EmployeeSettingsModalComponent implements OnInit {
 		if (this.isEditMode) {
 			this.store.dispatch(AppAction.updateUser({ user }));
 		} else {
-			// this.store.dispatch(AppAction.registerUser({ request: user as RegisterRequest }));
+			this.store.dispatch(AppAction.registerUser({ request: user as unknown as RegisterRequest }),);
 		}
 
 		this.onCancel();

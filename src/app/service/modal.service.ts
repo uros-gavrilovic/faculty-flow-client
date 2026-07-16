@@ -33,7 +33,7 @@ export class ModalService {
 			closable: true,
 			dismissableMask: true,
 			draggable: false,
-			style: { width: '70vw'},
+			style: { width: '40vw'},
 			data,
 		});
 		return this.dialogRef;

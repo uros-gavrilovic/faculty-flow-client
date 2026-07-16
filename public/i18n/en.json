@@ -109,6 +109,10 @@
 			"user-updated": {
 				"title": "User Updated",
 				"message": "User settings have been successfully saved."
+			},
+			"user-added": {
+				"title": "User Added",
+				"message": "New user has been successfully added."
 			}
 		}
 	}

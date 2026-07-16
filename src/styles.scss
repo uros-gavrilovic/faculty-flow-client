@@ -64,26 +64,32 @@
 		font-weight: 600;
 		background: var(--p-green-100, #dcfce7);
 		color: var(--p-green-700, #15803d);
+		border: 1px solid var(--p-green-700, #15803d);
 	}
 	&.chip-info {
 		background: var(--p-blue-100, #dbeafe);
 		color: var(--p-blue-700, #1d4ed8);
+		border: 1px solid var(--p-blue-700, #1d4ed8);
 	}
 	&.chip-warn {
 		background: var(--p-orange-100, #ffedd5);
 		color: var(--p-orange-700, #c2410c);
+		border: 1px solid var(--p-orange-700, #c2410c);
 	}
 	&.chip-danger {
 		background: var(--p-red-100, #fee2e2);
 		color: var(--p-red-700, #b91c1c);
+		border: 1px solid var(--p-red-700, #b91c1c);
 	}
 	&.chip-secondary {
 		background: var(--p-surface-100, #f1f5f9);
 		color: var(--p-surface-700, #334155);
+		border: 1px solid var(--p-surface-700, #334155);
 	}
 	&.chip-contrast {
 		background: var(--p-surface-900, #0f172a);
 		color: var(--p-surface-0, #ffffff);
+		border: 1px solid var(--p-surface-0, #ffffff);
 	}
 }
 

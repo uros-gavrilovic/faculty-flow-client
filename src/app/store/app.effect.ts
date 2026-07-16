@@ -125,28 +125,29 @@ export const getUsersEffect = createEffect(
 
 export const createUserEffect = createEffect(
 	() => {
+		const store = inject(Store);
 		const actions$ = inject(Actions);
 		const userApi = inject(UserApiService);
 		const messageService = inject(MessageService);
 
 		return actions$.pipe(
 			ofType(AppAction.registerUser),
-			switchMap((payload) =>
-				userApi
-					.register(payload.request)
-					.pipe(
-						tap(() =>
-							messageService.showMessage(
-								MessageSeverity.SUCCESS,
-								'messages.user-management.user-created.title',
-								'messages.user-management.user-created.message',
-							),
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([payload, searchRequest]) =>
+				userApi.register(payload.request).pipe(
+					tap(() =>
+						messageService.showMessage(
+							MessageSeverity.SUCCESS,
+							'messages.user-management.user-added.title',
+							'messages.user-management.user-added.message',
 						),
 					),
+					map(() => AppAction.searchUsers({ searchRequest })),
+				),
 			),
 		);
 	},
-	{ functional: true, dispatch: false },
+	{ functional: true },
 );
 
 export const updateUserEffect = createEffect(
@@ -168,7 +169,7 @@ export const updateUserEffect = createEffect(
 							'messages.user-management.user-updated.message',
 						),
 					),
-					pipe(map(() => AppAction.searchUsers({ searchRequest }))),
+					map(() => AppAction.searchUsers({ searchRequest })),
 				),
 			),
 		);
