@@ -1,7 +1,12 @@
 import { Component, effect, OnInit, Signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { EventType, Reservation, ReservationRequest } from '../../../model/reservation.model';
+import {
+	EventType,
+	Reservation,
+	ReservationRequest,
+	ReservationStatus,
+} from '../../../model/reservation.model';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import { Store } from '@ngrx/store';
 import * as AppAction from '../../../store/app.action';
@@ -28,11 +33,12 @@ export class RequestReservationModalComponent implements OnInit {
 	form: FormGroup;
 	submitting: boolean;
 	isEditMode: boolean;
+	isReadOnly: boolean;
 
 	rooms: Signal<Room[]>;
 	loggedUser: Signal<User>;
 
-	private reservation?: Reservation;
+	reservation?: Reservation;
 
 	readonly eventTypes: EventType[] = Object.values(EventType);
 
@@ -48,6 +54,7 @@ export class RequestReservationModalComponent implements OnInit {
 	ngOnInit(): void {
 		this.reservation = this.config.data?.reservation;
 		this.isEditMode = !!this.reservation;
+		this.isReadOnly = this.isEditMode && this.reservation?.status !== ReservationStatus.PENDING;
 		this.initForm();
 	}
 
@@ -97,12 +104,13 @@ export class RequestReservationModalComponent implements OnInit {
 
 		this.submitting = true;
 
-		// getRawValue() is used instead of .value so the disabled "reservedBy" control is included
 		const v = this.form.getRawValue();
 
-		const request: ReservationRequest = {
+		const request: ReservationRequest | Reservation = {
+			... this.reservation,
 			name: v.name,
 			roomCode: v.room,
+			eventType: v.eventType,
 			startTime: UtilFunction.toLocalDateTime(v.startTime),
 			endTime: UtilFunction.toLocalDateTime(v.endTime),
 			reservedBy: v.reservedBy,
@@ -110,10 +118,7 @@ export class RequestReservationModalComponent implements OnInit {
 		};
 
 		if (this.isEditMode) {
-			console.log('create');
-			// this.store.dispatch(
-			// 	AppAction.updateReservation({ uuid: this.reservation!.uuid, request }),
-			// );
+			this.store.dispatch(AppAction.updateReservation({reservation: request as unknown as Reservation}));
 		} else {
 			this.store.dispatch(AppAction.requestReservation({ request }));
 		}
@@ -124,4 +129,6 @@ export class RequestReservationModalComponent implements OnInit {
 	onCancel(): void {
 		this.ref.close(null);
 	}
+
+	protected readonly ReservationStatus = ReservationStatus;
 }

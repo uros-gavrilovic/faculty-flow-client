@@ -31,19 +31,20 @@ enum AppActionType {
 	SEARCH_RESERVATIONS = '[ROOM] Search Reservations',
 	SEARCH_RESERVATIONS_SUCCESS = '[ROOM] Search reservations Success',
 	REQUEST_RESERVATION = '[RESV] Request Reservation',
+	UPDATE_RESERVATION = '[RESV] Update Reservation',
 	REVIEW_RESERVATION = '[RESV] Review Reservation',
 
 	SAVE_SEARCH_REQUEST = '[SEARCH] Save Search Request',
 }
 
 export const loginUser = createAction(AppActionType.LOG_IN, props<{ request: LoginRequest }>());
-export const loginUserSuccess = createAction(AppActionType.LOG_IN_SUCCESS, props<{ loginResponse: LoginResponse }>(),);
+export const loginUserSuccess = createAction(AppActionType.LOG_IN_SUCCESS, props<{ loginResponse: LoginResponse }>());
 export const getCurrentUser = createAction(AppActionType.GET_CURRENT_USER, props<{ username: string }>());
 export const getCurrentUserSuccess = createAction(AppActionType.GET_CURRENT_USER_SUCCESS, props<{ user: User }>());
 export const logoutUser = createAction(AppActionType.LOG_OUT);
 export const registerUser = createAction(AppActionType.REGISTER_USER, props<{ request: RegisterRequest }>());
 
-export const getUser = createAction(AppActionType.GET_USER, props<{ uuid?: string; username?: string }>(),);
+export const getUser = createAction(AppActionType.GET_USER, props<{ uuid?: string; username?: string }>());
 export const getUserSuccess = createAction(AppActionType.GET_USER_SUCCESS, props<{ user: User }>());
 export const clearUser = createAction(AppActionType.CLEAR_USER);
 export const searchUsers = createAction(AppActionType.SEARCH_USERS, props<{searchRequest: SearchRequest}>());
@@ -52,11 +53,12 @@ export const updateUser = createAction(AppActionType.UPDATE_USER, props<{user: U
 export const updateUserSuccess = createAction(AppActionType.UPDATE_USER_SUCCESS, props<{user: User}>());
 
 export const getRooms = createAction(AppActionType.GET_ROOMS);
-export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>(),);
+export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>());
 
 export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest<ReservationFilter> }>());
-export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>(),);
-export const requestReservation = createAction(AppActionType.REQUEST_RESERVATION, props<{ request: ReservationRequest }>(),);
-export const reviewReservation = createAction(AppActionType.REVIEW_RESERVATION, props<{ review: ReservationReview }>(),);
+export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>());
+export const requestReservation = createAction(AppActionType.REQUEST_RESERVATION, props<{ request: ReservationRequest }>());
+export const updateReservation = createAction(AppActionType.UPDATE_RESERVATION, props<{ reservation: Reservation }>());
+export const reviewReservation = createAction(AppActionType.REVIEW_RESERVATION, props<{ review: ReservationReview }>());
 
-export const saveSearchRequest = createAction(AppActionType.SAVE_SEARCH_REQUEST, props<{ searchRequest: SearchRequest<any> }>(),);
+export const saveSearchRequest = createAction(AppActionType.SAVE_SEARCH_REQUEST, props<{ searchRequest: SearchRequest<any> }>());

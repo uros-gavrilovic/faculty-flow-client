@@ -42,6 +42,7 @@ export interface ReservationFilter {
 export interface ReservationRequest {
 	name: string;
 	roomCode: string;
+	eventType: EventType;
 	startTime: Date;
 	endTime: Date;
 	reservedBy: string;

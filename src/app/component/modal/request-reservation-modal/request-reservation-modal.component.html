@@ -4,7 +4,7 @@
 			<p-iconfield>
 				<p-floatlabel variant="in" class="w-full">
 					<p-inputicon class="pi pi-bookmark" />
-					<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" />
+					<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" [readonly]="isReadOnly" />
 					<label for="name">{{ 'reservation.title' | translate | required }}</label>
 				</p-floatlabel>
 			</p-iconfield>
@@ -25,7 +25,8 @@
 						optionValue="code"
 						[filter]="true"
 						filterBy="name"
-						[showClear]="true"
+						[showClear]="!isReadOnly"
+						[readonly]="isReadOnly"
 						class="w-full"
 					>
 						<ng-template pTemplate="selectedItem" let-room>
@@ -57,7 +58,8 @@
 						inputId="eventType"
 						[options]="eventTypes"
 						formControlName="eventType"
-						[showClear]="true"
+						[showClear]="!isReadOnly"
+						[readonly]="isReadOnly"
 						class="w-full"
 					>
 						<ng-template pTemplate="selectedItem" let-selectedOption>
@@ -86,7 +88,7 @@
 			<p-iconfield>
 				<p-floatlabel variant="in">
 					<p-inputicon class="pi pi-calendar-plus" />
-					<input type="datetime-local" pInputText id="startTime" formControlName="startTime" class="w-full"/>
+					<input type="datetime-local" pInputText id="startTime" formControlName="startTime" [readOnly]="isReadOnly" class="w-full"/>
 					<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
 				</p-floatlabel>
 			</p-iconfield>
@@ -99,7 +101,7 @@
 			<p-iconfield>
 				<p-floatlabel variant="in">
 					<p-inputicon class="pi pi-calendar-minus" />
-					<input type="datetime-local" pInputText id="endTime" formControlName="endTime" class="w-full"/>
+					<input type="datetime-local" pInputText id="endTime" formControlName="endTime" [readOnly]="isReadOnly" class="w-full"/>
 					<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
 				</p-floatlabel>
 			</p-iconfield>
@@ -112,7 +114,7 @@
 			<p-iconfield>
 				<p-floatlabel variant="in">
 					<p-inputicon class="pi pi-user" />
-					<input pInputText id="reservedBy" formControlName="reservedBy" autocomplete="off" class="w-full"/>
+					<input pInputText id="reservedBy" formControlName="reservedBy" [readOnly]="isReadOnly" autocomplete="off" class="w-full"/>
 					<label for="reservedBy">{{ 'reservation.requested-by' | translate | required }}</label>
 				</p-floatlabel>
 			</p-iconfield>
@@ -138,14 +140,20 @@
 
 		<div class="field col-12">
 			<p-floatlabel variant="in" class="w-full">
-				<textarea pTextarea id="note" formControlName="note" rows="3" class="w-full" [autoResize]="true"></textarea>
+				<textarea pTextarea id="note" formControlName="note" rows="3" class="w-full" [readonly]="isReadOnly" [autoResize]="true"></textarea>
 				<label for="note">{{ 'reservation.note' | translate }}</label>
 			</p-floatlabel>
 		</div>
 	</div>
 
 	<div class="flex justify-content-end gap-2 mt-3">
-		<p-button severity="secondary" [label]="'common.cancel' | translate" (onClick)="onCancel()" />
-		<p-button [label]="'modal.request-reservation.submit' | translate" [loading]="submitting" (onClick)="onSubmit()" />
+		@if (!reservation || reservation.status === ReservationStatus.PENDING) {
+			<p-button severity="secondary" [label]="'common.cancel' | translate" (onClick)="onCancel()" />
+			<p-button
+				[label]="(isEditMode ? 'modal.reservation-preview.update' : 'modal.reservation-preview.submit') | translate"
+				[loading]="submitting"
+				(onClick)="onSubmit()"
+			/>
+		}
 	</div>
 </form>

@@ -27,8 +27,13 @@ export class ReservationApiService {
 			.set('end', this.toLocalDateTime(end));
 	}
 
-	searchReservations(searchRequest: SearchRequest<ReservationFilter>): Observable<SearchResponse<Reservation>> {
-		return this.httpClient.post<SearchResponse<Reservation>>(`${this.RESERVATION_API}/search`, searchRequest);
+	searchReservations(
+		searchRequest: SearchRequest<ReservationFilter>,
+	): Observable<SearchResponse<Reservation>> {
+		return this.httpClient.post<SearchResponse<Reservation>>(
+			`${this.RESERVATION_API}/search`,
+			searchRequest,
+		);
 	}
 	getReservations(start: Date, end: Date): Observable<Reservation[]> {
 		return this.httpClient.get<Reservation[]>(this.RESERVATION_API, {
@@ -50,6 +55,10 @@ export class ReservationApiService {
 
 	requestReservation(request: ReservationRequest): Observable<Reservation> {
 		return this.httpClient.post<Reservation>(`${this.RESERVATION_API}/request`, request);
+	}
+
+	updateReservation(reservation: Reservation): Observable<Reservation> {
+		return this.httpClient.put<Reservation>(`${this.RESERVATION_API}`, reservation);
 	}
 
 	reviewReservation(review: ReservationReview): Observable<Reservation> {

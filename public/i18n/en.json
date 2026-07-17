@@ -55,9 +55,9 @@
 		"save": "Save"
 	},
 	"modal": {
-		"request-reservation": {
-			"title": "Request a reservation",
-			"submit": "Submit request"
+		"reservation-preview": {
+			"submit": "Submit request",
+			"update": "Update reservation"
 		},
 		"edit-employee": {
 			"title": "Edit employee information",
@@ -129,6 +129,20 @@
 			"user-added": {
 				"title": "User Added",
 				"message": "New user has been successfully added."
+			}
+		},
+		"reservation": {
+			"requested": {
+				"title": "Reservation requested",
+				"message": "Reservation has been successfully requested"
+			},
+			"updated": {
+				"title": "Reservation updated",
+				"message": "Reservation has been successfully updated"
+			},
+			"reviewed": {
+				"title": "Reservation updated",
+				"message": "Reservation has been successfully reviewed"
 			}
 		}
 	}

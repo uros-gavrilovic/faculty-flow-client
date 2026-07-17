@@ -212,14 +212,50 @@ export const requestReservationEffect = createEffect(
 		const actions$ = inject(Actions);
 		const reservationApi = inject(ReservationApiService);
 		const store = inject(Store);
+		const messageService = inject(MessageService);
 
 		return actions$.pipe(
 			ofType(AppAction.requestReservation),
 			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
 			switchMap(([{ request }, searchRequest]) =>
+				reservationApi.requestReservation(request).pipe(
+					tap(() =>
+						messageService.showMessage(
+							MessageSeverity.SUCCESS,
+							'messages.reservation.requested.title',
+							'messages.reservation.requested.message',
+						),
+					),
+					map(() => AppAction.searchReservations({ searchRequest })),
+				),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const updateReservationEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const reservationApi = inject(ReservationApiService);
+		const store = inject(Store);
+		const messageService = inject(MessageService);
+
+		return actions$.pipe(
+			ofType(AppAction.updateReservation),
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([{ reservation }, searchRequest]) =>
 				reservationApi
-					.requestReservation(request)
-					.pipe(map(() => AppAction.searchReservations({ searchRequest }))),
+					.updateReservation(reservation)
+					.pipe(
+						tap(() =>
+							messageService.showMessage(
+								MessageSeverity.SUCCESS,
+								'messages.reservation.updated.title',
+								'messages.reservation.updated.message',
+							),
+						),
+						map(() => AppAction.searchReservations({ searchRequest }))),
 			),
 		);
 	},
@@ -231,14 +267,22 @@ export const reviewReservationEffect = createEffect(
 		const store = inject(Store);
 		const actions$ = inject(Actions);
 		const reservationApi = inject(ReservationApiService);
+		const messageService = inject(MessageService);
 
 		return actions$.pipe(
 			ofType(AppAction.reviewReservation),
 			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
 			switchMap(([{ review }, searchRequest]) =>
-				reservationApi
-					.reviewReservation(review)
-					.pipe(map(() => AppAction.searchReservations({ searchRequest }))),
+				reservationApi.reviewReservation(review).pipe(
+					tap(() =>
+						messageService.showMessage(
+							MessageSeverity.SUCCESS,
+							'messages.reservation.reviewed.title',
+							'messages.reservation.reviewed.message',
+						),
+					),
+					map(() => AppAction.searchReservations({ searchRequest })),
+				),
 			),
 		);
 	}, { functional: true },
