@@ -1,74 +1,140 @@
 <form [formGroup]="form" class="p-fluid">
 	<div class="grid formgrid">
 		<div class="field col-12">
-			<p-floatlabel variant="in" class="w-full">
-				<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" />
-				<label for="name">{{ 'reservation.title' | translate | required }}</label>
-			</p-floatlabel>
+			<p-iconfield>
+				<p-floatlabel variant="in" class="w-full">
+					<p-inputicon class="pi pi-bookmark" />
+					<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" />
+					<label for="name">{{ 'reservation.title' | translate | required }}</label>
+				</p-floatlabel>
+			</p-iconfield>
 			@if (form.get('name')?.invalid && form.get('name')?.touched) {
 				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 			}
 		</div>
 
 		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<p-select
-					inputId="room"
-					[options]="rooms()"
-					formControlName="room"
-					optionLabel="name"
-					optionValue="code"
-					[filter]="true"
-					filterBy="name"
-					[showClear]="true"
-					class="w-full"
-				>
-					<ng-template pTemplate="selectedItem" let-room>
-						@if (room) {<div>{{ room.name }}</div>}
-					</ng-template>
-					<ng-template pTemplate="item" let-room>
-						<div>{{ room.name }}</div>
-					</ng-template>
-				</p-select>
+			<p-iconfield>
+				<p-floatlabel variant="in">
+					<p-inputicon class="pi pi-building" />
+					<p-select
+						inputId="room"
+						[options]="rooms()"
+						formControlName="room"
+						optionLabel="name"
+						optionValue="code"
+						[filter]="true"
+						filterBy="name"
+						[showClear]="true"
+						class="w-full"
+					>
+						<ng-template pTemplate="selectedItem" let-room>
+							@if (room) {
+								<div class="ml-4">{{ room.name }}</div>
+							}
+						</ng-template>
+						<ng-template pTemplate="item" let-room>
+							<div>{{ room.name }}</div>
+						</ng-template>
+					</p-select>
 
-				<label for="room">
-					{{ 'reservation.room' | translate | required }}
-				</label>
-			</p-floatlabel>
+					<label for="room">
+						{{ 'reservation.room' | translate | required }}
+					</label>
+				</p-floatlabel>
+			</p-iconfield>
 			@if (form.get('room')?.invalid && form.get('room')?.touched) {
 				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 			}
 		</div>
 
 		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<input pInputText id="reservedBy" formControlName="reservedBy" autocomplete="off" class="w-full"/>
-				<label for="reservedBy">{{ 'reservation.requested-by' | translate | required }}</label>
-			</p-floatlabel>
+			<p-iconfield>
+				<p-floatlabel variant="in" class="w-full">
+					<p-inputicon class="pi pi-tag" />
+
+					<p-select
+						inputId="eventType"
+						[options]="eventTypes"
+						formControlName="eventType"
+						[showClear]="true"
+						class="w-full"
+					>
+						<ng-template pTemplate="selectedItem" let-selectedOption>
+							@if (selectedOption) {
+								<div class="ml-4">{{ selectedOption | translateEnum: 'enum.reservation.event-type' }}</div>
+							}
+						</ng-template>
+						<ng-template #item let-option>
+							<div class="flex align-items-center gap-2">
+								<span>{{ option | translateEnum:'enum.reservation.event-type' }}</span>
+							</div>
+						</ng-template>
+					</p-select>
+
+					<label for="eventType">
+						{{ 'reservation.event-type' | translate | required }}
+					</label>
+				</p-floatlabel>
+			</p-iconfield>
+			@if (form.get('eventType')?.invalid && form.get('eventType')?.touched) {
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-iconfield>
+				<p-floatlabel variant="in">
+					<p-inputicon class="pi pi-calendar-plus" />
+					<input type="datetime-local" pInputText id="startTime" formControlName="startTime" class="w-full"/>
+					<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
+				</p-floatlabel>
+			</p-iconfield>
+			@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
+				<small class="p-error">{{ 'validation-required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-iconfield>
+				<p-floatlabel variant="in">
+					<p-inputicon class="pi pi-calendar-minus" />
+					<input type="datetime-local" pInputText id="endTime" formControlName="endTime" class="w-full"/>
+					<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
+				</p-floatlabel>
+			</p-iconfield>
+			@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {
+				<small class="p-error">{{ 'validation-required-field' | translate }}</small>
+			}
+		</div>
+
+		<div class="field" [ngClass]="isEditMode ? 'col-12 md:col-6' : 'col-12'">
+			<p-iconfield>
+				<p-floatlabel variant="in">
+					<p-inputicon class="pi pi-user" />
+					<input pInputText id="reservedBy" formControlName="reservedBy" autocomplete="off" class="w-full"/>
+					<label for="reservedBy">{{ 'reservation.requested-by' | translate | required }}</label>
+				</p-floatlabel>
+			</p-iconfield>
 			@if (form.get('reservedBy')?.invalid && form.get('reservedBy')?.touched) {
 				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 			}
 		</div>
 
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<input type="datetime-local" pInputText id="startTime" formControlName="startTime" class="w-full"/>
-				<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
-			</p-floatlabel>
-			@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
-			}
-		</div>
-
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<input type="datetime-local" pInputText id="endTime" formControlName="endTime" class="w-full"/>
-				<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
-			</p-floatlabel>
-			@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
-			}
-		</div>
+		@if (isEditMode) {
+			<div class="field col-12 md:col-6">
+				<p-iconfield>
+					<p-floatlabel variant="in">
+						<p-inputicon class="pi pi-user" />
+						<input pInputText id="reviewedBy" formControlName="reviewedBy" autocomplete="off" class="w-full"/>
+						<label for="reviewedBy">{{ 'reservation.reviewed-by' | translate | required }}</label>
+					</p-floatlabel>
+				</p-iconfield>
+				@if (form.get('reviewedBy')?.invalid && form.get('reviewedBy')?.touched) {
+					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+				}
+			</div>
+		}
 
 		<div class="field col-12">
 			<p-floatlabel variant="in" class="w-full">

@@ -3,6 +3,7 @@ import { RequestDialogData, RequestReservationModalComponent, } from '../compone
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TranslateService } from '@ngx-translate/core';
 import { EmployeeSettingsModalComponent, EmployeeSettingsModalData, } from '../component/modal/employee-settings-modal/employee-settings-modal.component';
+import { Reservation } from '../model/reservation.model';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
@@ -13,9 +14,9 @@ export class ModalService {
 		private translateService: TranslateService,
 	) {}
 
-	openRequestReservationDialog(data: RequestDialogData = {}): DynamicDialogRef {
+	openReservationPreviewModal(data: RequestDialogData = {}): DynamicDialogRef {
 		this.dialogRef = this.dialogService.open(RequestReservationModalComponent, {
-			header: this.translateService.instant('modal.request-reservation.title'),
+			header: this.translateService.instant('reservation.preview'),
 			closable: true,
 			dismissableMask: true,
 			draggable: false,
@@ -29,11 +30,13 @@ export class ModalService {
 		const isEditMode: boolean = !!data;
 
 		this.dialogRef = this.dialogService.open(EmployeeSettingsModalComponent, {
-			header: this.translateService.instant(isEditMode ? 'modal.edit-employee.title' : 'modal.add-employee.title'),
+			header: this.translateService.instant(
+				isEditMode ? 'modal.edit-employee.title' : 'modal.add-employee.title',
+			),
 			closable: true,
 			dismissableMask: true,
 			draggable: false,
-			style: { width: '40vw'},
+			style: { width: '40vw' },
 			data,
 		});
 		return this.dialogRef;

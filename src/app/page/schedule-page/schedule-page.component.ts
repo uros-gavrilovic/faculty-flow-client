@@ -29,10 +29,11 @@ import {ScheduleEvent} from '../../model/scheduler.model';
 import { ScheduleFilterComponent } from '../../component/schedule/schedule-filter/schedule-filter.component';
 import { SearchResponse } from '../../model/search.model';
 import { DatePipe } from '@angular/common';
+import { COMMON_MODULES } from '../../modules/common.module';
 
 @Component({
 	selector: 'app-schedule-page',
-	imports: [ScheduleModule, ScheduleFilterComponent, DatePipe],
+	imports: [ScheduleModule, ScheduleFilterComponent, DatePipe, COMMON_MODULES],
 	providers: [
 		DayService,
 		WeekService,
@@ -127,7 +128,8 @@ export class SchedulePageComponent implements OnInit {
 			(r: Reservation): ScheduleEvent => this.toScheduleEvent(r),
 		);
 
-		if (this.scheduleObj) this.scheduleObj.eventSettings = { ...this.eventSettings, dataSource: events };
+		if (this.scheduleObj)
+			this.scheduleObj.eventSettings = { ...this.eventSettings, dataSource: events };
 	}
 
 	private toScheduleEvent(r: Reservation): ScheduleEvent {
@@ -138,12 +140,30 @@ export class SchedulePageComponent implements OnInit {
 			EndTime: new Date(r.endTime),
 			Location: r.room,
 			ReservedBy: r.reservedBy,
+			ReviewedBy: r.reviewedBy,
+			Type: r.eventType,
 			Status: r.status,
 			Note: r.note ?? '',
+			Comment: r.comment ?? '',
 			IsReadonly: r.status !== ReservationStatus.PENDING,
 		};
 	}
 
+	private toReservation(scheduleEvent: ScheduleEvent): Reservation {
+		return {
+			uuid: scheduleEvent.Id,
+			name: scheduleEvent.Subject,
+			room: scheduleEvent.Location,
+			startTime: scheduleEvent.StartTime,
+			endTime: scheduleEvent.EndTime,
+			reservedBy: scheduleEvent.ReservedBy,
+			reviewedBy: scheduleEvent.ReviewedBy,
+			eventType: scheduleEvent.Type,
+			status: scheduleEvent.Status,
+			note: scheduleEvent.Note,
+			comment: scheduleEvent.Comment,
+		};
+	}
 	onPopupOpen(args: PopupOpenEventArgs): void {
 		if (args.type === 'Editor' || args.type === 'QuickInfo') {
 			args.cancel = true;
@@ -157,34 +177,17 @@ export class SchedulePageComponent implements OnInit {
 	}
 
 	onCellClick(args: CellClickEventArgs): void {
-		this.modalService.openRequestReservationDialog({
+		this.modalService.openReservationPreviewModal({
 			startTime: args.startTime,
 			endTime: args.endTime,
 		});
 	}
 
 	onEventClick(args: EventClickArgs): void {
-		const event = args.event as ScheduleEvent;
+		const scheduleEvent: ScheduleEvent = args.event as ScheduleEvent;
 
-		if (event.Status != ReservationStatus.PENDING) return;
-
-		this.confirmationService.confirm({
-			message: 'Are you sure you want to cancel this pending reservation request?',
-			header: 'Cancel reservation request',
-			icon: 'pi pi-exclamation-triangle',
-			acceptLabel: 'Yes, cancel it',
-			rejectLabel: 'Go back',
-			acceptButtonStyleClass: 'p-button-danger',
-			accept: () => {
-				this.store.dispatch(
-					AppAction.reviewReservation({
-						review: {
-							uuid: event.Id,
-							status: ReservationStatus.CANCELED,
-						},
-					}),
-				);
-			},
+		this.modalService.openReservationPreviewModal({
+			reservation: this.toReservation(scheduleEvent),
 		});
 	}
 

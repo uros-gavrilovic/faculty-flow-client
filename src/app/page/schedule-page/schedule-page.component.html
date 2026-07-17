@@ -31,6 +31,11 @@
 			</div>
 
 			<div class="col-12">
+				<i class="pi pi-tag"></i>
+				{{ data.Type | translateEnum:'enum.reservation.event-type' }}
+			</div>
+
+			<div class="col-12">
 				<i class="pi pi-user"></i>
 				{{ data.ReservedBy }}
 			</div>

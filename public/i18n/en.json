@@ -7,6 +7,7 @@
 	"reservation": {
 		"panel-title": "Reservations",
 		"panel-description": "Manage room reservations, approvals and requests",
+		"preview": "Reservation preview",
 		"title": "Reservation title",
 		"name": "Name",
 		"room": "Room",
@@ -17,6 +18,7 @@
 		"requested-by": "Requested by",
 		"reserved-by": "Reserved By",
 		"reviewed-by": "Reviewed By",
+		"event-type": "Event type",
 		"status": "Status",
 		"note": "Note",
 		"comment": "Comment",
@@ -83,6 +85,18 @@
 	"validation": {
 		"required-field": "This field is required",
 		"invalid-email": "Please enter a valid email address"
+	},
+	"enum": {
+		"reservation": {
+			"event-type": {
+				"lecture": "Lecture",
+				"exercise": "Exercise",
+				"laboratory": "Laboratory",
+				"exam": "Exam",
+				"consultation": "Consultation",
+				"other": "Other"
+			}
+		}
 	},
 	"messages": {
 		"auth": {

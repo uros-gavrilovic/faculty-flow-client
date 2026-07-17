@@ -14,9 +14,19 @@ export interface Reservation {
 	endTime: Date;
 	reservedBy: string;
 	reviewedBy: string | null;
+	eventType: EventType;
 	status: ReservationStatus;
 	note: string | null;
 	comment: string | null;
+}
+
+export enum EventType {
+	LECTURE = 'LECTURE',
+	EXERCISE = 'EXERCISE',
+	LABORATORY = 'LABORATORY',
+	EXAM = 'EXAM',
+	CONSULTATION = 'CONSULTATION',
+	OTHER = 'OTHER',
 }
 
 export interface ReservationFilter {

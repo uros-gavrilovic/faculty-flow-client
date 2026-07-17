@@ -1,19 +1,21 @@
 import { Component, effect, OnInit, Signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { ReservationRequest } from '../../../model/reservation.model';
+import { EventType, Reservation, ReservationRequest } from '../../../model/reservation.model';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import { Store } from '@ngrx/store';
 import * as AppAction from '../../../store/app.action';
 import { COMMON_MODULES } from '../../../modules/common.module';
 import { selectCurrentUser, selectRooms } from '../../../store/app.selector';
 import { Room } from '../../../model/room.model';
-import { User } from '../../../model/user.model';
+import { User, UserRole } from '../../../model/user.model';
 import * as UtilFunction from '../../../util/util-functions';
+import { required } from '@angular/forms/signals';
 
 export interface RequestDialogData {
 	startTime?: Date;
 	endTime?: Date;
+	reservation?: Reservation;
 }
 
 @Component({
@@ -25,9 +27,14 @@ export interface RequestDialogData {
 export class RequestReservationModalComponent implements OnInit {
 	form: FormGroup;
 	submitting: boolean;
+	isEditMode: boolean;
 
 	rooms: Signal<Room[]>;
 	loggedUser: Signal<User>;
+
+	private reservation?: Reservation;
+
+	readonly eventTypes: EventType[] = Object.values(EventType);
 
 	constructor(
 		private store: Store,
@@ -39,6 +46,8 @@ export class RequestReservationModalComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.reservation = this.config.data?.reservation;
+		this.isEditMode = !!this.reservation;
 		this.initForm();
 	}
 
@@ -54,15 +63,30 @@ export class RequestReservationModalComponent implements OnInit {
 
 	private initForm(): void {
 		const data: RequestDialogData = this.config.data;
+		const reservation = this.reservation;
 
 		this.form = this.formBuilder.group({
-			name: ['', [Validators.required, Validators.maxLength(120)]],
-			room: ['', Validators.required],
-			startTime: [UtilFunction.formatToLocalDateTimeString(data.startTime), Validators.required],
-			endTime: [UtilFunction.formatToLocalDateTimeString(data.endTime), Validators.required],
-			reservedBy: [{ value: this.loggedUser().username, disabled: true }, Validators.required],
-			note: [''],
+			name: [reservation?.name ?? '', [Validators.required, Validators.maxLength(120)]],
+			room: [reservation?.room ?? '', Validators.required],
+			startTime: [
+				UtilFunction.formatToLocalDateTimeString(reservation?.startTime ?? data.startTime),
+				Validators.required,
+			],
+			endTime: [
+				UtilFunction.formatToLocalDateTimeString(reservation?.endTime ?? data.endTime),
+				Validators.required,
+			],
+			reservedBy: [
+				{ value: reservation?.reservedBy ?? this.loggedUser().username, disabled: true },
+				Validators.required,
+			],
+			eventType: [reservation?.eventType, Validators.required],
+			note: [reservation?.note ?? ''],
 		});
+
+		if (this.isEditMode) {
+			this.form.addControl('reviewedBy', this.formBuilder.control({value: reservation?.reviewedBy, disabled: true}, Validators.required));
+		}
 	}
 
 	onSubmit(): void {
@@ -73,7 +97,8 @@ export class RequestReservationModalComponent implements OnInit {
 
 		this.submitting = true;
 
-		const v = this.form.value;
+		// getRawValue() is used instead of .value so the disabled "reservedBy" control is included
+		const v = this.form.getRawValue();
 
 		const request: ReservationRequest = {
 			name: v.name,
@@ -84,7 +109,15 @@ export class RequestReservationModalComponent implements OnInit {
 			note: v.note || undefined,
 		};
 
-		this.store.dispatch(AppAction.requestReservation({ request }));
+		if (this.isEditMode) {
+			console.log('create');
+			// this.store.dispatch(
+			// 	AppAction.updateReservation({ uuid: this.reservation!.uuid, request }),
+			// );
+		} else {
+			this.store.dispatch(AppAction.requestReservation({ request }));
+		}
+
 		this.ref.close();
 	}
 

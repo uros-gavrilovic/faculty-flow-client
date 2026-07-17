@@ -69,13 +69,15 @@
 	</ng-template>
 
 	<ng-template pTemplate="body" let-reservation>
-		<tr>
+		<tr (click)="onReservationSelect(reservation)">
 			@if (isAdmin) {
-				<td style="text-align: center">
-					<p-tableCheckbox
-						[value]="reservation"
-						[disabled]="reservation.status !== ReservationStatus.PENDING"
-					/>
+				<td>
+					<div (click)="$event.stopPropagation()">
+						<p-tableCheckbox
+							[value]="reservation"
+							[disabled]="reservation.status !== ReservationStatus.PENDING"
+						/>
+					</div>
 				</td>
 			}
 

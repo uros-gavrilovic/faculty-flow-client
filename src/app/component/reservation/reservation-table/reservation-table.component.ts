@@ -1,6 +1,6 @@
 import { Component, model, ModelSignal, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TableLazyLoadEvent } from 'primeng/table';
+import { TableLazyLoadEvent, TableRowSelectEvent } from 'primeng/table';
 import { TranslateService } from '@ngx-translate/core';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import {
@@ -19,6 +19,7 @@ import { COMMON_MODULES } from '../../../modules/common.module';
 import { ReservationFilterComponent } from '../reservation-filter/reservation-filter.component';
 import { ScheduleFilterComponent } from '../../schedule/schedule-filter/schedule-filter.component';
 import { SortEvent } from 'primeng/api';
+import { ModalService } from '../../../service/modal.service';
 
 @Component({
 	selector: 'app-reservation-table',
@@ -38,6 +39,7 @@ export class ReservationTableComponent {
 	constructor(
 		private store: Store,
 		private translateService: TranslateService,
+		private modalService: ModalService,
 	) {}
 
 	ngOnInit(): void {
@@ -141,5 +143,9 @@ export class ReservationTableComponent {
 				this.selectedReservations().some((s) => s.uuid === r.uuid),
 			)
 		);
+	}
+
+	protected onReservationSelect(reservation: Reservation): void {
+		this.modalService.openReservationPreviewModal({reservation})
 	}
 }
