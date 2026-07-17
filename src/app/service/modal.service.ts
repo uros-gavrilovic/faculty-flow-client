@@ -3,19 +3,21 @@ import { RequestDialogData, RequestReservationModalComponent, } from '../compone
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { TranslateService } from '@ngx-translate/core';
 import { EmployeeSettingsModalComponent, EmployeeSettingsModalData, } from '../component/modal/employee-settings-modal/employee-settings-modal.component';
-import { Reservation } from '../model/reservation.model';
+import { Store } from '@ngrx/store';
+import * as AppAction from '../store/app.action';
+import { take } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
-	private dialogRef: DynamicDialogRef;
 
 	constructor(
+		private store: Store,
 		private dialogService: DialogService,
 		private translateService: TranslateService,
 	) {}
 
 	openReservationPreviewModal(data: RequestDialogData = {}): DynamicDialogRef {
-		this.dialogRef = this.dialogService.open(RequestReservationModalComponent, {
+		const dialogRef = this.dialogService.open(RequestReservationModalComponent, {
 			header: this.translateService.instant('reservation.preview'),
 			closable: true,
 			dismissableMask: true,
@@ -23,22 +25,30 @@ export class ModalService {
 			style: { width: '40vw' },
 			data,
 		});
-		return this.dialogRef;
+
+		dialogRef.onClose
+			.pipe(take(1))
+			.subscribe(() => {this.store.dispatch(AppAction.clearReservation());});
+
+		return dialogRef;
 	}
 
 	openEmployeeSettingsDialog(data?: EmployeeSettingsModalData): DynamicDialogRef {
 		const isEditMode: boolean = !!data;
 
-		this.dialogRef = this.dialogService.open(EmployeeSettingsModalComponent, {
-			header: this.translateService.instant(
-				isEditMode ? 'modal.edit-employee.title' : 'modal.add-employee.title',
-			),
+		const dialogRef = this.dialogService.open(EmployeeSettingsModalComponent, {
+			header: this.translateService.instant(isEditMode ? 'modal.edit-employee.title' : 'modal.add-employee.title'),
 			closable: true,
 			dismissableMask: true,
 			draggable: false,
 			style: { width: '40vw' },
 			data,
 		});
-		return this.dialogRef;
+
+		dialogRef.onClose
+			.pipe(take(1))
+			.subscribe(() => {this.store.dispatch(AppAction.clearUser());});
+
+		return dialogRef;
 	}
 }

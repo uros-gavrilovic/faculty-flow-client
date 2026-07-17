@@ -19,7 +19,14 @@ export const routes: Routes = [
 		component: MainPageComponent,
 		children: [
 			{ path: 'schedule', component: SchedulePageComponent },
-			{ path: 'reservations', component: ReservationsPageComponent },
+			{
+				path: 'reservations',
+				component: ReservationsPageComponent,
+				children: [
+					{ path: '', component: UserTableComponent },
+					{ path: ':uuid', component: UserTableComponent },
+				],
+			},
 			{
 				path: 'employees',
 				component: EmployeesPageComponent,

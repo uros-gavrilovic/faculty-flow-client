@@ -1,4 +1,4 @@
-import { Component, model, ModelSignal, Signal } from '@angular/core';
+import { Component, DestroyRef, model, ModelSignal, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { TranslateService } from '@ngx-translate/core';
@@ -19,6 +19,10 @@ import { COMMON_MODULES } from '../../../modules/common.module';
 import { ScheduleFilterComponent } from '../../schedule/schedule-filter/schedule-filter.component';
 import { SortEvent } from 'primeng/api';
 import { ModalService } from '../../../service/modal.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { DynamicDialogRef } from 'primeng/dynamicdialog';
+import { EmployeeSettingsModalComponent } from '../../modal/employee-settings-modal/employee-settings-modal.component';
 
 @Component({
 	selector: 'app-reservation-table',
@@ -37,13 +41,20 @@ export class ReservationTableComponent {
 
 	constructor(
 		private store: Store,
+		private route: ActivatedRoute,
+		private router: Router,
 		private translateService: TranslateService,
 		private modalService: ModalService,
+		private destroyRef: DestroyRef,
 	) {}
 
 	ngOnInit(): void {
 		this.reservations = this.store.selectSignal(AppSelector.selectReservations);
 		this.currentUser = this.store.selectSignal(AppSelector.selectCurrentUser);
+
+		this.route.queryParamMap
+			.pipe(takeUntilDestroyed(this.destroyRef))
+			.subscribe((params: ParamMap): void => this.onRouteChange(params));
 
 		this.searchRequest = {
 			page: 0,
@@ -148,5 +159,18 @@ export class ReservationTableComponent {
 
 	protected onReservationSelect(reservation: Reservation): void {
 		this.modalService.openReservationPreviewModal({ reservation });
+	}
+
+	private onRouteChange(params: ParamMap): void {
+		const uuid: string = params.get('uuid');
+		if (!uuid) return;
+
+		const modalRef: DynamicDialogRef<EmployeeSettingsModalComponent> =
+			this.modalService.openReservationPreviewModal({ reservation: {uuid} });
+
+		modalRef.onClose.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
+			this.store.dispatch(AppAction.clearReservation());
+			this.router.navigate(['/reservations']);
+		});
 	}
 }

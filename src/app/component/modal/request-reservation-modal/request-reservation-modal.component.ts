@@ -12,17 +12,17 @@ import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import { Store } from '@ngrx/store';
 import * as AppAction from '../../../store/app.action';
 import { COMMON_MODULES } from '../../../modules/common.module';
-import { selectCurrentUser, selectRooms } from '../../../store/app.selector';
 import { Room } from '../../../model/room.model';
 import { User, UserRole } from '../../../model/user.model';
 import * as UtilFunction from '../../../util/util-functions';
-import { required } from '@angular/forms/signals';
 import { Severity } from '../../../model/ui.model';
+import * as AppSelector from '../../../store/app.selector';
 
 export interface RequestDialogData {
 	startTime?: Date;
 	endTime?: Date;
-	reservation?: Reservation;
+	reservation?: Partial<Reservation>;
+	onCloseCallback?: () => void;
 }
 
 @Component({
@@ -36,94 +36,114 @@ export class RequestReservationModalComponent implements OnInit {
 	submitting: boolean;
 	isEditMode: boolean;
 	isReadOnly: boolean;
+	initialDataLoaded: boolean = false;
 
+	reservation: Signal<Reservation>;
 	rooms: Signal<Room[]>;
 	loggedUser: Signal<User>;
 
-	reservation?: Reservation;
-
 	readonly eventTypes: EventType[] = Object.values(EventType);
+	readonly ReservationStatus = ReservationStatus;
+	readonly Severity = Severity;
 
 	constructor(
 		private store: Store,
-		private ref: DynamicDialogRef,
 		private formBuilder: FormBuilder,
+		private ref: DynamicDialogRef,
 		private config: DynamicDialogConfig<RequestDialogData>,
 	) {
-		this.initDispatch();
-	}
+		this.reservation = this.store.selectSignal(AppSelector.selectReservation);
+		this.loggedUser = this.store.selectSignal(AppSelector.selectCurrentUser);
+		this.rooms = this.store.selectSignal(AppSelector.selectRooms);
 
-	ngOnInit(): void {
-		this.reservation = this.config.data?.reservation;
-		this.isEditMode = !!this.reservation;
-
-		const user: User = this.loggedUser();
-		const isAdmin: boolean = user.roles?.includes(UserRole.ADMINISTRATOR) ?? false;
-		const isOwner: boolean = user.username === this.reservation?.reservedBy;
-
-		this.isReadOnly =
-			this.isEditMode &&
-			(this.reservation?.status !== ReservationStatus.PENDING || (!isOwner && !isAdmin));
+		this.isEditMode = !!this.config.data.reservation?.uuid;
+		this.isReadOnly = this.isEditMode;
 
 		this.initForm();
-	}
-
-	private initDispatch(): void {
-		this.loggedUser = this.store.selectSignal(selectCurrentUser);
-		this.rooms = this.store.selectSignal(selectRooms);
 
 		effect(() => {
 			const availableRooms: Room[] = this.rooms();
+
 			if (!availableRooms?.length) this.store.dispatch(AppAction.getRooms());
 		});
+		effect(() => {
+			const reservation: Reservation = this.reservation();
+
+			if (this.isEditMode && reservation && !this.initialDataLoaded) {
+				this.initialDataLoaded = true;
+				this.updateReadOnlyState(reservation);
+				this.patchForm(reservation);
+			}
+		});
+	}
+
+	ngOnInit(): void {
+		if (this.isEditMode) {
+			this.store.dispatch(
+				AppAction.getReservation({ uuid: this.config.data.reservation?.uuid }),
+			);
+		}
+	}
+
+	private updateReadOnlyState(reservation: Reservation): void {
+		const user: User = this.loggedUser();
+		const isAdmin: boolean = user.roles?.includes(UserRole.ADMINISTRATOR) ?? false;
+		const isOwner: boolean = user.username === reservation?.reservedBy;
+		const isLockedByStatus: boolean = reservation?.status !== ReservationStatus.PENDING;
+		const isLockedByPermission: boolean = !isOwner && !isAdmin;
+
+		console.log('isLockedByStatus', isLockedByStatus, 'isLockedByStatus', isLockedByStatus);
+		console.log('isReadOnly', isLockedByPermission || isLockedByStatus);
+
+		this.isReadOnly = isLockedByStatus || isLockedByPermission;
 	}
 
 	private initForm(): void {
 		const data: RequestDialogData = this.config.data;
-		const reservation = this.reservation;
 
 		this.form = this.formBuilder.group({
-			name: [reservation?.name ?? '', [Validators.required, Validators.maxLength(120)]],
-			room: [reservation?.room ?? '', Validators.required],
-			startTime: [
-				UtilFunction.formatToLocalDateTimeString(reservation?.startTime ?? data.startTime),
-				Validators.required,
-			],
-			endTime: [
-				UtilFunction.formatToLocalDateTimeString(reservation?.endTime ?? data.endTime),
-				Validators.required,
-			],
-			reservedBy: [
-				{ value: reservation?.reservedBy ?? this.loggedUser().username, disabled: true },
-				Validators.required,
-			],
-			eventType: [reservation?.eventType, Validators.required],
-			note: [reservation?.note ?? ''],
+			name: ['', [Validators.required, Validators.maxLength(120)]],
+			room: ['', Validators.required],
+			startTime: [UtilFunction.formatToLocalDateTimeString(data.startTime), Validators.required],
+			endTime: [UtilFunction.formatToLocalDateTimeString(data.endTime), Validators.required],
+			reservedBy: [{ value: this.loggedUser()?.username, disabled: true }, Validators.required],
+			eventType: [null, Validators.required],
+			note: [''],
 		});
 
 		if (this.isEditMode) {
 			this.form.addControl(
 				'reviewedBy',
-				this.formBuilder.control(
-					{ value: reservation?.reviewedBy, disabled: true },
-					Validators.required,
-				),
+				this.formBuilder.control({ value: null, disabled: true }, Validators.required),
 			);
 		}
+	}
+
+	private patchForm(reservation: Reservation): void {
+		this.form.patchValue({
+			name: reservation.name,
+			room: reservation.room,
+			startTime: UtilFunction.formatToLocalDateTimeString(reservation.startTime),
+			endTime: UtilFunction.formatToLocalDateTimeString(reservation.endTime),
+			reservedBy: reservation.reservedBy,
+			eventType: reservation.eventType,
+			note: reservation.note ?? '',
+		});
+
+		this.form.get('reviewedBy')?.patchValue(reservation.reviewedBy);
 	}
 
 	onSubmit(): void {
 		if (this.form.invalid) {
 			this.form.markAllAsTouched();
+
 			return;
 		}
-
-		this.submitting = true;
 
 		const v = this.form.getRawValue();
 
 		const request: ReservationRequest | Reservation = {
-			...this.reservation,
+			...this.reservation(),
 			name: v.name,
 			roomCode: v.room,
 			eventType: v.eventType,
@@ -133,6 +153,8 @@ export class RequestReservationModalComponent implements OnInit {
 			note: v.note || undefined,
 		};
 
+		this.submitting = true;
+
 		if (this.isEditMode) {
 			this.store.dispatch(
 				AppAction.updateReservation({ reservation: request as unknown as Reservation }),
@@ -141,26 +163,18 @@ export class RequestReservationModalComponent implements OnInit {
 			this.store.dispatch(AppAction.requestReservation({ request }));
 		}
 
-		this.onCancel();
+		this.onClose();
 	}
-
-	onCancel(): void {
-		this.ref.close(null);
-	}
-
-	getIsUserAdmin(user: User): boolean {
-		return user.roles?.includes(UserRole.ADMINISTRATOR);
-	}
-
-	protected readonly ReservationStatus = ReservationStatus;
 
 	onApproveReservation(reservation: Reservation): void {
 		const review: ReservationReview = {
 			uuid: reservation.uuid,
 			status: ReservationStatus.ACCEPTED,
 		};
+
 		this.store.dispatch(AppAction.reviewReservation({ review }));
-		this.onCancel();
+
+		this.onClose();
 	}
 
 	onRejectReservation(reservation: Reservation): void {
@@ -168,9 +182,17 @@ export class RequestReservationModalComponent implements OnInit {
 			uuid: reservation.uuid,
 			status: ReservationStatus.REJECTED,
 		};
+
 		this.store.dispatch(AppAction.reviewReservation({ review }));
-		this.onCancel();
+
+		this.onClose();
 	}
 
-	protected readonly Severity = Severity;
+	onClose(): void {
+		this.ref.close(true);
+	}
+
+	getIsUserAdmin(user: User): boolean {
+		return user?.roles?.includes(UserRole.ADMINISTRATOR);
+	}
 }

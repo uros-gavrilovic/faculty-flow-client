@@ -35,21 +35,9 @@ export class ReservationApiService {
 			searchRequest,
 		);
 	}
-	getReservations(start: Date, end: Date): Observable<Reservation[]> {
-		return this.httpClient.get<Reservation[]>(this.RESERVATION_API, {
-			params: this.dateParams(start, end),
-		});
-	}
-
-	getReservationsByRoom(roomCode: string, start: Date, end: Date): Observable<Reservation[]> {
-		return this.httpClient.get<Reservation[]>(`${this.RESERVATION_API}/${roomCode}`, {
-			params: this.dateParams(start, end),
-		});
-	}
-
-	getReservationRequests(start: Date, end: Date): Observable<Reservation[]> {
-		return this.httpClient.get<Reservation[]>(`${this.RESERVATION_API}/request`, {
-			params: this.dateParams(start, end),
+	getReservation(uuid: string): Observable<Reservation> {
+		return this.httpClient.get<Reservation>(`${this.RESERVATION_API}`, {
+			params: {uuid}
 		});
 	}
 

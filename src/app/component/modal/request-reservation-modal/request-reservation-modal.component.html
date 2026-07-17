@@ -4,7 +4,7 @@
 			<p-iconfield>
 				<p-floatlabel variant="in" class="w-full">
 					<p-inputicon class="pi pi-bookmark" />
-					<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" [readonly]="isReadOnly" />
+					<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" [readOnly]="isReadOnly" />
 					<label for="name">{{ 'reservation.title' | translate | required }}</label>
 				</p-floatlabel>
 			</p-iconfield>
@@ -93,7 +93,7 @@
 				</p-floatlabel>
 			</p-iconfield>
 			@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
-				<small class="p-error">{{ 'validation-required-field' | translate }}</small>
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 			}
 		</div>
 
@@ -106,7 +106,7 @@
 				</p-floatlabel>
 			</p-iconfield>
 			@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {
-				<small class="p-error">{{ 'validation-required-field' | translate }}</small>
+				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 			}
 		</div>
 
@@ -140,15 +140,15 @@
 
 		<div class="field col-12">
 			<p-floatlabel variant="in" class="w-full">
-				<textarea pTextarea id="note" formControlName="note" rows="3" class="w-full" [readonly]="isReadOnly" [autoResize]="true"></textarea>
+				<textarea pTextarea id="note" formControlName="note" rows="3" class="w-full" [readOnly]="isReadOnly" [autoResize]="true"></textarea>
 				<label for="note">{{ 'reservation.note' | translate }}</label>
 			</p-floatlabel>
 		</div>
 	</div>
 
 	<div class="flex justify-content-end gap-2 mt-3">
-		@if (!reservation || !isReadOnly) {
-			<p-button severity="secondary" [label]="'common.close' | translate" (onClick)="onCancel()" />
+		@if (!reservation() || !isReadOnly) {
+			<p-button severity="secondary" [label]="'common.close' | translate" (onClick)="onClose()" />
 			<p-button
 				[severity]="Severity.INFO"
 				[label]="(isEditMode ? 'modal.reservation-preview.update' : 'modal.reservation-preview.submit') | translate"
@@ -156,16 +156,16 @@
 				(onClick)="onSubmit()"
 			/>
 		}
-		@if (getIsUserAdmin(loggedUser()) && isEditMode && reservation.status == ReservationStatus.PENDING) {
+		@if (getIsUserAdmin(loggedUser()) && isEditMode && reservation()?.status == ReservationStatus.PENDING) {
 			<p-button
 				[severity]="Severity.DANGER"
 				[label]="'reservation.reject' | translate"
-				(onClick)="onRejectReservation(reservation)"
+				(onClick)="onRejectReservation(reservation())"
 			/>
 			<p-button
 				[severity]="Severity.SUCCESS"
 				[label]="'reservation.approve' | translate"
-				(onClick)="onApproveReservation(reservation)"
+				(onClick)="onApproveReservation(reservation())"
 			/>
 		}
 	</div>

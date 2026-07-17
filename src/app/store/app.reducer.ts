@@ -60,6 +60,18 @@ export const appReducer = createReducer(
 		rooms,
 	})),
 
+	on(AppAction.getReservationSuccess, (state: AppState, { reservation }): AppState => {
+		return {
+			...state,
+			reservation,
+		};
+	}),
+	on(AppAction.clearReservation, (state: AppState): AppState => {
+		return {
+			...state,
+			reservation: null,
+		};
+	}),
 	on(AppAction.searchReservationsSuccess, (state: AppState, { searchResponse }) => ({
 		...state,
 		reservations: searchResponse,
@@ -67,6 +79,6 @@ export const appReducer = createReducer(
 
 	on(AppAction.saveSearchRequest, (state, { searchRequest }) => ({
 		...state,
-		searchRequest
+		searchRequest,
 	})),
 );

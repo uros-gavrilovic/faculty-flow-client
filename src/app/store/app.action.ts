@@ -28,8 +28,11 @@ enum AppActionType {
 	GET_ROOMS_SUCCESS = '[ROOM] Get Rooms Success',
 
 	// Reservation
-	SEARCH_RESERVATIONS = '[ROOM] Search Reservations',
-	SEARCH_RESERVATIONS_SUCCESS = '[ROOM] Search reservations Success',
+	SEARCH_RESERVATIONS = '[RESV] Search Reservations',
+	SEARCH_RESERVATIONS_SUCCESS = '[RESV] Search reservations Success',
+	GET_RESERVATION = '[RESV] Get Reservation',
+	GET_RESERVATION_SUCCESS = '[RESV] Get Reservation Success',
+	CLEAR_RESERVATION = '[RESV] Clear Reservation',
 	REQUEST_RESERVATION = '[RESV] Request Reservation',
 	UPDATE_RESERVATION = '[RESV] Update Reservation',
 	REVIEW_RESERVATION = '[RESV] Review Reservation',
@@ -57,6 +60,9 @@ export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, pro
 
 export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest<ReservationFilter> }>());
 export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>());
+export const getReservation = createAction(AppActionType.GET_RESERVATION, props<{ uuid: string }>());
+export const getReservationSuccess = createAction(AppActionType.GET_RESERVATION_SUCCESS, props<{ reservation: Reservation }>());
+export const clearReservation = createAction(AppActionType.CLEAR_RESERVATION);
 export const requestReservation = createAction(AppActionType.REQUEST_RESERVATION, props<{ request: ReservationRequest }>());
 export const updateReservation = createAction(AppActionType.UPDATE_RESERVATION, props<{ reservation: Reservation }>());
 export const reviewReservation = createAction(AppActionType.REVIEW_RESERVATION, props<{ review: ReservationReview }>());

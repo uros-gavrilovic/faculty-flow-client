@@ -194,6 +194,25 @@ export const getRoomsEffect = createEffect(
 		{functional: true}
 );
 
+export const getReservationEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const reservationApi = inject(ReservationApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.getReservation),
+			switchMap((payload) =>
+				reservationApi
+					.getReservation(payload.uuid)
+					.pipe(
+						map((reservation: Reservation) => AppAction.getReservationSuccess({ reservation }))
+					),
+			),
+		);
+	},
+	{ functional: true },
+);
+
 export const searchReservationsEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);
