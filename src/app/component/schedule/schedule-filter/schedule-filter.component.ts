@@ -1,4 +1,4 @@
-import { Component, effect, EventEmitter, OnInit, Output, Signal } from '@angular/core';
+import { Component, effect, EventEmitter, Input, OnInit, Output, Signal } from '@angular/core';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReservationFilter, ReservationStatus } from '../../../model/reservation.model';
@@ -9,6 +9,9 @@ import * as AppAction from '../../../store/app.action';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import * as UtilFunction from '../../../util/util-functions';
+import { TableLazyLoadEvent } from 'primeng/table';
+import { User, UserRole } from '../../../model/user.model';
+import * as AppSelector from '../../../store/app.selector';
 
 @Component({
 	selector: 'app-schedule-filter',
@@ -18,9 +21,11 @@ import * as UtilFunction from '../../../util/util-functions';
 })
 export class ScheduleFilterComponent implements OnInit {
 
+	@Input() applyCurrentUserFilter: boolean;
 	@Output() filterChange: EventEmitter<ReservationFilter> = new EventEmitter<ReservationFilter>();
 
 	form: FormGroup;
+	currentUser: Signal<User>;
 	rooms: Signal<Room[]>;
 
 	readonly statuses: ReservationStatus[] = Object.values(ReservationStatus);
@@ -33,6 +38,7 @@ export class ScheduleFilterComponent implements OnInit {
 	}
 
 	private initDispatch(): void {
+		this.currentUser = this.store.selectSignal(AppSelector.selectCurrentUser);
 		this.rooms = this.store.selectSignal(selectRooms);
 
 		effect(() => {
@@ -50,7 +56,7 @@ export class ScheduleFilterComponent implements OnInit {
 			name: [null],
 			room: [null],
 			status: [null],
-			reservedBy: [null],
+			reservedBy: [this.applyCurrentUserFilter ? this.currentUser()?.username : null],
 		});
 		this.form.valueChanges
 			.pipe(

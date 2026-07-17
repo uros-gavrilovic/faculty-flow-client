@@ -49,9 +49,7 @@ export class ReservationTableComponent {
 			page: 0,
 			size: 10,
 			filter: {
-				reservedBy: this.currentUser()?.roles.includes(UserRole.ADMINISTRATOR)
-					? undefined
-					: this.currentUser()?.username,
+				reservedBy: this.isCurrentUserAdmin() ? undefined : this.currentUser()?.username,
 			},
 		};
 		this.store.dispatch(AppAction.searchReservations({ searchRequest: this.searchRequest }));
@@ -144,7 +142,11 @@ export class ReservationTableComponent {
 		);
 	}
 
+	isCurrentUserAdmin(): boolean {
+		return this.currentUser()?.roles.includes(UserRole.ADMINISTRATOR);
+	}
+
 	protected onReservationSelect(reservation: Reservation): void {
-		this.modalService.openReservationPreviewModal({reservation})
+		this.modalService.openReservationPreviewModal({ reservation });
 	}
 }

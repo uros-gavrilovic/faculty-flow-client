@@ -1,5 +1,6 @@
 <div class="toggle" [class.toggle-hidden]="!isFilterVisible()" [class.toggle-visible]="isFilterVisible()">
 	<app-schedule-filter
+		[applyCurrentUserFilter]="!isCurrentUserAdmin()"
 		(filterChange)="onFilterChange($event)"
 	></app-schedule-filter>
 </div>

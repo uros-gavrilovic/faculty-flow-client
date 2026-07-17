@@ -147,12 +147,25 @@
 	</div>
 
 	<div class="flex justify-content-end gap-2 mt-3">
-		@if (!reservation || reservation.status === ReservationStatus.PENDING) {
-			<p-button severity="secondary" [label]="'common.cancel' | translate" (onClick)="onCancel()" />
+		@if (!reservation || !isReadOnly) {
+			<p-button severity="secondary" [label]="'common.close' | translate" (onClick)="onCancel()" />
 			<p-button
+				[severity]="Severity.INFO"
 				[label]="(isEditMode ? 'modal.reservation-preview.update' : 'modal.reservation-preview.submit') | translate"
 				[loading]="submitting"
 				(onClick)="onSubmit()"
+			/>
+		}
+		@if (getIsUserAdmin(loggedUser()) && isEditMode && reservation.status == ReservationStatus.PENDING) {
+			<p-button
+				[severity]="Severity.DANGER"
+				[label]="'reservation.reject' | translate"
+				(onClick)="onRejectReservation(reservation)"
+			/>
+			<p-button
+				[severity]="Severity.SUCCESS"
+				[label]="'reservation.approve' | translate"
+				(onClick)="onApproveReservation(reservation)"
 			/>
 		}
 	</div>

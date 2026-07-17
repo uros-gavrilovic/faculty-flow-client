@@ -5,6 +5,7 @@ import {
 	EventType,
 	Reservation,
 	ReservationRequest,
+	ReservationReview,
 	ReservationStatus,
 } from '../../../model/reservation.model';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
@@ -16,6 +17,7 @@ import { Room } from '../../../model/room.model';
 import { User, UserRole } from '../../../model/user.model';
 import * as UtilFunction from '../../../util/util-functions';
 import { required } from '@angular/forms/signals';
+import { Severity } from '../../../model/ui.model';
 
 export interface RequestDialogData {
 	startTime?: Date;
@@ -54,7 +56,15 @@ export class RequestReservationModalComponent implements OnInit {
 	ngOnInit(): void {
 		this.reservation = this.config.data?.reservation;
 		this.isEditMode = !!this.reservation;
-		this.isReadOnly = this.isEditMode && this.reservation?.status !== ReservationStatus.PENDING;
+
+		const user: User = this.loggedUser();
+		const isAdmin: boolean = user.roles?.includes(UserRole.ADMINISTRATOR) ?? false;
+		const isOwner: boolean = user.username === this.reservation?.reservedBy;
+
+		this.isReadOnly =
+			this.isEditMode &&
+			(this.reservation?.status !== ReservationStatus.PENDING || (!isOwner && !isAdmin));
+
 		this.initForm();
 	}
 
@@ -92,7 +102,13 @@ export class RequestReservationModalComponent implements OnInit {
 		});
 
 		if (this.isEditMode) {
-			this.form.addControl('reviewedBy', this.formBuilder.control({value: reservation?.reviewedBy, disabled: true}, Validators.required));
+			this.form.addControl(
+				'reviewedBy',
+				this.formBuilder.control(
+					{ value: reservation?.reviewedBy, disabled: true },
+					Validators.required,
+				),
+			);
 		}
 	}
 
@@ -107,7 +123,7 @@ export class RequestReservationModalComponent implements OnInit {
 		const v = this.form.getRawValue();
 
 		const request: ReservationRequest | Reservation = {
-			... this.reservation,
+			...this.reservation,
 			name: v.name,
 			roomCode: v.room,
 			eventType: v.eventType,
@@ -118,17 +134,43 @@ export class RequestReservationModalComponent implements OnInit {
 		};
 
 		if (this.isEditMode) {
-			this.store.dispatch(AppAction.updateReservation({reservation: request as unknown as Reservation}));
+			this.store.dispatch(
+				AppAction.updateReservation({ reservation: request as unknown as Reservation }),
+			);
 		} else {
 			this.store.dispatch(AppAction.requestReservation({ request }));
 		}
 
-		this.ref.close();
+		this.onCancel();
 	}
 
 	onCancel(): void {
 		this.ref.close(null);
 	}
 
+	getIsUserAdmin(user: User): boolean {
+		return user.roles?.includes(UserRole.ADMINISTRATOR);
+	}
+
 	protected readonly ReservationStatus = ReservationStatus;
+
+	onApproveReservation(reservation: Reservation): void {
+		const review: ReservationReview = {
+			uuid: reservation.uuid,
+			status: ReservationStatus.ACCEPTED,
+		};
+		this.store.dispatch(AppAction.reviewReservation({ review }));
+		this.onCancel();
+	}
+
+	onRejectReservation(reservation: Reservation): void {
+		const review: ReservationReview = {
+			uuid: reservation.uuid,
+			status: ReservationStatus.REJECTED,
+		};
+		this.store.dispatch(AppAction.reviewReservation({ review }));
+		this.onCancel();
+	}
+
+	protected readonly Severity = Severity;
 }

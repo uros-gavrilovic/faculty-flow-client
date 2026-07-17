@@ -80,7 +80,8 @@
 		"no": "No",
 		"filters": "Filters",
 		"no-results": "No results found",
-		"loading": "Loading..."
+		"loading": "Loading...",
+		"close": "Close"
 	},
 	"validation": {
 		"required-field": "This field is required",
