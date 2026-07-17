@@ -11,6 +11,7 @@
 	(cellClick)="onCellClick($event)"
 	(eventClick)="onEventClick($event)"
 	(popupOpen)="onPopupOpen($event)"
+	(dataBound)="onDataBound()">
 	(actionBegin)="onActionBegin($event)"
 >
 	<ng-template #eventSettingsTemplate let-data>
@@ -20,11 +21,11 @@
 			</div>
 
 			<div class="row ml-1">
-				<div class="col-3">
+				<div class="col-3 location">
 					<i class="pi pi-map-marker mr-1"></i>
 					<b>{{ data.Location }}</b>
 				</div>
-				<div class="col-6">
+				<div class="col-6 time">
 					<i class="pi pi-clock mr-1"></i>
 					<b>{{ data.StartTime | date: 'HH:mm' }} - {{ data.EndTime | date: 'HH:mm' }}</b>
 				</div>

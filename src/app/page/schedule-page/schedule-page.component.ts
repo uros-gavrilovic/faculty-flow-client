@@ -196,6 +196,16 @@ export class SchedulePageComponent implements OnInit {
 		this.loadEvents();
 	}
 
+	onDataBound(): void {
+		const appointments = document.querySelectorAll<HTMLElement>('.e-appointment');
+		appointments.forEach((element: HTMLElement) => {
+			const width: number = element.getBoundingClientRect().width;
+			if (width < 200) element.classList.add('compact');
+
+			// const height: number = element.getBoundingClientRect().height;
+		});
+	}
+
 	onEventRendered(args: EventRenderedArgs): void {
 		const event = args.data as ScheduleEvent;
 		const colors = this.statusColorMap[event.Status];
