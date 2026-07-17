@@ -65,10 +65,15 @@ export const loginRedirectEffect = createEffect(
 					'messages.auth.login.title',
 					'messages.auth.login.message',
 				);
-				router.navigate([PageUrl.SCHEDULE]);
+
+				const tree = router.parseUrl(router.url);
+				const returnUrl = tree.queryParams['returnUrl'];
+
+				router.navigateByUrl(returnUrl ?? PageUrl.SCHEDULE);
 			}),
 		);
-	}, { functional: true, dispatch: false },
+	},
+	{ functional: true, dispatch: false },
 );
 
 export const logoutRedirectEffect = createEffect(
