@@ -1,29 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { UserTableComponent } from '../../component/user/user-table/user-table.component';
 import { PRIMENG_MODULES } from '../../modules/ui.module';
-import { TranslatePipe } from '@ngx-translate/core';
 import { ModalService } from '../../service/modal.service';
 import { PageHeaderComponent } from '../../component/misc/page-header/page-header.component';
-import { ReservationTableComponent } from '../../component/reservation/reservation-table/reservation-table.component';
+import { COMMON_MODULES } from '../../modules/common.module';
 
 @Component({
 	selector: 'app-employees-page',
-	imports: [
-		UserTableComponent,
-		PRIMENG_MODULES,
-		TranslatePipe,
-		PageHeaderComponent,
-		ReservationTableComponent,
-	],
+	imports: [COMMON_MODULES, PRIMENG_MODULES, UserTableComponent, PageHeaderComponent],
 	templateUrl: './employees-page.component.html',
 	styleUrl: './employees-page.component.scss',
 })
-export class EmployeesPageComponent implements OnInit {
-	constructor(private modalService: ModalService) {}
+export class EmployeesPageComponent {
 
-	ngOnInit() {}
+	constructor(
+		private modalService: ModalService
+	) {}
 
-	protected onAddEmployee() {
+	protected onAddEmployee(): void {
 		this.modalService.openEmployeeSettingsDialog();
 	}
 }

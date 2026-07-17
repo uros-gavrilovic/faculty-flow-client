@@ -1,6 +1,6 @@
 import { Component, model, ModelSignal, Signal } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { TableLazyLoadEvent, TableRowSelectEvent } from 'primeng/table';
+import { TableLazyLoadEvent } from 'primeng/table';
 import { TranslateService } from '@ngx-translate/core';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import {
@@ -16,14 +16,13 @@ import { User, UserRole } from '../../../model/user.model';
 import { Severity } from '../../../model/ui.model';
 import {reservationStatusSeverityMap} from '../../../constant/severity.constant';
 import { COMMON_MODULES } from '../../../modules/common.module';
-import { ReservationFilterComponent } from '../reservation-filter/reservation-filter.component';
 import { ScheduleFilterComponent } from '../../schedule/schedule-filter/schedule-filter.component';
 import { SortEvent } from 'primeng/api';
 import { ModalService } from '../../../service/modal.service';
 
 @Component({
 	selector: 'app-reservation-table',
-	imports: [PRIMENG_MODULES, COMMON_MODULES, ReservationFilterComponent, ScheduleFilterComponent],
+	imports: [PRIMENG_MODULES, COMMON_MODULES, ScheduleFilterComponent],
 	templateUrl: './reservation-table.component.html',
 	styleUrl: './reservation-table.component.scss',
 })
