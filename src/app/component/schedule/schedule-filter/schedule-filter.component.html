@@ -20,8 +20,9 @@
 			placeholder="Room"
 			[filter]="true"
 			filterBy="name"
-			[showClear]="true">
-		</p-select>
+			[showClear]="true"
+			[appendTo]="'body'"
+		/>
 	</div>
 
 	<div class="col-12 md:col-2">
@@ -30,8 +31,9 @@
 			formControlName="status"
 			[options]="statuses"
 			placeholder="Status"
-			[showClear]="true">
-		</p-select>
+			[showClear]="true"
+			[appendTo]="'body'"
+		/>
 	</div>
 
 	<div class="col-12 md:col-2">
@@ -42,14 +44,12 @@
 			placeholder="Reserved by">
 	</div>
 
-	<div class="col-12 md:col-1">
+	<div class="md:col-1">
 		<p-button
-			styleClass="w-full"
-			icon="pi pi-filter-slash"
- 			label="Clear"
+			icon="pi pi-eraser"
 			severity="secondary"
-			(click)="onClear()">
-		</p-button>
+			(click)="onClear()"
+		></p-button>
 	</div>
 
 

@@ -1,4 +1,4 @@
-<form [formGroup]="form" class="request-form p-fluid">
+<form [formGroup]="form" class="p-fluid">
 	<div class="grid formgrid">
 		<div class="field col-12">
 			<p-floatlabel variant="in" class="w-full">
@@ -42,7 +42,7 @@
 
 		<div class="field col-12 md:col-6">
 			<p-floatlabel variant="in">
-				<input pInputText id="reservedBy" formControlName="reservedBy" autocomplete="off" />
+				<input pInputText id="reservedBy" formControlName="reservedBy" autocomplete="off" class="w-full"/>
 				<label for="reservedBy">{{ 'reservation.requested-by' | translate | required }}</label>
 			</p-floatlabel>
 			@if (form.get('reservedBy')?.invalid && form.get('reservedBy')?.touched) {
@@ -52,7 +52,7 @@
 
 		<div class="field col-12 md:col-6">
 			<p-floatlabel variant="in">
-				<input type="datetime-local" pInputText id="startTime" formControlName="startTime" />
+				<input type="datetime-local" pInputText id="startTime" formControlName="startTime" class="w-full"/>
 				<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
 			</p-floatlabel>
 			@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
@@ -62,7 +62,7 @@
 
 		<div class="field col-12 md:col-6">
 			<p-floatlabel variant="in">
-				<input type="datetime-local" pInputText id="endTime" formControlName="endTime" />
+				<input type="datetime-local" pInputText id="endTime" formControlName="endTime" class="w-full"/>
 				<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
 			</p-floatlabel>
 			@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {

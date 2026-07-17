@@ -9,6 +9,6 @@ export interface SearchRequest<F = undefined> {
 	page: number;
 	size: number;
 	sortBy?: string;
-	direction?: 'asc' | 'desc';
+	direction?: 'ASC' | 'DESC';
 	filter?: F;
 }

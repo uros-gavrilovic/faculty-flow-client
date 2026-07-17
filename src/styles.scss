@@ -1,3 +1,4 @@
+@use './style/animations';
 @import "primeicons/primeicons.css";
 @import "primeflex/primeflex.css";
 @import '../node_modules/@syncfusion/ej2-base/styles/material3.css';
@@ -9,7 +10,6 @@
 @import '../node_modules/@syncfusion/ej2-popups/styles/material3.css';
 @import '../node_modules/@syncfusion/ej2-navigations/styles/material3.css';
 @import '../node_modules/@syncfusion/ej2-angular-schedule/styles/material3.css';
-
 .user-menu-panel {
 	min-width: 200px;
 

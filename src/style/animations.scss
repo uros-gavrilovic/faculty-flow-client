@@ -1,0 +1,16 @@
+.toggle {
+	overflow: hidden;
+	transition:
+		height 250ms ease-in-out,
+		opacity 250ms ease-in-out;
+}
+
+.toggle-hidden {
+	height: 0;
+	opacity: 0;
+}
+
+.toggle-visible {
+	height: auto;
+	opacity: 1;
+}

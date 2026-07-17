@@ -1,15 +1,41 @@
-<p-card>
-	<p-toolbar >
-		<ng-template pTemplate="start">
-			<div class="panel-toolbar">
-				<h1>{{ 'reservation.panel-title' | translate }}</h1>
-				<p>{{ 'reservation.panel-description' | translate }}</p>
+<app-page-header
+	[icon]="'pi pi-bookmark'"
+	[title]="'reservation.panel-title'"
+	[description]="'reservation.panel-description'"
+>
+	<ng-container toolbar>
+		<ng-container>
+			<div class="flex gap-2">
+				@if (isAdmin) {
+					<div class="toggle flex gap-2" [class.toggle-hidden]="!hasSelection" [class.toggle-visible]="hasSelection">
+						<span class="flex align-items-center mr-3">
+							<i class="pi pi-check-square mr-1"></i>
+							{{ selectedReservations().length }}
+							{{ 'reservation.selected' | translate }}
+						</span>
+
+						<p-button
+							icon="pi pi-check-circle"
+							[label]="'reservation.approve' | translate"
+							severity="success"
+							(onClick)="onApproveEvent()"
+						/>
+
+						<p-button
+							icon="pi pi-times-circle"
+							[label]="'reservation.reject' | translate"
+							severity="danger"
+							(onClick)="onRejectEvent()"
+						/>
+					</div>
+				}
+
+				<p-button [icon]="isFilterVisible() ? 'pi pi-filter' : 'pi pi-filter-slash'" (onClick)="onToggleFilter()" />
 			</div>
-		</ng-template>
+		</ng-container>
+	</ng-container>
 
-		<ng-template pTemplate="end">
-		</ng-template>
-	</p-toolbar>
-
-	<app-reservation-table/>
-</p-card>
+	<ng-container content>
+		<app-reservation-table [(selectedReservations)]="selectedReservations" [(isFilterVisible)]="isFilterVisible"/>
+	</ng-container>
+</app-page-header>

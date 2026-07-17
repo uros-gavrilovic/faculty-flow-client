@@ -1,0 +1,19 @@
+<p-card>
+	<p-toolbar>
+		<ng-template pTemplate="start">
+			<div>
+				<p-avatar [icon]="icon" shape="square" size="large" class="mr-3" />
+			</div>
+			<div class="panel-toolbar">
+				<h1>{{ title | translate }}</h1>
+				<p>{{ description | translate }}</p>
+			</div>
+		</ng-template>
+
+		<ng-template pTemplate="end">
+			<ng-content select="[toolbar]" />
+		</ng-template>
+	</p-toolbar>
+
+	<ng-content select="[content]" />
+</p-card>

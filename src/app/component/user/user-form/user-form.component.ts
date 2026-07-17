@@ -1,25 +1,20 @@
 import { Component, effect, Input, OnInit, Signal } from '@angular/core';
-import { FloatLabel } from 'primeng/floatlabel';
 import {
 	FormBuilder,
 	FormGroup,
-	FormsModule,
-	ReactiveFormsModule,
 	Validators,
 } from '@angular/forms';
-import { InputText } from 'primeng/inputtext';
-import { TranslatePipe } from '@ngx-translate/core';
 import { User } from '../../../model/user.model';
-import { NgClass } from '@angular/common';
+import { COMMON_MODULES } from '../../../modules/common.module';
+import { PRIMENG_MODULES } from '../../../modules/ui.module';
 
 @Component({
 	selector: 'app-user-form',
-	imports: [FloatLabel, FormsModule, InputText, ReactiveFormsModule, TranslatePipe, NgClass],
+	imports: [COMMON_MODULES, PRIMENG_MODULES],
 	templateUrl: './user-form.component.html',
 	styleUrl: './user-form.component.scss',
 })
 export class UserFormComponent implements OnInit {
-
 	@Input() user: Signal<User>;
 	@Input() form: FormGroup;
 	@Input() isEditMode: boolean;
@@ -37,7 +32,10 @@ export class UserFormComponent implements OnInit {
 	private initForm(): void {
 		this.form.addControl('firstName', this.formBuilder.control(null, Validators.required));
 		this.form.addControl('lastName', this.formBuilder.control(null, Validators.required));
-		this.form.addControl('email', this.formBuilder.control(null, [Validators.required, Validators.email]),);
+		this.form.addControl(
+			'email',
+			this.formBuilder.control(null, [Validators.required, Validators.email]),
+		);
 		this.form.addControl('username', this.formBuilder.control(null, Validators.required));
 
 		if (!this.isEditMode) {
