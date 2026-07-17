@@ -26,3 +26,7 @@ export function getAvatarSeverity(user: User): Severity | undefined {
 	const role = avatarRolePriority.find((role) => user.roles.includes(role));
 	return role && roleTagSeverityMap[role];
 }
+
+export function getAccountVerifiedSeverity(user: User): Severity {
+	return user.isVerified ? Severity.SECONDARY : Severity.WARN;
+}

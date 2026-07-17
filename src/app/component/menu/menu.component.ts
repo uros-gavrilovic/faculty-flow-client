@@ -21,11 +21,9 @@ interface NavItem {
 	styleUrl: './menu.component.scss',
 })
 export class MenuComponent {
-
-
 	navItems: NavItem[] = [
 		{ label: 'Schedule', route: '/schedule', icon: 'pi-calendar' },
-		{ label: 'Reservations', route: '/reservations', icon: 'pi-bookmark' },
+		{ label: 'Reservations', route: '/reservations', icon: 'pi-address-book' },
 		{
 			label: 'Employees',
 			route: '/employees',

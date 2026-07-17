@@ -25,9 +25,25 @@
 	margin-bottom: 1.5rem;
 }
 
-.input {
+p-iconfield,
+.p-inputtext {
 	width: 100%;
+}
+
+.p-inputtext {
 	margin-bottom: 1rem;
-	background: rgba(255,255,255,0.05);
+	background: rgba(255, 255, 255, 0.05);
 	color: white;
+}
+
+.p-inputtext::placeholder {
+	color: rgba(255, 255, 255, 0.5);
+}
+
+.p-floatlabel label {
+	color: rgba(255, 255, 255, 0.7);
+}
+
+.p-inputicon {
+	color: rgba(255, 255, 255, 0.7);
 }

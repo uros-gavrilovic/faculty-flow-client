@@ -2,17 +2,35 @@
 	<div class="login-card">
 		<h2 class="title">Faculty<i>Flow</i></h2>
 
-		<input pInputText
-		       type="text"
-		       [formControl]="username"
-		       [placeholder]="'auth.username' | translate"
-		       class="input" />
+		<p-iconfield>
+			<p-floatlabel variant="in" class="w-full">
+				<p-inputicon class="pi pi-user" />
+				<input
+					pInputText
+					id="username"
+					type="text"
+					[formControl]="username"
+					autocomplete="off"
+					class="w-full"
+				/>
+				<label for="username">{{ 'auth.username' | translate }}</label>
+			</p-floatlabel>
+		</p-iconfield>
 
-		<input pInputText
-		       type="password"
-		       [formControl]="password"
-		       [placeholder]="'auth.password' | translate"
-		       class="input" />
+		<p-iconfield>
+			<p-floatlabel variant="in" class="w-full">
+				<p-inputicon class="pi pi-lock" />
+				<input
+					pInputText
+					id="password"
+					type="password"
+					[formControl]="password"
+					autocomplete="off"
+					class="w-full"
+				/>
+				<label for="password">{{ 'auth.password' | translate }}</label>
+			</p-floatlabel>
+		</p-iconfield>
 
 		<p-button
 			styleClass="w-full"

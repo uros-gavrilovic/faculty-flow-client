@@ -38,6 +38,7 @@
 		"employee-information": "Employee Information",
 		"role-and-permissions": "Role and Permissions",
 		"users-count": "{{count}} users",
+		"user-not-verified": "User not verified",
 		"name": "First Name",
 		"surname": "Last Name",
 		"username": "Username",
@@ -75,6 +76,7 @@
 		"confirm": "Confirm",
 		"yes": "Yes",
 		"no": "No",
+		"filters": "Filters",
 		"no-results": "No results found",
 		"loading": "Loading..."
 	},

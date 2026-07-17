@@ -13,7 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EmployeeSettingsModalComponent } from '../../modal/employee-settings-modal/employee-settings-modal.component';
 import { DynamicDialogRef } from 'primeng/dynamicdialog';
 import { Severity } from '../../../model/ui.model';
-import {getAvatarSeverity, roleTagSeverityMap} from '../../../constant/severity.constant';
+import { getAccountVerifiedSeverity, getAvatarSeverity, roleTagSeverityMap} from '../../../constant/severity.constant';
 
 @Component({
 	selector: 'app-user-table',
@@ -80,4 +80,6 @@ export class UserTableComponent implements OnInit {
 	getAvatarSeverity(user: User): string {
 		return getAvatarSeverity(user);
 	}
+
+	protected readonly getAccountVerifiedSeverity = getAccountVerifiedSeverity;
 }

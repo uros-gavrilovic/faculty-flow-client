@@ -56,7 +56,12 @@
 			</td>
 
 			<td>
-				<p-chip [label]="user.username" icon="pi pi-user" />
+				<p-chip
+					[styleClass]="'chip chip-' + getAccountVerifiedSeverity(user)"
+					[label]="user.username"
+					[pTooltip]="user.isVerified ? '' : ('user-management.user-not-verified' | translate)"
+					icon="pi pi-user"
+				/>
 			<td>
 				{{ user.email }}
 			</td>

@@ -7,6 +7,7 @@ import { Reservation } from '../../model/reservation.model';
 import { User, UserRole } from '../../model/user.model';
 import * as AppSelector from '../../store/app.selector';
 import { Store } from '@ngrx/store';
+import { Severity } from '../../model/ui.model';
 
 @Component({
 	selector: 'app-reservations-page',
@@ -47,4 +48,6 @@ export class ReservationsPageComponent implements OnInit {
 	get isAdmin(): boolean {
 		return this.currentUser()?.roles.includes(UserRole.ADMINISTRATOR) ?? false;
 	}
+
+	protected readonly Severity = Severity;
 }

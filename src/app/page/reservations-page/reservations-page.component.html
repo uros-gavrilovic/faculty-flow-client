@@ -1,5 +1,5 @@
 <app-page-header
-	[icon]="'pi pi-bookmark'"
+	[icon]="'pi pi-address-book'"
 	[title]="'reservation.panel-title'"
 	[description]="'reservation.panel-description'"
 >
@@ -30,7 +30,12 @@
 					</div>
 				}
 
-				<p-button [icon]="isFilterVisible() ? 'pi pi-filter' : 'pi pi-filter-slash'" (onClick)="onToggleFilter()" />
+				<p-button
+					[severity]="Severity.SECONDARY"
+					[label]="'common.filters' | translate"
+					[icon]="isFilterVisible() ? 'pi pi-filter' : 'pi pi-filter-slash'"
+					(onClick)="onToggleFilter()"
+				/>
 			</div>
 		</ng-container>
 	</ng-container>
