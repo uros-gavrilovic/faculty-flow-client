@@ -25,6 +25,12 @@ export class MenuComponent {
 		{ label: 'Schedule', route: '/schedule', icon: 'pi-calendar' },
 		{ label: 'Reservations', route: '/reservations', icon: 'pi-address-book' },
 		{
+			label: 'Rooms',
+			route: '/rooms',
+			icon: 'pi-building',
+			allowedRoles: [UserRole.ADMINISTRATOR],
+		},
+		{
 			label: 'Employees',
 			route: '/employees',
 			icon: 'pi-users',
@@ -41,8 +47,10 @@ export class MenuComponent {
 		);
 	});
 	readonly currentUserInitials: Signal<string> = computed(() => {
-		return this.currentUser() ? `${this.currentUser()?.firstName[0]}${this.currentUser()?.lastName[0]}` : '';
-	})
+		return this.currentUser()
+			? `${this.currentUser()?.firstName[0]}${this.currentUser()?.lastName[0]}`
+			: '';
+	});
 
 	constructor(
 		private router: Router,

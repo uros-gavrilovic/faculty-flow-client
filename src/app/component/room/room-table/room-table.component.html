@@ -1,0 +1,85 @@
+<p-table
+	[value]="rooms()?.data ?? []"
+	[paginator]="true"
+	[rows]="10"
+	[totalRecords]="rooms()?.total ?? 0"
+	[lazy]="true"
+	(onPage)="onPage($event)"
+	(onSort)="onSort($event)"
+	[rowsPerPageOptions]="[5, 10, 25]"
+	[showCurrentPageReport]="true"
+	dataKey="uuid"
+>
+	<ng-template pTemplate="header">
+		<tr>
+			<th pSortableColumn="name">
+				{{ 'room.name' | translate }}
+				<p-sortIcon field="name" />
+			</th>
+
+			<th pSortableColumn="code">
+				{{ 'room.code' | translate }}
+				<p-sortIcon field="code" />
+			</th>
+
+			<th pSortableColumn="type">
+				{{ 'room.type' | translate }}
+				<p-sortIcon field="type" />
+			</th>
+
+			<th pSortableColumn="floor">
+				{{ 'room.floor' | translate }}
+				<p-sortIcon field="floor" />
+			</th>
+
+			<th pSortableColumn="building.name">
+				{{ 'room.building' | translate }}
+				<p-sortIcon field="building.name" />
+			</th>
+
+			<th pSortableColumn="capacity">
+				{{ 'room.capacity' | translate }}
+				<p-sortIcon field="capacity" />
+			</th>
+
+			<th pSortableColumn="oldName">
+				{{ 'room.old-name' | translate }}
+				<p-sortIcon field="oldName" />
+			</th>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="body" let-room>
+		<tr>
+			<td>{{ room.name }}</td>
+
+			<td>
+				<p-chip [label]="room.code" icon="pi pi-hashtag" />
+			</td>
+
+			<td>{{ room.type }}</td>
+
+			<td>{{ room.floor }}</td>
+
+			<td>{{ room.building.name }}</td>
+
+			<td>{{ room.capacity }}</td>
+
+			<td>
+				@if (room.oldName) {
+					{{ room.oldName }}
+				} @else {
+					<span class="cell-empty">—</span>
+				}
+			</td>
+		</tr>
+	</ng-template>
+
+	<ng-template pTemplate="emptymessage">
+		<tr>
+			<td colspan="7" class="text-center p-4">
+				{{ 'common.no-results' | translate }}
+			</td>
+		</tr>
+	</ng-template>
+</p-table>

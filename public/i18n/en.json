@@ -27,6 +27,10 @@
 		"reject": "Reject",
 		"pagination": "Showing {first} to {last} of {totalRecords} reservations"
 	},
+	"room": {
+		"panel-title": "Rooms",
+		"panel-description": "Manage available rooms, create new or update/delete existing"
+	},
 	"employee": {
 		"panel-title": "Employees",
 		"panel-description": "Manage faculty staff, permissions and accounts",

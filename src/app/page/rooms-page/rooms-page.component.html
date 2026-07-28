@@ -1,0 +1,22 @@
+<app-page-header
+	[icon]="'pi pi-building'"
+	[title]="'room.panel-title'"
+	[description]="'room.panel-description'"
+>
+	<ng-container toolbar>
+		<ng-container>
+			<div class="flex gap-2">
+				<p-button
+					[severity]="Severity.SECONDARY"
+					[label]="'common.filters' | translate"
+					[icon]="isFilterVisible() ? 'pi pi-filter' : 'pi pi-filter-slash'"
+					(onClick)="onToggleFilter()"
+				/>
+			</div>
+		</ng-container>
+	</ng-container>
+
+	<ng-container content>
+		<app-room-table/>
+	</ng-container>
+</app-page-header>

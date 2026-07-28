@@ -194,6 +194,25 @@ export const getRoomsEffect = createEffect(
 		{functional: true}
 );
 
+export const searchRoomsEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const roomApi = inject(RoomApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.searchRooms),
+			switchMap(({ searchRequest }) =>
+				roomApi
+					.searchRooms(searchRequest)
+					.pipe(
+						map((searchResponse) => AppAction.searchRoomsSuccess({ searchResponse })),
+					),
+			),
+		);
+	},
+	{ functional: true },
+);
+
 export const getReservationEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);

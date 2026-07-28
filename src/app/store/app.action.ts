@@ -2,7 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { User } from '../model/user.model';
 import { Reservation, ReservationFilter, ReservationRequest, ReservationReview } from '../model/reservation.model';
 import { LoginRequest, LoginResponse, RegisterRequest } from '../model/auth.model';
-import { Room } from '../model/room.model';
+import { Room, RoomFilter } from '../model/room.model';
 import { SearchRequest, SearchResponse } from '../model/search.model';
 
 enum AppActionType {
@@ -26,6 +26,8 @@ enum AppActionType {
 	// Room
 	GET_ROOMS = '[ROOM] Get Rooms',
 	GET_ROOMS_SUCCESS = '[ROOM] Get Rooms Success',
+	SEARCH_ROOMS = '[ROOM] Search Rooms',
+	SEARCH_ROOMS_SUCCESS = '[ROOM] Search Rooms Success',
 
 	// Reservation
 	SEARCH_RESERVATIONS = '[RESV] Search Reservations',
@@ -57,6 +59,8 @@ export const updateUserSuccess = createAction(AppActionType.UPDATE_USER_SUCCESS,
 
 export const getRooms = createAction(AppActionType.GET_ROOMS);
 export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>());
+export const searchRooms = createAction(AppActionType.SEARCH_ROOMS, props<{ searchRequest: SearchRequest<RoomFilter> }>());
+export const searchRoomsSuccess = createAction(AppActionType.SEARCH_ROOMS_SUCCESS, props<{ searchResponse: SearchResponse<Room> }>());
 
 export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest<ReservationFilter> }>());
 export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>());

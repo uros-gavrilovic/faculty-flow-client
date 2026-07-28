@@ -21,3 +21,8 @@ export enum RoomType {
 	OFFICE = 'OFFICE',
 	OTHER = 'OTHER',
 }
+
+export interface RoomFilter {
+	name?: string;
+	code?: string;
+}

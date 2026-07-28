@@ -9,6 +9,7 @@ import { NotFoundPageComponent } from './page/not-found-page/not-found-page.comp
 import { UserTableComponent } from './component/user/user-table/user-table.component';
 import { roleGuard } from './guard/authorization.guard';
 import { UserRole } from './model/user.model';
+import { RoomsPageComponent } from './page/rooms-page/rooms-page.component';
 
 export const routes: Routes = [
 	{ path: '', canActivate: [authRedirectGuard], pathMatch: 'full', component: LoginPageComponent },
@@ -22,6 +23,15 @@ export const routes: Routes = [
 			{
 				path: 'reservations',
 				component: ReservationsPageComponent,
+				children: [
+					{ path: '', component: UserTableComponent },
+					{ path: ':uuid', component: UserTableComponent },
+				],
+			},
+			{
+				path: 'rooms',
+				component: RoomsPageComponent,
+				canActivate: [roleGuard([UserRole.ADMINISTRATOR])],
 				children: [
 					{ path: '', component: UserTableComponent },
 					{ path: ':uuid', component: UserTableComponent },
