@@ -1,0 +1,31 @@
+<form [formGroup]="form" class="grid gap-3 p-3">
+	<div class="col-12 md:col-5">
+		<p-iconfield class="w-full">
+			<p-inputicon class="pi pi-search" />
+			<input
+				pInputText
+				class="w-full"
+				formControlName="name"
+				placeholder="Room name">
+		</p-iconfield>
+	</div>
+
+	<div class="col-12 md:col-5">
+		<p-iconfield class="w-full">
+			<p-inputicon class="pi pi-search" />
+			<input
+				pInputText
+				class="w-full"
+				formControlName="code"
+				placeholder="Room code">
+		</p-iconfield>
+	</div>
+
+	<div class="col-1">
+		<p-button
+			icon="pi pi-eraser"
+			severity="secondary"
+			(click)="onClear()">
+		</p-button>
+	</div>
+</form>

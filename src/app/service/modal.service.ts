@@ -6,10 +6,13 @@ import { EmployeeSettingsModalComponent, EmployeeSettingsModalData, } from '../c
 import { Store } from '@ngrx/store';
 import * as AppAction from '../store/app.action';
 import { take } from 'rxjs';
+import {
+	RoomDialogData,
+	RoomModalComponent,
+} from '../component/modal/room-modal/room-modal.component';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
-
 	constructor(
 		private store: Store,
 		private dialogService: DialogService,
@@ -48,6 +51,24 @@ export class ModalService {
 		dialogRef.onClose
 			.pipe(take(1))
 			.subscribe(() => {this.store.dispatch(AppAction.clearUser());});
+
+		return dialogRef;
+	}
+
+	openRoomModal(data?: RoomDialogData): DynamicDialogRef<RoomModalComponent> {
+
+		const dialogRef = this.dialogService.open(RoomModalComponent, {
+			header: this.translateService.instant(data?.room?.uuid ? 'modal.room.edit' : 'modal.room.create',),
+			closable: true,
+			dismissableMask: true,
+			draggable: false,
+			style: { width: '40vw' },
+			data,
+		});
+
+		dialogRef.onClose
+			.pipe(take(1))
+			.subscribe(() => {this.store.dispatch(AppAction.clearRoom());});
 
 		return dialogRef;
 	}

@@ -13,6 +13,7 @@ import { Reservation } from '../model/reservation.model';
 import { LoginResponse } from '../model/auth.model';
 import { RoomApiService } from '../service/room-api.service';
 import { Store } from '@ngrx/store';
+import { Room } from '../model/room.model';
 
 export const loginEffect = createEffect(
 	() => {
@@ -182,6 +183,23 @@ export const updateUserEffect = createEffect(
 	{ functional: true },
 );
 
+export const getRoomEffect$ = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const roomApi = inject(RoomApiService);
+
+		return actions$.pipe(
+			ofType(AppAction.getRoom),
+			switchMap((payload) =>
+				roomApi
+					.getRoom(payload.uuid)
+					.pipe(map((room: Room) => AppAction.getRoomSuccess({ room }),),),
+			),
+		);
+	},
+	{ functional: true },
+);
+
 export const getRoomsEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);
@@ -207,6 +225,87 @@ export const searchRoomsEffect = createEffect(
 					.pipe(
 						map((searchResponse) => AppAction.searchRoomsSuccess({ searchResponse })),
 					),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const createRoomEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const roomApi = inject(RoomApiService);
+		const store = inject(Store);
+		const messageService = inject(MessageService);
+
+		return actions$.pipe(
+			ofType(AppAction.createRoom),
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([{ room }, searchRequest]) =>
+				roomApi.createRoom(room).pipe(
+					tap(() =>
+						messageService.showMessage(
+							MessageSeverity.SUCCESS,
+							'messages.room.created.title',
+							'messages.room.created.message',
+						),
+					),
+					map(() => AppAction.searchRooms({ searchRequest })),
+				),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const updateRoomEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const roomApi = inject(RoomApiService);
+		const store = inject(Store);
+		const messageService = inject(MessageService);
+
+		return actions$.pipe(
+			ofType(AppAction.updateRoom),
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([{ room }, searchRequest]) =>
+				roomApi.updateRoom(room).pipe(
+					tap(() =>
+						messageService.showMessage(
+							MessageSeverity.SUCCESS,
+							'messages.room.updated.title',
+							'messages.room.updated.message',
+						),
+					),
+					map(() => AppAction.searchRooms({ searchRequest })),
+				),
+			),
+		);
+	},
+	{ functional: true },
+);
+
+export const deleteRoomEffect = createEffect(
+	() => {
+		const actions$ = inject(Actions);
+		const roomApi = inject(RoomApiService);
+		const store = inject(Store);
+		const messageService = inject(MessageService);
+
+		return actions$.pipe(
+			ofType(AppAction.deleteRoom),
+			withLatestFrom(store.select(AppSelector.selectSearchRequest)),
+			switchMap(([{ uuid }, searchRequest]) =>
+				roomApi.deleteRoom(uuid).pipe(
+					tap(() =>
+						messageService.showMessage(
+							MessageSeverity.SUCCESS,
+							'messages.room.deleted.title',
+							'messages.room.deleted.message',
+						),
+					),
+					map(() => AppAction.searchRooms({ searchRequest })),
+				),
 			),
 		);
 	},

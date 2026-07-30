@@ -29,7 +29,15 @@
 	},
 	"room": {
 		"panel-title": "Rooms",
-		"panel-description": "Manage available rooms, create new or update/delete existing"
+		"panel-description": "Manage available rooms, create new or update/delete existing",
+		"name": "Room Name",
+		"code": "Room Code",
+		"type": "Room Type",
+		"floor": "Floor",
+		"building": "Building",
+		"capacity": "Capacity",
+		"old-name": "Previous Name",
+		"add-room": "Add a room"
 	},
 	"employee": {
 		"panel-title": "Employees",
@@ -77,6 +85,7 @@
 		"cancel": "Cancel",
 		"submit": "Submit",
 		"save": "Save",
+		"update": "Update",
 		"edit": "Edit",
 		"delete": "Delete",
 		"confirm": "Confirm",
@@ -92,6 +101,17 @@
 		"invalid-email": "Please enter a valid email address"
 	},
 	"enum": {
+		"building": {
+			"old": "Old",
+			"new": "New"
+		},
+		"room-type": {
+			"classroom": "Classroom",
+			"amphitheater": "Amphitheater",
+			"computer_lab": "Computer lab",
+			"office": "Office",
+			"other": "Other"
+		},
 		"reservation": {
 			"event-type": {
 				"lecture": "Lecture",

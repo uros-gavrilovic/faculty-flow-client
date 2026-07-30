@@ -12,11 +12,12 @@ import { SortEvent } from 'primeng/api';
 import * as AppAction from '../../../store/app.action';
 import * as AppSelector from '../../../store/app.selector';
 import { Actions, ofType } from '@ngrx/effects';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RoomFilterComponent } from '../room-filter/room-filter.component';
+import { ModalService } from '../../../service/modal.service';
 
 @Component({
 	selector: 'app-room-table',
-	imports: [COMMON_MODULES, PRIMENG_MODULES],
+	imports: [COMMON_MODULES, PRIMENG_MODULES, RoomFilterComponent],
 	templateUrl: './room-table.component.html',
 	styleUrl: './room-table.component.scss',
 })
@@ -30,6 +31,7 @@ export class RoomTableComponent {
 	constructor(
 		private store: Store,
 		private actions$: Actions,
+		private modalService: ModalService,
 		private translateService: TranslateService,
 	) {}
 
@@ -42,11 +44,9 @@ export class RoomTableComponent {
 			filter: {},
 		};
 
-		this.actions$
-			.pipe(ofType(AppAction.searchRoomsSuccess))
-			.subscribe(({ searchResponse }) => {
-				this.rooms.set(searchResponse);
-			});
+		this.actions$.pipe(ofType(AppAction.searchRoomsSuccess)).subscribe(({ searchResponse }) => {
+			this.rooms.set(searchResponse);
+		});
 
 		this.store.dispatch(AppAction.searchRooms({ searchRequest: this.searchRequest }));
 	}
@@ -82,14 +82,7 @@ export class RoomTableComponent {
 		this.store.dispatch(AppAction.searchRooms({ searchRequest: this.searchRequest }));
 	}
 
-	get showingRoomsTemplate(): string {
-		return this.translateService.instant('room.pagination');
-	}
-
 	protected onRoomSelect(room: Room): void {
-		// TODO:
-		// this.modalService.openRoomModal({ room });
-		// or
-		// this.router.navigate(['/rooms', room.uuid]);
+		this.modalService.openRoomModal({ room });
 	}
 }

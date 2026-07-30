@@ -12,11 +12,17 @@
 					[icon]="isFilterVisible() ? 'pi pi-filter' : 'pi pi-filter-slash'"
 					(onClick)="onToggleFilter()"
 				/>
+				<p-button
+					label="{{ 'room.add-room' | translate }}"
+					icon="pi pi-plus"
+					styleClass="add-employee-btn"
+					(onClick)="onAddRoom()"
+				/>
 			</div>
 		</ng-container>
 	</ng-container>
 
 	<ng-container content>
-		<app-room-table/>
+		<app-room-table [(isFilterVisible)]="isFilterVisible"/>
 	</ng-container>
 </app-page-header>

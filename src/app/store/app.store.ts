@@ -11,6 +11,7 @@ export interface AppState<F = unknown> {
 	currentUser: User;
 	user: User;
 	users: SearchResponse<User>;
+	room: Room;
 	rooms: Room[];
 	roomsSearchRequest: SearchResponse<Room>;
 	reservation: Reservation;
@@ -30,6 +31,7 @@ export const INITIAL_APP_STATE: AppState = (() => {
 		currentUser: null,
 		user: null,
 		users: null,
+		room: null,
 		rooms: null,
 		roomsSearchRequest: null,
 		reservation: null,

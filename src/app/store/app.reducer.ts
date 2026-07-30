@@ -55,6 +55,18 @@ export const appReducer = createReducer(
 		};
 	}),
 
+	on(AppAction.getRoomSuccess, (state: AppState, { room }): AppState => {
+		return {
+			...state,
+			room,
+		};
+	}),
+	on(AppAction.clearRoom, (state: AppState): AppState => {
+		return {
+			...state,
+			room: null,
+		};
+	}),
 	on(AppAction.getRoomsSuccess, (state, { rooms }) => ({
 		...state,
 		rooms,

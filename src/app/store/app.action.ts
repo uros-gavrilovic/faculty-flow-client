@@ -24,10 +24,16 @@ enum AppActionType {
 	UPDATE_USER_SUCCESS = '[USER] Update User Success',
 
 	// Room
+	GET_ROOM = '[ROOM] Get Room',
+	GET_ROOM_SUCCESS = '[ROOM] Get Room Success',
+	CLEAR_ROOM = '[ROOM] Clear Room',
 	GET_ROOMS = '[ROOM] Get Rooms',
 	GET_ROOMS_SUCCESS = '[ROOM] Get Rooms Success',
 	SEARCH_ROOMS = '[ROOM] Search Rooms',
 	SEARCH_ROOMS_SUCCESS = '[ROOM] Search Rooms Success',
+	CREATE_ROOM = '[ROOM] Create Room',
+	UPDATE_ROOM = '[ROOM] Update Room',
+	DELETE_ROOM = '[ROOM] Delete Room',
 
 	// Reservation
 	SEARCH_RESERVATIONS = '[RESV] Search Reservations',
@@ -57,10 +63,16 @@ export const searchUsersSuccess = createAction(AppActionType.SEARCH_USERS_SUCCES
 export const updateUser = createAction(AppActionType.UPDATE_USER, props<{user: User}>());
 export const updateUserSuccess = createAction(AppActionType.UPDATE_USER_SUCCESS, props<{user: User}>());
 
+export const getRoom = createAction(AppActionType.GET_ROOM, props<{ uuid: string }>());
+export const getRoomSuccess = createAction(AppActionType.GET_ROOM_SUCCESS, props<{ room: Room }>());
+export const clearRoom = createAction(AppActionType.CLEAR_ROOM);
 export const getRooms = createAction(AppActionType.GET_ROOMS);
 export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>());
 export const searchRooms = createAction(AppActionType.SEARCH_ROOMS, props<{ searchRequest: SearchRequest<RoomFilter> }>());
 export const searchRoomsSuccess = createAction(AppActionType.SEARCH_ROOMS_SUCCESS, props<{ searchResponse: SearchResponse<Room> }>());
+export const createRoom = createAction(AppActionType.CREATE_ROOM, props<{ room: Room }>());
+export const updateRoom = createAction(AppActionType.UPDATE_ROOM, props<{ room: Room }>());
+export const deleteRoom = createAction(AppActionType.DELETE_ROOM, props<{ uuid: string }>());
 
 export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest<ReservationFilter> }>());
 export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>());

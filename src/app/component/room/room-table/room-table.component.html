@@ -1,3 +1,9 @@
+<div class="toggle" [class.toggle-hidden]="!isFilterVisible()" [class.toggle-visible]="isFilterVisible()">
+	<app-room-filter
+		(filterChange)="onFilterChange($event)"
+	></app-room-filter>
+</div>
+
 <p-table
 	[value]="rooms()?.data ?? []"
 	[paginator]="true"
@@ -8,6 +14,7 @@
 	(onSort)="onSort($event)"
 	[rowsPerPageOptions]="[5, 10, 25]"
 	[showCurrentPageReport]="true"
+	selectionMode="single"
 	dataKey="uuid"
 >
 	<ng-template pTemplate="header">
@@ -50,18 +57,18 @@
 	</ng-template>
 
 	<ng-template pTemplate="body" let-room>
-		<tr>
+		<tr (click)="onRoomSelect(room)">
 			<td>{{ room.name }}</td>
 
 			<td>
 				<p-chip [label]="room.code" icon="pi pi-hashtag" />
 			</td>
 
-			<td>{{ room.type }}</td>
+			<td>{{ room.type | translateEnum: 'enum.room-type' }}</td>
 
 			<td>{{ room.floor }}</td>
 
-			<td>{{ room.building.name }}</td>
+			<td>{{ room.building | translateEnum : 'enum.building' }}</td>
 
 			<td>{{ room.capacity }}</td>
 

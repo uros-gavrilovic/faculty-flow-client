@@ -1,0 +1,181 @@
+<form [formGroup]="form" class="p-fluid">
+	<div class="grid formgrid">
+
+		<div class="field col-12 md:col-6">
+			<p-iconfield>
+				<p-floatlabel variant="in" class="w-full">
+					<p-inputicon class="pi pi-building" />
+					<input
+						pInputText
+						id="name"
+						formControlName="name"
+						autocomplete="off"
+						class="w-full" />
+					<label for="name">
+						{{ 'room.name' | translate | required }}
+					</label>
+				</p-floatlabel>
+			</p-iconfield>
+
+			@if (form.get('name')?.invalid && form.get('name')?.touched) {
+				<small class="p-error">
+					{{ 'validation.required-field' | translate }}
+				</small>
+			}
+		</div>
+
+
+		<div class="field col-12 md:col-6">
+			<p-iconfield>
+				<p-floatlabel variant="in" class="w-full">
+					<p-inputicon class="pi pi-hashtag" />
+					<input
+						pInputText
+						id="code"
+						formControlName="code"
+						autocomplete="off"
+						class="w-full" />
+					<label for="code">
+						{{ 'room.code' | translate | required }}
+					</label>
+				</p-floatlabel>
+			</p-iconfield>
+
+			@if (form.get('code')?.invalid && form.get('code')?.touched) {
+				<small class="p-error">
+					{{ 'validation.required-field' | translate }}
+				</small>
+			}
+		</div>
+
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<p-select
+					inputId="type"
+					formControlName="type"
+					[options]="roomTypes"
+					class="w-full">
+
+					<ng-template pTemplate="selectedItem" let-selectedOption>
+						@if (selectedOption) {
+							<div class="ml-4">
+								{{ selectedOption | translateEnum:'enum.room-type' }}
+							</div>
+						}
+					</ng-template>
+
+					<ng-template pTemplate="item" let-option>
+						<div>
+							{{ option | translateEnum:'enum.room-type' }}
+						</div>
+					</ng-template>
+
+				</p-select>
+
+				<label for="type">
+					{{ 'room.type' | translate | required }}
+				</label>
+			</p-floatlabel>
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<p-select
+					inputId="building"
+					formControlName="building"
+					[options]="buildings"
+					class="w-full">
+					<ng-template pTemplate="selectedItem" let-selectedOption>
+						@if (selectedOption) {
+							<div class="ml-4">
+								{{ selectedOption | translateEnum:'enum.building' }}
+							</div>
+						}
+					</ng-template>
+pTemplate
+					<ng-template pTemplate="item" let-option>
+						<div>
+							{{ option | translateEnum:'enum.building' }}
+						</div>
+					</ng-template>
+
+				</p-select>
+
+				<label for="building">
+					{{ 'room.building' | translate }}
+				</label>
+			</p-floatlabel>
+		</div>
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<input
+					pInputText
+					type="number"
+					id="floor"
+					formControlName="floor"
+					class="w-full" />
+
+				<label for="floor">
+					{{ 'room.floor' | translate }}
+				</label>
+			</p-floatlabel>
+		</div>
+
+
+		<div class="field col-12 md:col-6">
+			<p-floatlabel variant="in">
+				<input
+					pInputText
+					type="number"
+					id="capacity"
+					formControlName="capacity"
+					class="w-full" />
+
+				<label for="capacity">
+					{{ 'room.capacity' | translate }}
+				</label>
+			</p-floatlabel>
+		</div>
+
+
+		<div class="field col-12">
+			<p-floatlabel variant="in">
+				<input
+					pInputText
+					id="oldName"
+					formControlName="oldName"
+					class="w-full" />
+
+				<label for="oldName">
+					{{ 'room.old-name' | translate }}
+				</label>
+			</p-floatlabel>
+		</div>
+
+	</div>
+
+
+	<div class="flex justify-content-end gap-2 mt-3">
+		<p-button
+			severity="secondary"
+			[label]="'common.close' | translate"
+			(onClick)="onClose()" />
+
+		@if (isEditMode) {
+			<p-button
+				severity="danger"
+				icon="pi pi-trash"
+				[label]="'common.delete' | translate"
+				(onClick)="onDelete()" />
+		}
+
+		<p-button
+			severity="info"
+			[label]="(isEditMode ? 'common.update' : 'common.create') | translate"
+			[loading]="submitting"
+			(onClick)="onSubmit()" />
+
+	</div>
+</form>

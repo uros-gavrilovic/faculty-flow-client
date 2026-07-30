@@ -4,6 +4,7 @@ import { PRIMENG_MODULES } from '../../modules/ui.module';
 import { PageHeaderComponent } from '../../component/misc/page-header/page-header.component';
 import { Severity } from '../../model/ui.model';
 import { RoomTableComponent } from '../../component/room/room-table/room-table.component';
+import { ModalService } from '../../service/modal.service';
 
 @Component({
 	selector: 'app-rooms-page',
@@ -16,9 +17,15 @@ export class RoomsPageComponent {
 
 	readonly Severity = Severity;
 
-	constructor() {}
+	constructor(
+		private modalService: ModalService,
+	) {}
 
 	onToggleFilter(): void {
 		this.isFilterVisible.set(!this.isFilterVisible());
+	}
+
+	onAddRoom(): void {
+		this.modalService.openRoomModal();
 	}
 }

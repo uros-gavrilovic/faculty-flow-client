@@ -12,6 +12,7 @@ export const selectToken = createSelector(selectAppState, (state: AppState): Tok
 export const selectCurrentUser = createSelector(selectAppState, (state: AppState): User => state.currentUser);
 export const selectUser = createSelector(selectAppState, (state: AppState): User => state.user);
 export const selectUsers = createSelector(selectAppState, (state: AppState): SearchResponse<User> => state.users);
+export const selectRoom = createSelector(selectAppState, (state: AppState): Room => state.room);
 export const selectRooms = createSelector(selectAppState, (state: AppState): Room[] => state.rooms);
 export const selectReservation = createSelector(selectAppState, (state: AppState): Reservation => state.reservation);
 export const selectReservations = createSelector(selectAppState, (state: AppState): SearchResponse<Reservation> => state.reservations);
