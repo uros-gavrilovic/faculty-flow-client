@@ -435,7 +435,7 @@ export const saveSearchRequestEffect = createEffect(
 		const actions$ = inject(Actions);
 
 		return actions$.pipe(
-			ofType(AppAction.searchReservations, AppAction.searchUsers),
+			ofType(AppAction.searchReservations, AppAction.searchUsers, AppAction.searchRooms),
 			map(({ searchRequest }) => AppAction.saveSearchRequest({ searchRequest })),
 		);
 	}, { functional: true },

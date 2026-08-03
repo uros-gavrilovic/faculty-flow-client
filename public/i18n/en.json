@@ -78,12 +78,17 @@
 		"add-employee": {
 			"title": "Add new employee",
 			"submit": "Add employee"
+		},
+		"room": {
+			"create": "Create a Room",
+			"edit": "Edit a Room"
 		}
 	},
 	"common": {
 		"actions": "Actions",
 		"cancel": "Cancel",
 		"submit": "Submit",
+		"create": "Create",
 		"save": "Save",
 		"update": "Update",
 		"edit": "Edit",
