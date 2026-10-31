@@ -16,6 +16,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
+import { errorInterceptor } from './interceptor/error.interceptor';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -24,7 +25,6 @@ export const appConfig: ApplicationConfig = {
 		provideStore({ [APP_STATE_KEY]: appReducer }),
 		provideEffects(AppEffects),
 		provideStoreDevtools({ maxAge: 25, logOnly: true }),
-		provideHttpClient(withInterceptors([authorizationInterceptor])),
 		provideTranslateService({
 			fallbackLang: 'en',
 			lang: 'en',
@@ -33,6 +33,10 @@ export const appConfig: ApplicationConfig = {
 				suffix: '.json',
 			}),
 		}),
+		provideHttpClient(withInterceptors([
+			errorInterceptor,
+			authorizationInterceptor
+		])),
 		providePrimeNG({
 			theme: {
 				preset: Aura,

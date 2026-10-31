@@ -92,9 +92,6 @@ export class RequestReservationModalComponent implements OnInit {
 		const isLockedByStatus: boolean = reservation?.status !== ReservationStatus.PENDING;
 		const isLockedByPermission: boolean = !isOwner && !isAdmin;
 
-		console.log('isLockedByStatus', isLockedByStatus, 'isLockedByStatus', isLockedByStatus);
-		console.log('isReadOnly', isLockedByPermission || isLockedByStatus);
-
 		this.isReadOnly = isLockedByStatus || isLockedByPermission;
 	}
 

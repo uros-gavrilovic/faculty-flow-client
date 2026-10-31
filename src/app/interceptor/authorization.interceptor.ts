@@ -5,7 +5,7 @@ import {
 	HttpInterceptorFn,
 	HttpRequest,
 } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, EMPTY, Observable, throwError } from 'rxjs';
 import { Token } from '../model/token.model';
 import { Store } from '@ngrx/store';
 import { inject, Signal, Injector } from '@angular/core';
@@ -43,12 +43,14 @@ export const authorizationInterceptor: HttpInterceptorFn = (
 					'messages.auth.login-failed.message',
 				);
 				router.navigate(['/login']);
+				return EMPTY;
 			} else if (error.status === 403) {
 				messageService.showMessage(
 					MessageSeverity.WARN,
 					'messages.auth.insufficient-privileges.title',
 					'messages.auth.insufficient-privileges.message',
 				);
+				return EMPTY;
 			}
 
 			return throwError(() => error);

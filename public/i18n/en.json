@@ -129,6 +129,9 @@
 		}
 	},
 	"messages": {
+		"error": {
+			"generic": "Error Occurred"
+		},
 		"auth": {
 			"login": {
 				"title": "Logged In",
