@@ -27,6 +27,7 @@ import { InputIcon } from 'primeng/inputicon';
 import { Tooltip } from 'primeng/tooltip';
 import { Fieldset } from 'primeng/fieldset';
 import { MultiSelect } from 'primeng/multiselect';
+import { DatePicker } from 'primeng/datepicker';
 
 export const PRIMENG_MODULES = [
 	InputTextModule,
@@ -61,4 +62,5 @@ export const PRIMENG_MODULES = [
 	Tooltip,
 	Fieldset,
 	MultiSelect,
+	DatePicker,
 ];

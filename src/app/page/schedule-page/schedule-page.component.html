@@ -9,9 +9,11 @@
 	(created)="onCreated()"
 	(navigating)="onNavigating()"
 	(cellClick)="onCellClick($event)"
+	(select)="onCellSelect($event)"
+	[allowMultiRowSelection]="false"
 	(eventClick)="onEventClick($event)"
 	(popupOpen)="onPopupOpen($event)"
-	(dataBound)="onDataBound()">
+	(dataBound)="onDataBound()"
 	(actionBegin)="onActionBegin($event)"
 >
 	<ng-template #eventSettingsTemplate let-data>
@@ -51,6 +53,6 @@
 	</ng-template>
 	<e-views>
 		<e-view option="Week" startHour="08:00" endHour="18:00" [showWeekend]="false"></e-view>
-		<e-view option="Month" [showWeekend]="false"></e-view>
+<!--		<e-view option="Month" [showWeekend]="false"></e-view>-->
 	</e-views>
 </ejs-schedule>

@@ -12,6 +12,7 @@ import {
 	PopupOpenEventArgs,
 	ScheduleComponent,
 	ScheduleModule,
+	SelectEventArgs,
 	TimelineMonthService,
 	TimelineViewsService,
 	TimelineYearService,
@@ -30,6 +31,7 @@ import { ScheduleFilterComponent } from '../../component/schedule/schedule-filte
 import { SearchResponse } from '../../model/search.model';
 import { DatePipe } from '@angular/common';
 import { COMMON_MODULES } from '../../modules/common.module';
+import { formatToLocalDateTimeString } from '../../util/util-functions';
 
 @Component({
 	selector: 'app-schedule-page',
@@ -115,8 +117,8 @@ export class SchedulePageComponent implements OnInit {
 					size: 1000,
 					filter: {
 						...this.filter,
-						startTime: start,
-						endTime: end,
+						startTime: formatToLocalDateTimeString(start),
+						endTime: formatToLocalDateTimeString(end),
 					},
 				},
 			}),
@@ -154,8 +156,8 @@ export class SchedulePageComponent implements OnInit {
 			uuid: scheduleEvent.Id,
 			name: scheduleEvent.Subject,
 			room: scheduleEvent.Location,
-			startTime: scheduleEvent.StartTime,
-			endTime: scheduleEvent.EndTime,
+			startTime: formatToLocalDateTimeString(scheduleEvent.StartTime),
+			endTime: formatToLocalDateTimeString(scheduleEvent.EndTime),
 			reservedBy: scheduleEvent.ReservedBy,
 			reviewedBy: scheduleEvent.ReviewedBy,
 			eventType: scheduleEvent.Type,
@@ -180,6 +182,17 @@ export class SchedulePageComponent implements OnInit {
 		this.modalService.openReservationPreviewModal({
 			startTime: args.startTime,
 			endTime: args.endTime,
+		});
+	}
+
+	onCellSelect(args: SelectEventArgs): void {
+		if (args.requestType !== 'cellSelect' || this.scheduleObj.getSelectedCells().length < 2) return;
+
+		const { StartTime, EndTime } = args.data as Record<string, Date>;
+
+		this.modalService.openReservationPreviewModal({
+			startTime: StartTime,
+			endTime: EndTime,
 		});
 	}
 

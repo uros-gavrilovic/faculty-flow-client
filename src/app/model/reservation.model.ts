@@ -10,8 +10,8 @@ export interface Reservation {
 	uuid: string;
 	name: string;
 	room: string;
-	startTime: Date;
-	endTime: Date;
+	startTime: string;
+	endTime: string;
 	reservedBy: string;
 	reviewedBy: string | null;
 	eventType: EventType;
@@ -32,8 +32,8 @@ export enum EventType {
 export interface ReservationFilter {
 	name?: string;
 	room?: string;
-	startTime?: Date;
-	endTime?: Date;
+	startTime?: string;
+	endTime?: string;
 	reservedBy?: string;
 	reviewedBy?: string;
 	status?: ReservationStatus;
@@ -43,8 +43,8 @@ export interface ReservationRequest {
 	name: string;
 	roomCode: string;
 	eventType: EventType;
-	startTime: Date;
-	endTime: Date;
+	startTime: string;
+	endTime: string;
 	reservedBy: string;
 	note?: string;
 }

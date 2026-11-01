@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { BackgroundComponent } from '../../component/background/background.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.store';
@@ -20,6 +20,7 @@ import { LoginRequest } from '../../model/auth.model';
 	styleUrl: './login-page.component.scss',
 })
 export class LoginPageComponent {
+
 	form: FormGroup;
 
 	constructor(
@@ -38,7 +39,17 @@ export class LoginPageComponent {
 		});
 	}
 
+	@HostListener('document:keydown.enter', ['$event'])
+	onEnterKey(event: KeyboardEvent): void {
+		event.preventDefault();
+		if (event.repeat) return;
+
+		this.onLogin();
+	}
+
 	onLogin(): void {
+		if (this.form.invalid) return;
+
 		const request: LoginRequest = this.form.getRawValue();
 		this.store$.dispatch(AppActions.loginUser({ request }));
 	}

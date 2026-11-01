@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
 	Reservation,
@@ -16,16 +16,6 @@ export class ReservationApiService {
 	readonly RESERVATION_API: string = environment.reservationApi;
 
 	constructor(private httpClient: HttpClient) {}
-
-	private toLocalDateTime(date: Date): string {
-		return date.toISOString().slice(0, 19);
-	}
-
-	private dateParams(start: Date, end: Date): HttpParams {
-		return new HttpParams()
-			.set('start', this.toLocalDateTime(start))
-			.set('end', this.toLocalDateTime(end));
-	}
 
 	searchReservations(
 		searchRequest: SearchRequest<ReservationFilter>,

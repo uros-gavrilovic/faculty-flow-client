@@ -93,6 +93,11 @@ export class RequestReservationModalComponent implements OnInit {
 		const isLockedByPermission: boolean = !isOwner && !isAdmin;
 
 		this.isReadOnly = isLockedByStatus || isLockedByPermission;
+
+		if (this.isReadOnly) {
+			this.form.get('startTime')?.disable();
+			this.form.get('endTime')?.disable();
+		}
 	}
 
 	private initForm(): void {
@@ -101,8 +106,8 @@ export class RequestReservationModalComponent implements OnInit {
 		this.form = this.formBuilder.group({
 			name: ['', [Validators.required, Validators.maxLength(120)]],
 			room: ['', Validators.required],
-			startTime: [UtilFunction.formatToLocalDateTimeString(data.startTime), Validators.required],
-			endTime: [UtilFunction.formatToLocalDateTimeString(data.endTime), Validators.required],
+			startTime: [data.startTime ?? null, Validators.required],
+			endTime: [data.endTime ?? null, Validators.required],
 			reservedBy: [{ value: this.loggedUser()?.username, disabled: true }, Validators.required],
 			eventType: [null, Validators.required],
 			note: [''],
@@ -120,8 +125,8 @@ export class RequestReservationModalComponent implements OnInit {
 		this.form.patchValue({
 			name: reservation.name,
 			room: reservation.room,
-			startTime: UtilFunction.formatToLocalDateTimeString(reservation.startTime),
-			endTime: UtilFunction.formatToLocalDateTimeString(reservation.endTime),
+			startTime: new Date(reservation.startTime),
+			endTime: new Date(reservation.endTime),
 			reservedBy: reservation.reservedBy,
 			eventType: reservation.eventType,
 			note: reservation.note ?? '',
@@ -133,31 +138,35 @@ export class RequestReservationModalComponent implements OnInit {
 	onSubmit(): void {
 		if (this.form.invalid) {
 			this.form.markAllAsTouched();
-
 			return;
 		}
 
 		const v = this.form.getRawValue();
-
-		const request: ReservationRequest | Reservation = {
-			...this.reservation(),
+		const formFields = {
 			name: v.name,
-			roomCode: v.room,
 			eventType: v.eventType,
-			startTime: UtilFunction.toLocalDateTime(v.startTime),
-			endTime: UtilFunction.toLocalDateTime(v.endTime),
+			startTime: UtilFunction.formatToLocalDateTimeString(v.startTime),
+			endTime: UtilFunction.formatToLocalDateTimeString(v.endTime),
 			reservedBy: v.reservedBy,
-			note: v.note || undefined,
 		};
 
 		this.submitting = true;
 
 		if (this.isEditMode) {
-			this.store.dispatch(
-				AppAction.updateReservation({ reservation: request as unknown as Reservation }),
-			);
+			const updateReservationRequest: Reservation = {
+				...this.reservation(),
+				...formFields,
+				room: v.room,
+				note: v.note || null,
+			};
+			this.store.dispatch(AppAction.updateReservation({ reservation: updateReservationRequest }));
 		} else {
-			this.store.dispatch(AppAction.requestReservation({ request }));
+			const reservationRequest: ReservationRequest = {
+				...formFields,
+				roomCode: v.room,
+				note: v.note || undefined,
+			};
+			this.store.dispatch(AppAction.requestReservation({ request: reservationRequest }));
 		}
 
 		this.onClose();

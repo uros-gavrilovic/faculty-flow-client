@@ -85,26 +85,40 @@
 		</div>
 
 		<div class="field col-12 md:col-6">
-			<p-iconfield>
-				<p-floatlabel variant="in">
-					<p-inputicon class="pi pi-calendar-plus" />
-					<input type="datetime-local" pInputText id="startTime" formControlName="startTime" [readOnly]="isReadOnly" class="w-full"/>
-					<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
-				</p-floatlabel>
-			</p-iconfield>
+			<p-floatlabel variant="in">
+				<p-datepicker
+					inputId="startTime"
+					formControlName="startTime"
+					[showTime]="true"
+					hourFormat="24"
+					dateFormat="dd.mm.yy"
+					[showIcon]="true"
+					iconDisplay="input"
+					[fluid]="true"
+					appendTo="body"
+				/>
+				<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
+			</p-floatlabel>
 			@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
 				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 			}
 		</div>
 
 		<div class="field col-12 md:col-6">
-			<p-iconfield>
-				<p-floatlabel variant="in">
-					<p-inputicon class="pi pi-calendar-minus" />
-					<input type="datetime-local" pInputText id="endTime" formControlName="endTime" [readOnly]="isReadOnly" class="w-full"/>
-					<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
-				</p-floatlabel>
-			</p-iconfield>
+			<p-floatlabel variant="in">
+				<p-datepicker
+					inputId="endTime"
+					formControlName="endTime"
+					[showTime]="true"
+					hourFormat="24"
+					dateFormat="dd.mm.yy"
+					[showIcon]="true"
+					iconDisplay="input"
+					[fluid]="true"
+					appendTo="body"
+				/>
+				<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
+			</p-floatlabel>
 			@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {
 				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 			}
