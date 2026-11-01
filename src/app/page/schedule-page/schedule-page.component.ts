@@ -4,6 +4,7 @@ import {
 	AgendaService,
 	CellClickEventArgs,
 	DayService,
+	DragAndDropService,
 	EventClickArgs,
 	EventRenderedArgs,
 	EventSettingsModel,
@@ -32,6 +33,8 @@ import { SearchResponse } from '../../model/search.model';
 import { DatePipe } from '@angular/common';
 import { COMMON_MODULES } from '../../modules/common.module';
 import { formatToLocalDateTimeString } from '../../util/util-functions';
+import { combineLatest } from 'rxjs';
+import { User, UserRole } from '../../model/user.model';
 
 @Component({
 	selector: 'app-schedule-page',
@@ -46,6 +49,7 @@ import { formatToLocalDateTimeString } from '../../util/util-functions';
 		TimelineViewsService,
 		TimelineMonthService,
 		TimelineYearService,
+		DragAndDropService,
 	],
 	templateUrl: './schedule-page.component.html',
 	styleUrl: './schedule-page.component.scss',
@@ -83,11 +87,13 @@ export class SchedulePageComponent implements OnInit {
 	}
 
 	initSelectors(): void {
-		this.store
-			.select(AppSelector.selectReservations)
+		combineLatest([
+			this.store.select(AppSelector.selectReservations),
+			this.store.select(AppSelector.selectCurrentUser),
+		])
 			.pipe(takeUntilDestroyed(this.destroyRef))
-			.subscribe((response: SearchResponse<Reservation>): void => {
-				this.mergeEvents(response);
+			.subscribe(([response, user]: [SearchResponse<Reservation>, User]): void => {
+				this.mergeEvents(response, user);
 			});
 	}
 
@@ -125,16 +131,19 @@ export class SchedulePageComponent implements OnInit {
 		);
 	}
 
-	private mergeEvents(response: SearchResponse<Reservation>): void {
+	private mergeEvents(response: SearchResponse<Reservation>, user: User): void {
 		const events: ScheduleEvent[] = response.data?.map(
-			(r: Reservation): ScheduleEvent => this.toScheduleEvent(r),
+			(r: Reservation): ScheduleEvent => this.toScheduleEvent(r, user),
 		);
 
 		if (this.scheduleObj)
 			this.scheduleObj.eventSettings = { ...this.eventSettings, dataSource: events };
 	}
 
-	private toScheduleEvent(r: Reservation): ScheduleEvent {
+	private toScheduleEvent(r: Reservation, user: User): ScheduleEvent {
+		const canEdit: boolean =
+			user?.username === r.reservedBy || !!user?.roles?.includes(UserRole.ADMINISTRATOR);
+
 		return {
 			Id: r.uuid,
 			Subject: r.name,
@@ -147,7 +156,7 @@ export class SchedulePageComponent implements OnInit {
 			Status: r.status,
 			Note: r.note ?? '',
 			Comment: r.comment ?? '',
-			IsReadonly: r.status !== ReservationStatus.PENDING,
+			IsReadonly: r.status !== ReservationStatus.PENDING || !canEdit,
 		};
 	}
 
@@ -162,8 +171,8 @@ export class SchedulePageComponent implements OnInit {
 			reviewedBy: scheduleEvent.ReviewedBy,
 			eventType: scheduleEvent.Type,
 			status: scheduleEvent.Status,
-			note: scheduleEvent.Note,
-			comment: scheduleEvent.Comment,
+			note: scheduleEvent.Note || null,
+			comment: scheduleEvent.Comment || null,
 		};
 	}
 	onPopupOpen(args: PopupOpenEventArgs): void {
@@ -173,8 +182,13 @@ export class SchedulePageComponent implements OnInit {
 	}
 
 	onActionBegin(args: ActionEventArgs): void {
-		if (['eventCreate', 'eventChange', 'eventRemove'].includes(args.requestType ?? '')) {
-			args.cancel = true;
+		if (!['eventCreate', 'eventChange', 'eventRemove'].includes(args.requestType ?? '')) return;
+
+		args.cancel = true;
+
+		const changed = args.changedRecords?.[0] as ScheduleEvent | undefined;
+		if (args.requestType === 'eventChange' && changed) {
+			this.store.dispatch(AppAction.updateReservation({ reservation: this.toReservation(changed) }));
 		}
 	}
 
