@@ -14,7 +14,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
 			messageService.showMessage(
 				MessageSeverity.ERROR,
 				'messages.error.generic',
-				error.message,
+				error?.error?.message ?? error.message,
 			);
 
 			return throwError(() => error);
