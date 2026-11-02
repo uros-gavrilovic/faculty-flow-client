@@ -12,6 +12,7 @@ import {
 	Validators,
 } from '@angular/forms';
 import { LoginRequest } from '../../model/auth.model';
+import {environment} from '../../../environment/environment';
 
 @Component({
 	selector: 'app-login-page',
@@ -34,8 +35,8 @@ export class LoginPageComponent {
 
 	private initForm(): void {
 		this.form = this.formBuilder.group({
-			username: ['admin', [Validators.required]],
-			password: ['admin123', Validators.required],
+			username: [environment.production ? '' : 'admin', [Validators.required]],
+			password: [environment.production ? '' : 'admin123', Validators.required],
 		});
 	}
 
