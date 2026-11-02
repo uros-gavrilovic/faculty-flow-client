@@ -44,6 +44,10 @@ enum AppActionType {
 	REQUEST_RESERVATION = '[RESV] Request Reservation',
 	UPDATE_RESERVATION = '[RESV] Update Reservation',
 	REVIEW_RESERVATION = '[RESV] Review Reservation',
+	REQUEST_RESERVATION_SUCCESS = '[RESV] Request Reservation Success',
+	UPDATE_RESERVATION_SUCCESS = '[RESV] Update Reservation Success',
+	REVIEW_RESERVATION_SUCCESS = '[RESV] Review Reservation Success',
+	RESERVATION_FAILURE = '[RESV] Reservation Failure',
 
 	SAVE_SEARCH_REQUEST = '[SEARCH] Save Search Request',
 }
@@ -82,5 +86,9 @@ export const clearReservation = createAction(AppActionType.CLEAR_RESERVATION);
 export const requestReservation = createAction(AppActionType.REQUEST_RESERVATION, props<{ request: ReservationRequest }>());
 export const updateReservation = createAction(AppActionType.UPDATE_RESERVATION, props<{ reservation: Reservation }>());
 export const reviewReservation = createAction(AppActionType.REVIEW_RESERVATION, props<{ review: ReservationReview }>());
+export const requestReservationSuccess = createAction(AppActionType.REQUEST_RESERVATION_SUCCESS);
+export const updateReservationSuccess = createAction(AppActionType.UPDATE_RESERVATION_SUCCESS);
+export const reviewReservationSuccess = createAction(AppActionType.REVIEW_RESERVATION_SUCCESS);
+export const reservationFailure = createAction(AppActionType.RESERVATION_FAILURE, props<{ error: unknown }>());
 
 export const saveSearchRequest = createAction(AppActionType.SAVE_SEARCH_REQUEST, props<{ searchRequest: SearchRequest<any> }>());

@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { UserApiService } from '../service/user-api.service';
 import * as AppAction from './app.action';
 import * as AppSelector from './app.selector';
-import { catchError, switchMap, map, tap, withLatestFrom, take, pipe } from 'rxjs';
+import { catchError, switchMap, map, tap, withLatestFrom, take, pipe, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { MessageService } from '../service/message.service';
 import { MessageSeverity } from '../model/message-severity.model';
@@ -368,7 +368,11 @@ export const requestReservationEffect = createEffect(
 							'messages.reservation.requested.message',
 						),
 					),
-					map(() => AppAction.searchReservations({ searchRequest })),
+					switchMap(() => [
+						AppAction.requestReservationSuccess(),
+						AppAction.searchReservations({ searchRequest }),
+					]),
+					catchError((error) => of(AppAction.reservationFailure({ error }))),
 				),
 			),
 		);
@@ -397,7 +401,12 @@ export const updateReservationEffect = createEffect(
 								'messages.reservation.updated.message',
 							),
 						),
-						map(() => AppAction.searchReservations({ searchRequest }))),
+						switchMap(() => [
+							AppAction.updateReservationSuccess(),
+							AppAction.searchReservations({ searchRequest }),
+						]),
+						catchError((error) => of(AppAction.reservationFailure({ error }))),
+					),
 			),
 		);
 	},
@@ -423,7 +432,11 @@ export const reviewReservationEffect = createEffect(
 							'messages.reservation.reviewed.message',
 						),
 					),
-					map(() => AppAction.searchReservations({ searchRequest })),
+					switchMap(() => [
+						AppAction.reviewReservationSuccess(),
+						AppAction.searchReservations({ searchRequest }),
+					]),
+					catchError((error) => of(AppAction.reservationFailure({ error }))),
 				),
 			),
 		);

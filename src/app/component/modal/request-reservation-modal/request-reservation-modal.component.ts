@@ -1,4 +1,8 @@
-import { Component, effect, OnInit, Signal } from '@angular/core';
+import { Component, DestroyRef, effect, OnInit, Signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Actions, ofType } from '@ngrx/effects';
+import { Action, ActionCreator } from '@ngrx/store';
+import { take } from 'rxjs';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import {
@@ -51,6 +55,8 @@ export class RequestReservationModalComponent implements OnInit {
 		private formBuilder: FormBuilder,
 		private ref: DynamicDialogRef,
 		private config: DynamicDialogConfig<RequestDialogData>,
+		private actions$: Actions,
+		private destroyRef: DestroyRef,
 	) {
 		this.reservation = this.store.selectSignal(AppSelector.selectReservation);
 		this.loggedUser = this.store.selectSignal(AppSelector.selectCurrentUser);
@@ -150,8 +156,6 @@ export class RequestReservationModalComponent implements OnInit {
 			reservedBy: v.reservedBy,
 		};
 
-		this.submitting = true;
-
 		if (this.isEditMode) {
 			const updateReservationRequest: Reservation = {
 				...this.reservation(),
@@ -159,6 +163,7 @@ export class RequestReservationModalComponent implements OnInit {
 				room: v.room,
 				note: v.note || null,
 			};
+			this.closeOnSuccess(AppAction.updateReservationSuccess);
 			this.store.dispatch(AppAction.updateReservation({ reservation: updateReservationRequest }));
 		} else {
 			const reservationRequest: ReservationRequest = {
@@ -166,10 +171,9 @@ export class RequestReservationModalComponent implements OnInit {
 				roomCode: v.room,
 				note: v.note || undefined,
 			};
+			this.closeOnSuccess(AppAction.requestReservationSuccess);
 			this.store.dispatch(AppAction.requestReservation({ request: reservationRequest }));
 		}
-
-		this.onClose();
 	}
 
 	onApproveReservation(reservation: Reservation): void {
@@ -178,9 +182,8 @@ export class RequestReservationModalComponent implements OnInit {
 			status: ReservationStatus.ACCEPTED,
 		};
 
+		this.closeOnSuccess(AppAction.reviewReservationSuccess);
 		this.store.dispatch(AppAction.reviewReservation({ review }));
-
-		this.onClose();
 	}
 
 	onRejectReservation(reservation: Reservation): void {
@@ -189,9 +192,23 @@ export class RequestReservationModalComponent implements OnInit {
 			status: ReservationStatus.REJECTED,
 		};
 
+		this.closeOnSuccess(AppAction.reviewReservationSuccess);
 		this.store.dispatch(AppAction.reviewReservation({ review }));
+	}
 
-		this.onClose();
+	private closeOnSuccess(successAction: ActionCreator<string, () => Action>): void {
+		this.submitting = true;
+
+		this.actions$
+			.pipe(
+				ofType(successAction, AppAction.reservationFailure),
+				take(1),
+				takeUntilDestroyed(this.destroyRef),
+			)
+			.subscribe((action) => {
+				this.submitting = false;
+				if (action.type === successAction.type) this.onClose();
+			});
 	}
 
 	onClose(): void {
