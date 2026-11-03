@@ -148,7 +148,11 @@ export const createUserEffect = createEffect(
 							'messages.user-management.user-added.message',
 						),
 					),
-					map(() => AppAction.searchUsers({ searchRequest })),
+					switchMap((user) => [
+						AppAction.registerUserSuccess({ user }),
+						AppAction.searchUsers({ searchRequest }),
+					]),
+					catchError((error) => of(AppAction.userFailure({ error }))),
 				),
 			),
 		);
@@ -175,7 +179,11 @@ export const updateUserEffect = createEffect(
 							'messages.user-management.user-updated.message',
 						),
 					),
-					map(() => AppAction.searchUsers({ searchRequest })),
+					switchMap((user) => [
+						AppAction.updateUserSuccess({ user }),
+						AppAction.searchUsers({ searchRequest }),
+					]),
+					catchError((error) => of(AppAction.userFailure({ error }))),
 				),
 			),
 		);
@@ -250,7 +258,11 @@ export const createRoomEffect = createEffect(
 							'messages.room.created.message',
 						),
 					),
-					map(() => AppAction.searchRooms({ searchRequest })),
+					switchMap(() => [
+						AppAction.createRoomSuccess(),
+						AppAction.searchRooms({ searchRequest }),
+					]),
+					catchError((error) => of(AppAction.roomFailure({ error }))),
 				),
 			),
 		);
@@ -277,7 +289,11 @@ export const updateRoomEffect = createEffect(
 							'messages.room.updated.message',
 						),
 					),
-					map(() => AppAction.searchRooms({ searchRequest })),
+					switchMap(() => [
+						AppAction.updateRoomSuccess(),
+						AppAction.searchRooms({ searchRequest }),
+					]),
+					catchError((error) => of(AppAction.roomFailure({ error }))),
 				),
 			),
 		);
@@ -304,7 +320,11 @@ export const deleteRoomEffect = createEffect(
 							'messages.room.deleted.message',
 						),
 					),
-					map(() => AppAction.searchRooms({ searchRequest })),
+					switchMap(() => [
+						AppAction.deleteRoomSuccess(),
+						AppAction.searchRooms({ searchRequest }),
+					]),
+					catchError((error) => of(AppAction.roomFailure({ error }))),
 				),
 			),
 		);

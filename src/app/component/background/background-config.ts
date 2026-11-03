@@ -1,27 +1,24 @@
 export const backgroundConfig = {
 	key: 'faculty-flow',
 	name: 'faculty-flow',
+	fpsLimit: 60,
 	particles: {
 		number: {
-			value: 40,
+			value: 7,
 			density: {
-				enable: true,
+				enable: false,
 			},
 		},
-		paint: {
-			fill: {
-				color: {
-					value: '#ffffff',
-				},
-			},
+		color: {
+			value: ['#2f8f6c', '#3aa27c', '#24785b', '#1c5f4a'],
 		},
 		shape: {
 			type: 'circle',
 		},
 		opacity: {
 			value: {
-				min: 0.1,
-				max: 0.2,
+				min: 0.12,
+				max: 0.25,
 			},
 			animation: {
 				enable: false,
@@ -29,15 +26,18 @@ export const backgroundConfig = {
 		},
 		size: {
 			value: {
-				min: 20,
-				max: 100,
+				min: 150,
+				max: 300,
 			},
 		},
 		move: {
 			enable: true,
 			speed: {
-				min: 0.1,
-				max: 1,
+				min: 0.05,
+				max: 0.3,
+			},
+			outModes: {
+				default: 'out',
 			},
 		},
 	},
@@ -45,35 +45,11 @@ export const backgroundConfig = {
 		events: {
 			onHover: {
 				enable: false,
-				mode: 'bubble',
-			},
-		},
-		modes: {
-			grab: {
-				distance: 400,
-				links: {
-					opacity: 1,
-				},
-			},
-			bubble: {
-				distance: 250,
-				size: 0,
-				duration: 2,
-				opacity: 0,
-			},
-			repulse: {
-				distance: 400,
-				duration: 0.4,
-			},
-			push: {
-				quantity: 4,
-			},
-			remove: {
-				quantity: 2,
 			},
 		},
 	},
 	background: {
-		color: '#232741',
+		color: '#0e3b31',
+		image: 'linear-gradient(135deg, #1a5a47 0%, #0e3b31 45%, #0b3029 70%, #14503f 100%)',
 	},
 };

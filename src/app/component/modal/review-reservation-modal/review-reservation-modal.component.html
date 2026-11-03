@@ -1,0 +1,138 @@
+<div class="review">
+	<section class="summary">
+		<header class="summary-header">
+			<div class="summary-title">
+				<h3>{{ reservation.name }}</h3>
+				<p-tag
+					[value]="reservation.eventType | translateEnum: 'enum.reservation.event-type'"
+					severity="secondary"
+					[rounded]="true"
+				/>
+			</div>
+			<p-tag
+				[value]="reservation.status | translateEnum: 'enum.reservation.status'"
+				severity="secondary"
+				icon="pi pi-clock"
+			/>
+		</header>
+
+		<dl class="details">
+			<div class="detail">
+				<span class="detail-icon"><i class="pi pi-building"></i></span>
+				<dt>{{ 'reservation.room' | translate }}</dt>
+				<dd>{{ roomName() }}</dd>
+			</div>
+
+			<div class="detail">
+				<span class="detail-icon"><i class="pi pi-calendar"></i></span>
+				<dt>{{ 'modal.review-reservation.date' | translate }}</dt>
+				<dd>
+					{{ startTime | date: 'dd.MM.yyyy' }}
+					@if (!isSameDay) {
+						– {{ endTime | date: 'dd.MM.yyyy' }}
+					}
+				</dd>
+			</div>
+
+			<div class="detail">
+				<span class="detail-icon"><i class="pi pi-clock"></i></span>
+				<dt>{{ 'modal.review-reservation.time' | translate }}</dt>
+				<dd>
+					{{ startTime | date: 'HH:mm' }} – {{ endTime | date: 'HH:mm' }}
+					<span class="duration">{{ duration }}</span>
+				</dd>
+			</div>
+
+			<div class="detail">
+				<span class="detail-icon"><i class="pi pi-user"></i></span>
+				<dt>{{ 'reservation.requested-by' | translate }}</dt>
+				<dd>{{ reservation.reservedBy }}</dd>
+			</div>
+		</dl>
+
+		@if (reservation.note) {
+			<blockquote class="note">
+				<span class="note-label">{{ 'reservation.note' | translate }}</span>
+				{{ reservation.note }}
+			</blockquote>
+		}
+	</section>
+
+	<section class="decision">
+		<h4 class="section-label" id="decision-label">{{ 'modal.review-reservation.decision' | translate }}</h4>
+
+		<div class="decision-options" role="radiogroup" aria-labelledby="decision-label">
+			<button
+				type="button"
+				role="radio"
+				class="decision-option approve"
+				[class.selected]="decision() === ReservationStatus.ACCEPTED"
+				[attr.aria-checked]="decision() === ReservationStatus.ACCEPTED"
+				[disabled]="submitting()"
+				(click)="selectDecision(ReservationStatus.ACCEPTED)"
+			>
+				<span class="decision-icon"><i class="pi pi-check"></i></span>
+				<span class="decision-text">
+					<span class="decision-title">{{ 'reservation.approve' | translate }}</span>
+					<span class="decision-description">{{ 'modal.review-reservation.approve-description' | translate }}</span>
+				</span>
+			</button>
+
+			<button
+				type="button"
+				role="radio"
+				class="decision-option reject"
+				[class.selected]="decision() === ReservationStatus.REJECTED"
+				[attr.aria-checked]="decision() === ReservationStatus.REJECTED"
+				[disabled]="submitting()"
+				(click)="selectDecision(ReservationStatus.REJECTED)"
+			>
+				<span class="decision-icon"><i class="pi pi-times"></i></span>
+				<span class="decision-text">
+					<span class="decision-title">{{ 'reservation.reject' | translate }}</span>
+					<span class="decision-description">{{ 'modal.review-reservation.reject-description' | translate }}</span>
+				</span>
+			</button>
+		</div>
+	</section>
+
+	<section class="comment">
+		<label class="section-label" for="review-comment">
+			{{ 'reservation.comment' | translate }}
+			<span class="optional">({{ 'common.optional' | translate }})</span>
+		</label>
+		<textarea
+			pTextarea
+			id="review-comment"
+			rows="3"
+			class="w-full"
+			[formControl]="commentControl"
+			[autoResize]="true"
+			[placeholder]="'modal.review-reservation.comment-placeholder' | translate"
+			[invalid]="commentControl.invalid"
+		></textarea>
+		<small class="counter" [class.over]="commentLength() > MAX_COMMENT_LENGTH">
+			{{ commentLength() }} / {{ MAX_COMMENT_LENGTH }}
+		</small>
+	</section>
+
+	<footer class="actions">
+		<p-button
+			severity="secondary"
+			[text]="true"
+			[label]="'common.cancel' | translate"
+			[disabled]="submitting()"
+			(onClick)="onCancel()"
+		/>
+		@if (!!decision()) {
+			<p-button
+				[severity]="confirmSeverity()"
+				[icon]="confirmIcon()"
+				[label]="confirmLabel() | translate"
+				[disabled]="!decision() || commentControl.invalid"
+				[loading]="submitting()"
+				(onClick)="onConfirm()"
+			/>
+		}
+	</footer>
+</div>

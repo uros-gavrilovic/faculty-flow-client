@@ -17,6 +17,10 @@ export class RoleFormComponent implements OnInit {
 	@Input() form: FormGroup;
 
 	readonly allRoles: UserRole[] = Object.values(UserRole);
+	readonly roleIcons: Record<UserRole, string> = {
+		[UserRole.ADMINISTRATOR]: 'pi pi-shield',
+		[UserRole.USER]: 'pi pi-user',
+	};
 
 	constructor(private formBuilder: FormBuilder) {
 		effect(() => {
@@ -36,9 +40,8 @@ export class RoleFormComponent implements OnInit {
 		this.form.patchValue({ roles: user.roles });
 	}
 
-	onRemoveRole(role: UserRole): void {
-		const roles = this.form.controls['roles'].value as UserRole[];
-		this.form.controls['roles'].setValue(roles.filter((r) => r !== role));
+	isSelected(role: UserRole): boolean {
+		return (this.form.get('roles')?.value as UserRole[] | null)?.includes(role) ?? false;
 	}
 
 	getRoleSeverity(role: UserRole): Severity {

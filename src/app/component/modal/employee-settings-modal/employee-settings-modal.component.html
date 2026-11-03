@@ -1,31 +1,59 @@
-	<app-panel-stepper [title]="'user-management.user-information'" [icon]="'pi pi-user'">
-		<app-user-form
-			[form]=form [user]="user"
-			[isEditMode]="isEditMode"
+<div class="employee-settings">
+	<section class="profile">
+		<p-avatar
+			[label]="initials() || null"
+			[icon]="initials() ? null : 'pi pi-user-plus'"
+			[class]="'avatar-' + avatarSeverity()"
+			size="xlarge"
+			shape="circle"
 		/>
-	</app-panel-stepper>
 
-	@if (isEditMode) {
-		<app-panel-stepper title="user-management.employee-information" icon="pi pi-briefcase" [iconStyleClass]="'chip chip-info'"/>
-	}
+		<div class="profile-text">
+			<span class="profile-name">
+				{{ fullName() || ('modal.employee-settings.new-employee' | translate) }}
+			</span>
+			<span class="profile-meta">
+				@if (username() || email()) {
+					@if (username()) {
+						<span class="profile-username">&#64;{{ username() }}</span>
+					}
+					@if (username() && email()) {
+						<span class="separator">·</span>
+					}
+					@if (email()) {
+						<span class="profile-email">{{ email() }}</span>
+					}
+				} @else {
+					{{ 'modal.employee-settings.new-employee-hint' | translate }}
+				}
+			</span>
+		</div>
 
-	<app-panel-stepper title="user-management.role-and-permissions" icon="pi pi-shield" [iconStyleClass]="'chip chip-danger'">
-		<app-role-form
-			[form]="form"
-			[user]="user"
-		/>
-	</app-panel-stepper>
+		@if (isEditMode && user()) {
+			<span class="status" [class.verified]="user()?.isVerified">
+				<span class="status-dot"></span>
+				{{ (user()?.isVerified ? 'user-management.verified' : 'user-management.pending') | translate }}
+			</span>
+		}
+	</section>
 
-	<div class="flex justify-content-end gap-2 mt-3">
+	<app-user-form [form]="form" [user]="user" [isEditMode]="isEditMode" />
+
+	<app-role-form [form]="form" [user]="user" />
+
+	<footer class="actions">
 		<p-button
 			severity="secondary"
-			[label]="'common.cancel' | translate"
 			[text]="true"
+			[label]="'common.cancel' | translate"
+			[disabled]="submitting()"
 			(onClick)="onCancel()"
 		/>
 		<p-button
 			icon="pi pi-check"
 			[label]="(isEditMode ? 'modal.edit-employee.submit' : 'modal.add-employee.submit') | translate"
+			[loading]="submitting()"
 			(onClick)="onSubmit()"
 		/>
-	</div>
+	</footer>
+</div>

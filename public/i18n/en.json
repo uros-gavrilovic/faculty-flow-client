@@ -25,6 +25,7 @@
 		"selected": "selected",
 		"approve": "Approve",
 		"reject": "Reject",
+		"review": "Review",
 		"pagination": "Showing {first} to {last} of {totalRecords} reservations"
 	},
 	"room": {
@@ -64,12 +65,30 @@
 		"settings": "User Settings",
 		"showing-users": "Showing {first} to {last} of {totalRecords} users",
 		"add-user": "Add Employee",
-		"save": "Save"
+		"save": "Save",
+		"personal-information": "Personal information",
+		"account": "Account",
+		"verified": "Verified",
+		"pending": "Pending verification",
+		"role-description": {
+			"administrator": "Manage rooms, employees and review reservations",
+			"user": "Request and manage own reservations"
+		}
 	},
 	"modal": {
 		"reservation-preview": {
 			"submit": "Submit request",
-			"update": "Update reservation"
+			"update": "Update reservation",
+			"title-create": "Request a reservation",
+			"new-reservation": "New reservation",
+			"new-reservation-hint": "Pick a room, event type and time below",
+			"details": "Details",
+			"schedule": "Schedule",
+			"review": "Review",
+			"note-placeholder": "Anything the reviewer should know (equipment, number of attendees…)",
+			"end-before-start": "End time must be after the start time",
+			"locked-status": "This reservation is {{status}} and can no longer be changed.",
+			"locked-permission": "Only the requester or an administrator can change this reservation."
 		},
 		"edit-employee": {
 			"title": "Edit employee information",
@@ -81,7 +100,38 @@
 		},
 		"room": {
 			"create": "Create a Room",
-			"edit": "Edit a Room"
+			"edit": "Edit a Room",
+			"new-room": "New room",
+			"new-room-hint": "Fill in the details below to add a room",
+			"general": "General",
+			"location": "Location & capacity",
+			"old-name-hint": "Optional — the name the room was previously known by",
+			"building-label": "{{building}} building",
+			"floor-label": "Floor {{floor}}",
+			"seats": "{{count}} seats",
+			"submit-create": "Create room",
+			"submit-update": "Save changes",
+			"delete-confirm": {
+				"title": "Delete room",
+				"message": "Are you sure you want to delete <b>{{name}}</b>? This cannot be undone."
+			}
+		},
+		"review-reservation": {
+			"title": "Review reservation",
+			"date": "Date",
+			"time": "Time",
+			"decision": "Decision",
+			"approve-description": "The room will be booked",
+			"reject-description": "The request will be declined",
+			"comment-placeholder": "Add a note for the requester (e.g. reason for rejection)",
+			"confirm": "Confirm",
+			"confirm-approve": "Approve reservation",
+			"confirm-reject": "Reject reservation"
+		},
+		"employee-settings": {
+			"new-employee": "New employee",
+			"new-employee-hint": "Fill in the details below to create an account",
+			"username-locked": "Username can't be changed after the account is created"
 		}
 	},
 	"common": {
@@ -99,7 +149,8 @@
 		"filters": "Filters",
 		"no-results": "No results found",
 		"loading": "Loading...",
-		"close": "Close"
+		"close": "Close",
+		"optional": "optional"
 	},
 	"validation": {
 		"required-field": "This field is required",
@@ -125,7 +176,17 @@
 				"exam": "Exam",
 				"consultation": "Consultation",
 				"other": "Other"
+			},
+			"status": {
+				"pending": "Pending",
+				"canceled": "Canceled",
+				"accepted": "Accepted",
+				"rejected": "Rejected"
 			}
+		},
+		"user-role": {
+			"administrator": "Administrator",
+			"user": "User"
 		}
 	},
 	"messages": {
@@ -176,6 +237,20 @@
 			"reviewed": {
 				"title": "Reservation updated",
 				"message": "Reservation has been successfully reviewed"
+			}
+		},
+		"room": {
+			"created": {
+				"title": "Room created",
+				"message": "Room has been successfully created"
+			},
+			"updated": {
+				"title": "Room updated",
+				"message": "Room has been successfully updated"
+			},
+			"deleted": {
+				"title": "Room deleted",
+				"message": "Room has been successfully deleted"
 			}
 		}
 	}

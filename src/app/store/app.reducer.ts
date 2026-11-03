@@ -48,10 +48,12 @@ export const appReducer = createReducer(
 		return {
 			...state,
 			user: user,
-			users: {
-				...state.users,
-				data: state.users.data.map((u: User) => (u.uuid === user.uuid ? user : u)),
-			},
+			users: state.users?.data
+				? {
+						...state.users,
+						data: state.users.data.map((u: User) => (u.uuid === user.uuid ? user : u)),
+					}
+				: state.users,
 		};
 	}),
 

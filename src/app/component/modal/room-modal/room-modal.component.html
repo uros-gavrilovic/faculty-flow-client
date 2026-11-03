@@ -1,181 +1,186 @@
-<form [formGroup]="form" class="p-fluid">
-	<div class="grid formgrid">
+<form [formGroup]="form" class="room-settings p-fluid" (ngSubmit)="onSubmit()">
+	<!-- Summary -->
+	<section class="summary">
+		<span class="summary-icon"><i [class]="summaryIcon()"></i></span>
 
-		<div class="field col-12 md:col-6">
-			<p-iconfield>
-				<p-floatlabel variant="in" class="w-full">
-					<p-inputicon class="pi pi-building" />
-					<input
-						pInputText
-						id="name"
-						formControlName="name"
-						autocomplete="off"
-						class="w-full" />
-					<label for="name">
-						{{ 'room.name' | translate | required }}
-					</label>
-				</p-floatlabel>
-			</p-iconfield>
+		<div class="summary-text">
+			<span class="summary-name">
+				{{ displayName() || ('modal.room.new-room' | translate) }}
+			</span>
+			<span class="summary-meta">
+				@if (code() || metaParts().length) {
+					@if (code()) {
+						<span class="summary-code">{{ code() }}</span>
+					}
+					<span>{{ metaParts().join(' · ') }}</span>
+				} @else {
+					{{ 'modal.room.new-room-hint' | translate }}
+				}
+			</span>
+		</div>
 
-			@if (form.get('name')?.invalid && form.get('name')?.touched) {
-				<small class="p-error">
-					{{ 'validation.required-field' | translate }}
-				</small>
+		@if (capacity() !== null) {
+			<span class="capacity">
+				<i class="pi pi-users"></i>
+				{{ 'modal.room.seats' | translate: { count: capacity() } }}
+			</span>
+		}
+	</section>
+
+	<!-- General -->
+	<section>
+		<h4 class="form-section-label">
+			<i class="pi pi-tag"></i>
+			{{ 'modal.room.general' | translate }}
+		</h4>
+
+		<div class="grid formgrid">
+			<div class="field col-12 md:col-7">
+				<p-iconfield>
+					<p-floatlabel variant="in" class="w-full">
+						<p-inputicon class="pi pi-building" />
+						<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" />
+						<label for="name">{{ 'room.name' | translate | required }}</label>
+					</p-floatlabel>
+				</p-iconfield>
+				@if (form.get('name')?.invalid && form.get('name')?.touched) {
+					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+				}
+			</div>
+
+			<div class="field col-12 md:col-5">
+				<p-iconfield>
+					<p-floatlabel variant="in" class="w-full">
+						<p-inputicon class="pi pi-hashtag" />
+						<input pInputText id="code" formControlName="code" autocomplete="off" class="w-full code-input" />
+						<label for="code">{{ 'room.code' | translate | required }}</label>
+					</p-floatlabel>
+				</p-iconfield>
+				@if (form.get('code')?.invalid && form.get('code')?.touched) {
+					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+				}
+			</div>
+
+			<div class="field col-12">
+				<p-iconfield>
+					<p-floatlabel variant="in" class="w-full">
+						<p-inputicon class="pi pi-history" />
+						<input pInputText id="oldName" formControlName="oldName" autocomplete="off" class="w-full" />
+						<label for="oldName">{{ 'room.old-name' | translate }}</label>
+					</p-floatlabel>
+				</p-iconfield>
+				<small class="field-hint">{{ 'modal.room.old-name-hint' | translate }}</small>
+			</div>
+		</div>
+	</section>
+
+	<!-- Room type -->
+	<section>
+		<h4 class="form-section-label" id="room-type-label">
+			<i class="pi pi-th-large"></i>
+			{{ 'room.type' | translate | required }}
+		</h4>
+
+		<div class="tiles type-tiles" role="radiogroup" aria-labelledby="room-type-label">
+			@for (roomType of roomTypes; track roomType) {
+				<button
+					type="button"
+					role="radio"
+					class="tile"
+					[class.selected]="type() === roomType"
+					[attr.aria-checked]="type() === roomType"
+					[disabled]="busy()"
+					(click)="selectType(roomType)"
+				>
+					<span class="tile-icon"><i [class]="roomTypeIcons[roomType]"></i></span>
+					<span class="tile-label">{{ roomType | translateEnum: 'enum.room-type' }}</span>
+				</button>
+			}
+		</div>
+		@if (form.get('type')?.invalid && form.get('type')?.touched) {
+			<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+		}
+	</section>
+
+	<!-- Location & capacity -->
+	<section>
+		<h4 class="form-section-label" id="building-label">
+			<i class="pi pi-map-marker"></i>
+			{{ 'modal.room.location' | translate }}
+		</h4>
+
+		<div class="tiles building-tiles" role="radiogroup" aria-labelledby="building-label">
+			@for (option of buildings; track option) {
+				<button
+					type="button"
+					role="radio"
+					class="tile tile-row"
+					[class.selected]="building() === option"
+					[attr.aria-checked]="building() === option"
+					[disabled]="busy()"
+					(click)="selectBuilding(option)"
+				>
+					<span class="tile-icon"><i [class]="buildingIcons[option]"></i></span>
+					<span class="tile-text">
+						<span class="tile-label">{{ option | translateEnum: 'enum.building' }}</span>
+						<span class="tile-caption">{{ 'room.building' | translate }}</span>
+					</span>
+				</button>
 			}
 		</div>
 
+		<div class="grid formgrid mt-3">
+			<div class="field col-12 md:col-6">
+				<p-iconfield>
+					<p-floatlabel variant="in" class="w-full">
+						<p-inputicon class="pi pi-sort-alt" />
+						<p-inputnumber inputId="floor" formControlName="floor" [useGrouping]="false" [fluid]="true" />
+						<label for="floor">{{ 'room.floor' | translate }}</label>
+					</p-floatlabel>
+				</p-iconfield>
+			</div>
 
-		<div class="field col-12 md:col-6">
-			<p-iconfield>
-				<p-floatlabel variant="in" class="w-full">
-					<p-inputicon class="pi pi-hashtag" />
-					<input
-						pInputText
-						id="code"
-						formControlName="code"
-						autocomplete="off"
-						class="w-full" />
-					<label for="code">
-						{{ 'room.code' | translate | required }}
-					</label>
-				</p-floatlabel>
-			</p-iconfield>
-
-			@if (form.get('code')?.invalid && form.get('code')?.touched) {
-				<small class="p-error">
-					{{ 'validation.required-field' | translate }}
-				</small>
-			}
+			<div class="field col-12 md:col-6">
+				<p-iconfield>
+					<p-floatlabel variant="in" class="w-full">
+						<p-inputicon class="pi pi-users" />
+						<p-inputnumber inputId="capacity" formControlName="capacity" [min]="0" [useGrouping]="false" [fluid]="true" />
+						<label for="capacity">{{ 'room.capacity' | translate }}</label>
+					</p-floatlabel>
+				</p-iconfield>
+			</div>
 		</div>
+	</section>
 
-
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<p-select
-					inputId="type"
-					formControlName="type"
-					[options]="roomTypes"
-					class="w-full">
-
-					<ng-template pTemplate="selectedItem" let-selectedOption>
-						@if (selectedOption) {
-							<div class="ml-4">
-								{{ selectedOption | translateEnum:'enum.room-type' }}
-							</div>
-						}
-					</ng-template>
-
-					<ng-template pTemplate="item" let-option>
-						<div>
-							{{ option | translateEnum:'enum.room-type' }}
-						</div>
-					</ng-template>
-
-				</p-select>
-
-				<label for="type">
-					{{ 'room.type' | translate | required }}
-				</label>
-			</p-floatlabel>
-		</div>
-
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<p-select
-					inputId="building"
-					formControlName="building"
-					[options]="buildings"
-					class="w-full">
-					<ng-template pTemplate="selectedItem" let-selectedOption>
-						@if (selectedOption) {
-							<div class="ml-4">
-								{{ selectedOption | translateEnum:'enum.building' }}
-							</div>
-						}
-					</ng-template>
-pTemplate
-					<ng-template pTemplate="item" let-option>
-						<div>
-							{{ option | translateEnum:'enum.building' }}
-						</div>
-					</ng-template>
-
-				</p-select>
-
-				<label for="building">
-					{{ 'room.building' | translate }}
-				</label>
-			</p-floatlabel>
-		</div>
-
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<input
-					pInputText
-					type="number"
-					id="floor"
-					formControlName="floor"
-					class="w-full" />
-
-				<label for="floor">
-					{{ 'room.floor' | translate }}
-				</label>
-			</p-floatlabel>
-		</div>
-
-
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<input
-					pInputText
-					type="number"
-					id="capacity"
-					formControlName="capacity"
-					class="w-full" />
-
-				<label for="capacity">
-					{{ 'room.capacity' | translate }}
-				</label>
-			</p-floatlabel>
-		</div>
-
-
-		<div class="field col-12">
-			<p-floatlabel variant="in">
-				<input
-					pInputText
-					id="oldName"
-					formControlName="oldName"
-					class="w-full" />
-
-				<label for="oldName">
-					{{ 'room.old-name' | translate }}
-				</label>
-			</p-floatlabel>
-		</div>
-
-	</div>
-
-
-	<div class="flex justify-content-end gap-2 mt-3">
-		<p-button
-			severity="secondary"
-			[label]="'common.close' | translate"
-			(onClick)="onClose()" />
-
+	<!-- Actions -->
+	<footer class="actions">
 		@if (isEditMode) {
 			<p-button
 				severity="danger"
 				icon="pi pi-trash"
+				[text]="true"
 				[label]="'common.delete' | translate"
-				(onClick)="onDelete()" />
+				[loading]="deleting()"
+				[disabled]="submitting()"
+				(onClick)="onDelete()"
+			/>
 		}
 
-		<p-button
-			severity="info"
-			[label]="(isEditMode ? 'common.update' : 'common.create') | translate"
-			[loading]="submitting"
-			(onClick)="onSubmit()" />
+		<span class="spacer"></span>
 
-	</div>
+		<p-button
+			severity="secondary"
+			[text]="true"
+			[label]="'common.cancel' | translate"
+			[disabled]="busy()"
+			(onClick)="onClose()"
+		/>
+		<p-button
+			type="submit"
+			icon="pi pi-check"
+			[label]="(isEditMode ? 'modal.room.submit-update' : 'modal.room.submit-create') | translate"
+			[loading]="submitting()"
+			[disabled]="deleting()"
+		/>
+	</footer>
 </form>

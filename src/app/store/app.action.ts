@@ -13,6 +13,7 @@ enum AppActionType {
 	GET_CURRENT_USER_SUCCESS = '[AUTH] Get Current User Success',
 	LOG_OUT = '[AUTH] Log Out',
 	REGISTER_USER = '[AUTH] Register User',
+	REGISTER_USER_SUCCESS = '[AUTH] Register User Success',
 
 	// User
 	CLEAR_USER = '[USER] Clear User',
@@ -22,6 +23,7 @@ enum AppActionType {
 	SEARCH_USERS_SUCCESS = '[USER] Search Users Success',
 	UPDATE_USER = '[USER] Update User',
 	UPDATE_USER_SUCCESS = '[USER] Update User Success',
+	USER_FAILURE = '[USER] User Failure',
 
 	// Room
 	GET_ROOM = '[ROOM] Get Room',
@@ -34,6 +36,10 @@ enum AppActionType {
 	CREATE_ROOM = '[ROOM] Create Room',
 	UPDATE_ROOM = '[ROOM] Update Room',
 	DELETE_ROOM = '[ROOM] Delete Room',
+	CREATE_ROOM_SUCCESS = '[ROOM] Create Room Success',
+	UPDATE_ROOM_SUCCESS = '[ROOM] Update Room Success',
+	DELETE_ROOM_SUCCESS = '[ROOM] Delete Room Success',
+	ROOM_FAILURE = '[ROOM] Room Failure',
 
 	// Reservation
 	SEARCH_RESERVATIONS = '[RESV] Search Reservations',
@@ -58,6 +64,7 @@ export const getCurrentUser = createAction(AppActionType.GET_CURRENT_USER, props
 export const getCurrentUserSuccess = createAction(AppActionType.GET_CURRENT_USER_SUCCESS, props<{ user: User }>());
 export const logoutUser = createAction(AppActionType.LOG_OUT);
 export const registerUser = createAction(AppActionType.REGISTER_USER, props<{ request: RegisterRequest }>());
+export const registerUserSuccess = createAction(AppActionType.REGISTER_USER_SUCCESS, props<{ user: User }>());
 
 export const getUser = createAction(AppActionType.GET_USER, props<{ uuid?: string; username?: string }>());
 export const getUserSuccess = createAction(AppActionType.GET_USER_SUCCESS, props<{ user: User }>());
@@ -66,6 +73,7 @@ export const searchUsers = createAction(AppActionType.SEARCH_USERS, props<{searc
 export const searchUsersSuccess = createAction(AppActionType.SEARCH_USERS_SUCCESS, props<{ searchResponse: SearchResponse<User> }>());
 export const updateUser = createAction(AppActionType.UPDATE_USER, props<{user: User}>());
 export const updateUserSuccess = createAction(AppActionType.UPDATE_USER_SUCCESS, props<{user: User}>());
+export const userFailure = createAction(AppActionType.USER_FAILURE, props<{ error: unknown }>());
 
 export const getRoom = createAction(AppActionType.GET_ROOM, props<{ uuid: string }>());
 export const getRoomSuccess = createAction(AppActionType.GET_ROOM_SUCCESS, props<{ room: Room }>());
@@ -77,6 +85,10 @@ export const searchRoomsSuccess = createAction(AppActionType.SEARCH_ROOMS_SUCCES
 export const createRoom = createAction(AppActionType.CREATE_ROOM, props<{ room: Room }>());
 export const updateRoom = createAction(AppActionType.UPDATE_ROOM, props<{ room: Room }>());
 export const deleteRoom = createAction(AppActionType.DELETE_ROOM, props<{ uuid: string }>());
+export const createRoomSuccess = createAction(AppActionType.CREATE_ROOM_SUCCESS);
+export const updateRoomSuccess = createAction(AppActionType.UPDATE_ROOM_SUCCESS);
+export const deleteRoomSuccess = createAction(AppActionType.DELETE_ROOM_SUCCESS);
+export const roomFailure = createAction(AppActionType.ROOM_FAILURE, props<{ error: unknown }>());
 
 export const searchReservations = createAction(AppActionType.SEARCH_RESERVATIONS, props<{ searchRequest: SearchRequest<ReservationFilter> }>());
 export const searchReservationsSuccess = createAction(AppActionType.SEARCH_RESERVATIONS_SUCCESS, props<{ searchResponse: SearchResponse<Reservation> }>());

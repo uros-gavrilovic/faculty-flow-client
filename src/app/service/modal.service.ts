@@ -10,6 +10,15 @@ import {
 	RoomDialogData,
 	RoomModalComponent,
 } from '../component/modal/room-modal/room-modal.component';
+import {
+	ReviewDialogData,
+	ReviewReservationModalComponent,
+} from '../component/modal/review-reservation-modal/review-reservation-modal.component';
+import { Reservation } from '../model/reservation.model';
+
+export interface ReservationPreviewResult {
+	review?: Reservation;
+}
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
@@ -21,19 +30,42 @@ export class ModalService {
 
 	openReservationPreviewModal(data: RequestDialogData = {}): DynamicDialogRef {
 		const dialogRef = this.dialogService.open(RequestReservationModalComponent, {
-			header: this.translateService.instant('reservation.preview'),
+			header: this.translateService.instant(
+				data.reservation?.uuid ? 'reservation.preview' : 'modal.reservation-preview.title-create',
+			),
 			closable: true,
 			dismissableMask: true,
 			draggable: false,
-			style: { width: '40vw' },
+			style: { width: '40vw', minWidth: '600px' },
+			breakpoints: { '960px': '90vw' },
 			data,
 		});
 
 		dialogRef.onClose
 			.pipe(take(1))
-			.subscribe(() => {this.store.dispatch(AppAction.clearReservation());});
+			.subscribe((result?: ReservationPreviewResult | boolean) => {
+				this.store.dispatch(AppAction.clearReservation());
+
+				if (typeof result === 'object' && result?.review) {
+					this.openReviewReservationModal(result.review);
+				}
+			});
 
 		return dialogRef;
+	}
+
+	openReviewReservationModal(reservation: Reservation): DynamicDialogRef<ReviewReservationModalComponent> {
+		const data: ReviewDialogData = { reservation };
+
+		return this.dialogService.open(ReviewReservationModalComponent, {
+			header: this.translateService.instant('modal.review-reservation.title'),
+			closable: true,
+			dismissableMask: true,
+			draggable: false,
+			style: { width: '40vw', minWidth: '520px' },
+			breakpoints: { '960px': '90vw' },
+			data,
+		});
 	}
 
 	openEmployeeSettingsDialog(data?: EmployeeSettingsModalData): DynamicDialogRef {
@@ -44,7 +76,8 @@ export class ModalService {
 			closable: true,
 			dismissableMask: true,
 			draggable: false,
-			style: { width: '40vw' },
+			style: { width: '40vw', minWidth: '560px' },
+			breakpoints: { '960px': '90vw' },
 			data,
 		});
 
@@ -62,7 +95,8 @@ export class ModalService {
 			closable: true,
 			dismissableMask: true,
 			draggable: false,
-			style: { width: '40vw' },
+			style: { width: '40vw', minWidth: '560px' },
+			breakpoints: { '960px': '90vw' },
 			data,
 		});
 

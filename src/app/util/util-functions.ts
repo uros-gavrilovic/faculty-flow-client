@@ -13,3 +13,12 @@ export function filterEmptyFields(value: any): any {
 		Object.entries(value).filter(([_, v]) => v != null && v !== ''),
 	);
 }
+export function formatDuration(start: Date, end: Date): string {
+	const totalMinutes: number = Math.max(0, Math.round((end.getTime() - start.getTime()) / 60000));
+	const hours: number = Math.floor(totalMinutes / 60);
+	const minutes: number = totalMinutes % 60;
+
+	if (hours && minutes) return `${hours}h ${minutes}m`;
+	if (hours) return `${hours}h`;
+	return `${minutes}m`;
+}

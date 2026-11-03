@@ -1,186 +1,295 @@
-<form [formGroup]="form" class="p-fluid">
-	<div class="grid formgrid">
-		<div class="field col-12">
-			<p-iconfield>
-				<p-floatlabel variant="in" class="w-full">
-					<p-inputicon class="pi pi-bookmark" />
-					<input pInputText id="name" formControlName="name" autocomplete="off" class="w-full" [readOnly]="isReadOnly" />
-					<label for="name">{{ 'reservation.title' | translate | required }}</label>
-				</p-floatlabel>
-			</p-iconfield>
-			@if (form.get('name')?.invalid && form.get('name')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
-			}
-		</div>
+<form [formGroup]="form" class="reservation-form p-fluid" (ngSubmit)="onSubmit()">
+	<!-- Summary -->
+	<section class="summary">
+		<span class="summary-icon"><i [class]="summaryIcon()"></i></span>
 
-		<div class="field col-12 md:col-6">
-			<p-iconfield>
-				<p-floatlabel variant="in">
-					<p-inputicon class="pi pi-building" />
-					<p-select
-						inputId="room"
-						[options]="rooms()"
-						formControlName="room"
-						optionLabel="name"
-						optionValue="code"
-						[filter]="true"
-						filterBy="name"
-						[showClear]="!isReadOnly"
-						[readonly]="isReadOnly"
-						class="w-full"
-					>
-						<ng-template pTemplate="selectedItem" let-room>
-							@if (room) {
-								<div class="ml-4">{{ room.name }}</div>
+		<div class="summary-text">
+			<span class="summary-name">
+				{{ displayName() || ('modal.reservation-preview.new-reservation' | translate) }}
+			</span>
+
+			<span class="summary-meta">
+				@if (selectedRoom() || startTime()) {
+					@if (selectedRoom(); as room) {
+						<span class="meta-item"><i class="pi pi-building"></i>{{ room.name }}</span>
+					}
+					@if (startTime(); as start) {
+						@if (isSameDay()) {
+							<span class="meta-item"><i class="pi pi-calendar"></i>{{ start | date: 'EEE, dd.MM.yyyy' }}</span>
+							@if (endTime(); as end) {
+								<span class="meta-item">
+									<i class="pi pi-clock"></i>{{ start | date: 'HH:mm' }} – {{ end | date: 'HH:mm' }}
+								</span>
 							}
-						</ng-template>
-						<ng-template pTemplate="item" let-room>
-							<div>{{ room.name }}</div>
-						</ng-template>
-					</p-select>
+						} @else {
+							<span class="meta-item">
+								<i class="pi pi-calendar"></i>
+								{{ start | date: 'dd.MM. HH:mm' }} – {{ endTime() | date: 'dd.MM.yyyy HH:mm' }}
+							</span>
+						}
+					}
+				} @else {
+					{{ 'modal.reservation-preview.new-reservation-hint' | translate }}
+				}
+			</span>
 
-					<label for="room">
-						{{ 'reservation.room' | translate | required }}
-					</label>
-				</p-floatlabel>
-			</p-iconfield>
-			@if (form.get('room')?.invalid && form.get('room')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			@if (requestedBy()) {
+				<span class="summary-requester">
+					{{ 'reservation.requested-by' | translate }}
+					<span class="username">&#64;{{ requestedBy() }}</span>
+				</span>
 			}
 		</div>
 
-		<div class="field col-12 md:col-6">
-			<p-iconfield>
-				<p-floatlabel variant="in" class="w-full">
-					<p-inputicon class="pi pi-tag" />
-
-					<p-select
-						inputId="eventType"
-						[options]="eventTypes"
-						formControlName="eventType"
-						[showClear]="!isReadOnly"
-						[readonly]="isReadOnly"
-						class="w-full"
-					>
-						<ng-template pTemplate="selectedItem" let-selectedOption>
-							@if (selectedOption) {
-								<div class="ml-4">{{ selectedOption | translateEnum: 'enum.reservation.event-type' }}</div>
-							}
-						</ng-template>
-						<ng-template #item let-option>
-							<div class="flex align-items-center gap-2">
-								<span>{{ option | translateEnum:'enum.reservation.event-type' }}</span>
-							</div>
-						</ng-template>
-					</p-select>
-
-					<label for="eventType">
-						{{ 'reservation.event-type' | translate | required }}
-					</label>
-				</p-floatlabel>
-			</p-iconfield>
-			@if (form.get('eventType')?.invalid && form.get('eventType')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
-			}
-		</div>
-
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<p-datepicker
-					inputId="startTime"
-					formControlName="startTime"
-					[showTime]="true"
-					hourFormat="24"
-					dateFormat="dd.mm.yy"
-					[showIcon]="true"
-					iconDisplay="input"
-					[fluid]="true"
-					appendTo="body"
+		<div class="summary-badges">
+			@if (isEditMode && reservation()?.status) {
+				<p-tag
+					[value]="reservation().status | translateEnum: 'enum.reservation.status'"
+					[severity]="statusSeverity()"
+					[rounded]="true"
 				/>
-				<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
-			</p-floatlabel>
-			@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+			}
+			@if (duration()) {
+				<span class="duration"><i class="pi pi-stopwatch"></i>{{ duration() }}</span>
 			}
 		</div>
+	</section>
 
-		<div class="field col-12 md:col-6">
-			<p-floatlabel variant="in">
-				<p-datepicker
-					inputId="endTime"
-					formControlName="endTime"
-					[showTime]="true"
-					hourFormat="24"
-					dateFormat="dd.mm.yy"
-					[showIcon]="true"
-					iconDisplay="input"
-					[fluid]="true"
-					appendTo="body"
-				/>
-				<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
-			</p-floatlabel>
-			@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
-			}
+	@if (lockMessage()) {
+		<div class="lock-banner" role="status">
+			<i class="pi pi-lock"></i>
+			<span>{{ lockMessage() }}</span>
 		</div>
+	}
 
-		<div class="field" [ngClass]="isEditMode ? 'col-12 md:col-6' : 'col-12'">
-			<p-iconfield>
-				<p-floatlabel variant="in">
-					<p-inputicon class="pi pi-user" />
-					<input pInputText id="reservedBy" formControlName="reservedBy" [readOnly]="isReadOnly" autocomplete="off" class="w-full"/>
-					<label for="reservedBy">{{ 'reservation.requested-by' | translate | required }}</label>
-				</p-floatlabel>
-			</p-iconfield>
-			@if (form.get('reservedBy')?.invalid && form.get('reservedBy')?.touched) {
-				<small class="p-error">{{ 'validation.required-field' | translate }}</small>
-			}
-		</div>
+	<!-- Details -->
+	<section>
+		<h4 class="form-section-label">
+			<i class="pi pi-bookmark"></i>
+			{{ 'modal.reservation-preview.details' | translate }}
+		</h4>
 
-		@if (isEditMode) {
-			<div class="field col-12 md:col-6">
+		<div class="grid formgrid">
+			<div class="field col-12">
 				<p-iconfield>
-					<p-floatlabel variant="in">
-						<p-inputicon class="pi pi-user" />
-						<input pInputText id="reviewedBy" formControlName="reviewedBy" autocomplete="off" class="w-full"/>
-						<label for="reviewedBy">{{ 'reservation.reviewed-by' | translate | required }}</label>
+					<p-floatlabel variant="in" class="w-full">
+						<p-inputicon class="pi pi-pen-to-square" />
+						<input
+							pInputText
+							id="name"
+							formControlName="name"
+							autocomplete="off"
+							class="w-full"
+							[readOnly]="isReadOnly()"
+						/>
+						<label for="name">{{ 'reservation.title' | translate | required }}</label>
 					</p-floatlabel>
 				</p-iconfield>
-				@if (form.get('reviewedBy')?.invalid && form.get('reviewedBy')?.touched) {
+				@if (form.get('name')?.invalid && form.get('name')?.touched) {
 					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
 				}
 			</div>
-		}
 
-		<div class="field col-12">
-			<p-floatlabel variant="in" class="w-full">
-				<textarea pTextarea id="note" formControlName="note" rows="3" class="w-full" [readOnly]="isReadOnly" [autoResize]="true"></textarea>
-				<label for="note">{{ 'reservation.note' | translate }}</label>
-			</p-floatlabel>
+			<div class="field col-12">
+				<p-iconfield>
+					<p-floatlabel variant="in">
+						<p-inputicon class="pi pi-building" />
+						<p-select
+							inputId="room"
+							[options]="rooms()"
+							formControlName="room"
+							optionLabel="name"
+							optionValue="code"
+							[filter]="true"
+							filterBy="name,code"
+							[showClear]="!isReadOnly()"
+							[readonly]="isReadOnly()"
+							appendTo="body"
+							class="w-full"
+						>
+							<ng-template #selectedItem let-room>
+								@if (room) {
+									<div class="ml-4 room-selected">
+										<span>{{ room.name }}</span>
+										<span class="room-code">{{ room.code }}</span>
+									</div>
+								}
+							</ng-template>
+							<ng-template #item let-room>
+								<div class="room-option">
+									<span class="room-option-icon"><i [class]="roomTypeIcons[$any(room.type)] ?? 'pi pi-building'"></i></span>
+									<span class="room-option-name">{{ room.name }}</span>
+									<span class="room-code">{{ room.code }}</span>
+									@if (room.capacity) {
+										<span class="room-option-capacity"><i class="pi pi-users"></i>{{ room.capacity }}</span>
+									}
+								</div>
+							</ng-template>
+						</p-select>
+						<label for="room">{{ 'reservation.room' | translate | required }}</label>
+					</p-floatlabel>
+				</p-iconfield>
+				@if (form.get('room')?.invalid && form.get('room')?.touched) {
+					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+				}
+			</div>
 		</div>
-	</div>
+	</section>
 
-	<div class="flex justify-content-end gap-2 mt-3">
-		@if (!reservation() || !isReadOnly) {
-			<p-button severity="secondary" [label]="'common.close' | translate" (onClick)="onClose()" />
+	<!-- Event type -->
+	<section>
+		<h4 class="form-section-label" id="event-type-label">
+			<i class="pi pi-tag"></i>
+			{{ 'reservation.event-type' | translate | required }}
+		</h4>
+
+		<div class="tiles" role="radiogroup" aria-labelledby="event-type-label">
+			@for (type of eventTypes; track type) {
+				<button
+					type="button"
+					role="radio"
+					class="tile"
+					[class.selected]="eventType() === type"
+					[attr.aria-checked]="eventType() === type"
+					[disabled]="isReadOnly() || submitting()"
+					(click)="selectEventType(type)"
+				>
+					<span class="tile-icon"><i [class]="eventTypeIcons[type]"></i></span>
+					<span class="tile-label">{{ type | translateEnum: 'enum.reservation.event-type' }}</span>
+				</button>
+			}
+		</div>
+		@if (form.get('eventType')?.invalid && form.get('eventType')?.touched) {
+			<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+		}
+	</section>
+
+	<!-- Schedule -->
+	<section>
+		<h4 class="form-section-label">
+			<i class="pi pi-calendar-clock"></i>
+			{{ 'modal.reservation-preview.schedule' | translate }}
+		</h4>
+
+		<div class="grid formgrid">
+			<div class="field col-12 md:col-6">
+				<p-floatlabel variant="in">
+					<p-datepicker
+						inputId="startTime"
+						formControlName="startTime"
+						[showTime]="true"
+						hourFormat="24"
+						dateFormat="dd.mm.yy"
+						[stepMinute]="15"
+						[showIcon]="true"
+						iconDisplay="input"
+						[fluid]="true"
+						appendTo="body"
+					/>
+					<label for="startTime">{{ 'reservation.start' | translate | required }}</label>
+				</p-floatlabel>
+				@if (form.get('startTime')?.invalid && form.get('startTime')?.touched) {
+					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+				}
+			</div>
+
+			<div class="field col-12 md:col-6">
+				<p-floatlabel variant="in">
+					<p-datepicker
+						inputId="endTime"
+						formControlName="endTime"
+						[showTime]="true"
+						hourFormat="24"
+						dateFormat="dd.mm.yy"
+						[stepMinute]="15"
+						[minDate]="startTime()"
+						[showIcon]="true"
+						iconDisplay="input"
+						[fluid]="true"
+						appendTo="body"
+					/>
+					<label for="endTime">{{ 'reservation.end' | translate | required }}</label>
+				</p-floatlabel>
+				@if (form.get('endTime')?.invalid && form.get('endTime')?.touched) {
+					<small class="p-error">{{ 'validation.required-field' | translate }}</small>
+				} @else if (form.hasError('endBeforeStart') && (form.get('endTime')?.touched || form.get('startTime')?.touched)) {
+					<small class="p-error">{{ 'modal.reservation-preview.end-before-start' | translate }}</small>
+				}
+			</div>
+		</div>
+	</section>
+
+	<!-- Note -->
+	<section>
+		<label class="form-section-label" for="note">
+			<i class="pi pi-align-left"></i>
+			{{ 'reservation.note' | translate }}
+			<span class="optional">({{ 'common.optional' | translate }})</span>
+		</label>
+		<textarea
+			pTextarea
+			id="note"
+			formControlName="note"
+			rows="3"
+			class="w-full"
+			[readOnly]="isReadOnly()"
+			[autoResize]="true"
+			[placeholder]="isReadOnly() ? '' : ('modal.reservation-preview.note-placeholder' | translate)"
+		></textarea>
+	</section>
+
+	<!-- Review outcome -->
+	@if (isEditMode && (reservation()?.reviewedBy || reservation()?.comment)) {
+		<section class="review-outcome">
+			<h4 class="form-section-label">
+				<i class="pi pi-check-square"></i>
+				{{ 'modal.reservation-preview.review' | translate }}
+			</h4>
+
+			<div class="review-card">
+				@if (reservation().reviewedBy) {
+					<span class="review-by">
+						{{ 'reservation.reviewed-by' | translate }}
+						<span class="username">&#64;{{ reservation().reviewedBy }}</span>
+					</span>
+				}
+				@if (reservation().comment) {
+					<blockquote class="review-comment">{{ reservation().comment }}</blockquote>
+				}
+			</div>
+		</section>
+	}
+
+	<!-- Actions -->
+	<footer class="actions">
+		@if (canReview()) {
 			<p-button
-				[severity]="Severity.INFO"
+				severity="success"
+				[outlined]="true"
+				icon="pi pi-check-square"
+				[label]="'reservation.review' | translate"
+				[disabled]="submitting()"
+				(onClick)="onReview()"
+			/>
+		}
+
+		<span class="spacer"></span>
+
+		<p-button
+			severity="secondary"
+			[text]="true"
+			[label]="(isReadOnly() ? 'common.close' : 'common.cancel') | translate"
+			[disabled]="submitting()"
+			(onClick)="onClose()"
+		/>
+
+		@if (!isReadOnly()) {
+			<p-button
+				type="submit"
+				[icon]="isEditMode ? 'pi pi-check' : 'pi pi-send'"
 				[label]="(isEditMode ? 'modal.reservation-preview.update' : 'modal.reservation-preview.submit') | translate"
-				[loading]="submitting"
-				(onClick)="onSubmit()"
+				[loading]="submitting()"
 			/>
 		}
-		@if (getIsUserAdmin(loggedUser()) && isEditMode && reservation()?.status == ReservationStatus.PENDING) {
-			<p-button
-				[severity]="Severity.DANGER"
-				[label]="'reservation.reject' | translate"
-				(onClick)="onRejectReservation(reservation())"
-			/>
-			<p-button
-				[severity]="Severity.SUCCESS"
-				[label]="'reservation.approve' | translate"
-				(onClick)="onApproveReservation(reservation())"
-			/>
-		}
-	</div>
+	</footer>
 </form>
