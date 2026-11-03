@@ -1,21 +1,19 @@
-import { Component, effect, EventEmitter, Input, OnInit, Output, Signal } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, Signal } from '@angular/core';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ReservationFilter, ReservationStatus } from '../../../model/reservation.model';
 import { COMMON_MODULES } from '../../../modules/common.module';
-import { selectRooms } from '../../../store/app.selector';
-import { Room } from '../../../model/room.model';
-import * as AppAction from '../../../store/app.action';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 import * as UtilFunction from '../../../util/util-functions';
 import { TableLazyLoadEvent } from 'primeng/table';
 import { User, UserRole } from '../../../model/user.model';
 import * as AppSelector from '../../../store/app.selector';
+import { RoomSelectComponent } from '../../room/room-select/room-select.component';
 
 @Component({
 	selector: 'app-schedule-filter',
-	imports: [PRIMENG_MODULES, COMMON_MODULES],
+	imports: [PRIMENG_MODULES, COMMON_MODULES, RoomSelectComponent],
 	templateUrl: './schedule-filter.component.html',
 	styleUrl: './schedule-filter.component.scss',
 })
@@ -26,7 +24,6 @@ export class ScheduleFilterComponent implements OnInit {
 
 	form: FormGroup;
 	currentUser: Signal<User>;
-	rooms: Signal<Room[]>;
 
 	readonly statuses: ReservationStatus[] = Object.values(ReservationStatus);
 
@@ -39,12 +36,6 @@ export class ScheduleFilterComponent implements OnInit {
 
 	private initDispatch(): void {
 		this.currentUser = this.store.selectSignal(AppSelector.selectCurrentUser);
-		this.rooms = this.store.selectSignal(selectRooms);
-
-		effect(() => {
-			const availableRooms: Room[] = this.rooms();
-			if (!availableRooms?.length) this.store.dispatch(AppAction.getRooms());
-		});
 	}
 
 	ngOnInit(): void {

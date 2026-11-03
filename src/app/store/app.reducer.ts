@@ -69,10 +69,6 @@ export const appReducer = createReducer(
 			room: null,
 		};
 	}),
-	on(AppAction.getRoomsSuccess, (state, { rooms }) => ({
-		...state,
-		rooms,
-	})),
 	on(AppAction.searchRoomsSuccess, (state: AppState, { searchResponse }) => ({
 		...state,
 		roomsSearchRequest: searchResponse,

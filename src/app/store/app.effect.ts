@@ -208,18 +208,6 @@ export const getRoomEffect$ = createEffect(
 	{ functional: true },
 );
 
-export const getRoomsEffect = createEffect(
-	() => {
-		const actions$ = inject(Actions);
-		const roomApi = inject(RoomApiService);
-
-		return actions$.pipe(
-			ofType(AppAction.getRooms),
-			switchMap(() => roomApi.getRooms().pipe(map((rooms) => AppAction.getRoomsSuccess({ rooms })))),
-		)},
-		{functional: true}
-);
-
 export const searchRoomsEffect = createEffect(
 	() => {
 		const actions$ = inject(Actions);

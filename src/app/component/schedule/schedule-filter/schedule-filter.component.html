@@ -11,18 +11,7 @@
 	</div>
 
 	<div class="col-12 md:col-3">
-		<p-select
-			class="w-full"
-			formControlName="room"
-			[options]="rooms()"
-			optionLabel="name"
-			optionValue="code"
-			placeholder="Room"
-			[filter]="true"
-			filterBy="name"
-			[showClear]="true"
-			[appendTo]="'body'"
-		/>
+		<app-room-select formControlName="room" placeholder="Room" />
 	</div>
 
 	<div class="col-12 md:col-2">

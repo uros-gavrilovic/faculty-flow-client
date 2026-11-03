@@ -38,7 +38,10 @@
 		"building": "Building",
 		"capacity": "Capacity",
 		"old-name": "Previous Name",
-		"add-room": "Add a room"
+		"add-room": "Add a room",
+		"select": {
+			"empty": "No rooms found"
+		}
 	},
 	"employee": {
 		"panel-title": "Employees",

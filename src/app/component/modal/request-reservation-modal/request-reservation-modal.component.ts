@@ -15,9 +15,10 @@ import { Severity } from '../../../model/ui.model';
 import * as AppAction from '../../../store/app.action';
 import * as AppSelector from '../../../store/app.selector';
 import * as UtilFunction from '../../../util/util-functions';
-import { EVENT_TYPE_ICONS, ROOM_TYPE_ICONS } from '../../../constant/icon.constant';
+import { EVENT_TYPE_ICONS } from '../../../constant/icon.constant';
 import { reservationStatusSeverityMap } from '../../../constant/severity.constant';
 import { ReservationPreviewResult } from '../../../service/modal.service';
+import { RoomSelectComponent } from '../../room/room-select/room-select.component';
 
 export interface RequestDialogData {
 	startTime?: Date;
@@ -48,7 +49,7 @@ const endAfterStartValidator: ValidatorFn = (group: AbstractControl): Validation
 
 @Component({
 	selector: 'app-request-reservation-modal',
-	imports: [COMMON_MODULES, PRIMENG_MODULES],
+	imports: [COMMON_MODULES, PRIMENG_MODULES, RoomSelectComponent],
 	templateUrl: './request-reservation-modal.component.html',
 	styleUrl: './request-reservation-modal.component.scss',
 })
@@ -61,12 +62,10 @@ export class RequestReservationModalComponent implements OnInit {
 	private initialDataLoaded = false;
 
 	readonly reservation: Signal<Reservation>;
-	readonly rooms: Signal<Room[]>;
 	readonly loggedUser: Signal<User>;
 
 	readonly eventTypes: EventType[] = Object.values(EventType);
 	readonly eventTypeIcons = EVENT_TYPE_ICONS;
-	readonly roomTypeIcons = ROOM_TYPE_ICONS;
 
 	private readonly formValue: Signal<ReservationFormValue>;
 
@@ -75,10 +74,7 @@ export class RequestReservationModalComponent implements OnInit {
 	readonly requestedBy: Signal<string> = computed(() => this.formValue().reservedBy ?? '');
 	readonly startTime: Signal<Date | null> = computed(() => this.toDate(this.formValue().startTime));
 	readonly endTime: Signal<Date | null> = computed(() => this.toDate(this.formValue().endTime));
-	readonly selectedRoom: Signal<Room | null> = computed(() => {
-		const code: string | null | undefined = this.formValue().room;
-		return code ? (this.rooms()?.find((room: Room) => room.code === code) ?? null) : null;
-	});
+	readonly selectedRoom: WritableSignal<Room | null> = signal(null);
 	readonly isSameDay: Signal<boolean> = computed(() => {
 		const start: Date | null = this.startTime();
 		const end: Date | null = this.endTime();
@@ -125,7 +121,6 @@ export class RequestReservationModalComponent implements OnInit {
 	) {
 		this.reservation = this.store.selectSignal(AppSelector.selectReservation);
 		this.loggedUser = this.store.selectSignal(AppSelector.selectCurrentUser);
-		this.rooms = this.store.selectSignal(AppSelector.selectRooms);
 
 		this.isEditMode = !!this.config.data.reservation?.uuid;
 		this.isReadOnly.set(this.isEditMode);
@@ -147,9 +142,6 @@ export class RequestReservationModalComponent implements OnInit {
 			initialValue: this.form.getRawValue(),
 		});
 
-		effect(() => {
-			if (!this.rooms()?.length) this.store.dispatch(AppAction.getRooms());
-		});
 		effect(() => {
 			const reservation: Reservation = this.reservation();
 

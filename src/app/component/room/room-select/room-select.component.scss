@@ -1,0 +1,82 @@
+:host {
+	display: block;
+	width: 100%;
+}
+
+.room-selected {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	min-width: 0;
+}
+
+.room-selected-name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.room-code {
+	flex-shrink: 0;
+	font-family: ui-monospace, 'SFMono-Regular', Menlo, monospace;
+	font-size: 0.75rem;
+	padding: 0.0625rem 0.375rem;
+	border-radius: 6px;
+	background: var(--p-surface-100);
+	color: var(--p-text-muted-color);
+}
+
+.room-option {
+	display: flex;
+	align-items: center;
+	gap: 0.75rem;
+	width: 100%;
+	min-width: 0;
+}
+
+.room-option-icon {
+	flex-shrink: 0;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	border-radius: 8px;
+	background: var(--p-primary-50);
+	color: var(--p-primary-600);
+
+	i {
+		font-size: 0.875rem;
+	}
+}
+
+.room-option-name {
+	font-weight: 500;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.room-option-capacity {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.3125rem;
+	margin-left: auto;
+	font-size: 0.8125rem;
+	color: var(--p-text-muted-color);
+
+	i {
+		font-size: 0.75rem;
+	}
+}
+
+.room-select-footer {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.5rem 0.875rem;
+	border-top: 1px solid var(--p-content-border-color);
+	font-size: 0.8125rem;
+	color: var(--p-text-muted-color);
+}

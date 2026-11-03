@@ -1,4 +1,4 @@
-import { Component, computed, DestroyRef, effect, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, computed, DestroyRef, Signal, signal, WritableSignal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, Validators } from '@angular/forms';
 import { Actions, ofType } from '@ngrx/effects';
@@ -11,7 +11,7 @@ import { Reservation, ReservationReview, ReservationStatus } from '../../../mode
 import { Room } from '../../../model/room.model';
 import { Severity } from '../../../model/ui.model';
 import * as AppAction from '../../../store/app.action';
-import * as AppSelector from '../../../store/app.selector';
+import { RoomApiService } from '../../../service/room-api.service';
 import { formatDuration } from '../../../util/util-functions';
 
 export interface ReviewDialogData {
@@ -36,8 +36,7 @@ export class ReviewReservationModalComponent {
 	readonly isSameDay: boolean;
 	readonly duration: string;
 
-	readonly rooms: Signal<Room[]>;
-	readonly roomName: Signal<string>;
+	readonly roomName: WritableSignal<string>;
 
 	readonly decision: WritableSignal<ReviewDecision | null> = signal(null);
 	readonly submitting: WritableSignal<boolean> = signal(false);
@@ -74,6 +73,7 @@ export class ReviewReservationModalComponent {
 		private ref: DynamicDialogRef,
 		private config: DynamicDialogConfig<ReviewDialogData>,
 		private destroyRef: DestroyRef,
+		private roomApi: RoomApiService,
 	) {
 		this.reservation = this.config.data.reservation;
 		this.startTime = new Date(this.reservation.startTime);
@@ -81,14 +81,14 @@ export class ReviewReservationModalComponent {
 		this.isSameDay = this.startTime.toDateString() === this.endTime.toDateString();
 		this.duration = formatDuration(this.startTime, this.endTime);
 
-		this.rooms = this.store.selectSignal(AppSelector.selectRooms);
-		this.roomName = computed(
-			() => this.rooms()?.find((room: Room) => room.code === this.reservation.room)?.name ?? this.reservation.room,
-		);
-
-		effect(() => {
-			if (!this.rooms()?.length) this.store.dispatch(AppAction.getRooms());
-		});
+		// Show the room code until the name is resolved via the search endpoint.
+		this.roomName = signal(this.reservation.room);
+		this.roomApi
+			.findByCode(this.reservation.room)
+			.pipe(takeUntilDestroyed(this.destroyRef))
+			.subscribe((room: Room | null) => {
+				if (room?.name) this.roomName.set(room.name);
+			});
 	}
 
 	selectDecision(decision: ReviewDecision): void {

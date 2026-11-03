@@ -94,38 +94,14 @@
 				<p-iconfield>
 					<p-floatlabel variant="in">
 						<p-inputicon class="pi pi-building" />
-						<p-select
+						<app-room-select
 							inputId="room"
-							[options]="rooms()"
 							formControlName="room"
-							optionLabel="name"
-							optionValue="code"
-							[filter]="true"
-							filterBy="name,code"
-							[showClear]="!isReadOnly()"
 							[readonly]="isReadOnly()"
-							appendTo="body"
-							class="w-full"
-						>
-							<ng-template #selectedItem let-room>
-								@if (room) {
-									<div class="ml-4 room-selected">
-										<span>{{ room.name }}</span>
-										<span class="room-code">{{ room.code }}</span>
-									</div>
-								}
-							</ng-template>
-							<ng-template #item let-room>
-								<div class="room-option">
-									<span class="room-option-icon"><i [class]="roomTypeIcons[$any(room.type)] ?? 'pi pi-building'"></i></span>
-									<span class="room-option-name">{{ room.name }}</span>
-									<span class="room-code">{{ room.code }}</span>
-									@if (room.capacity) {
-										<span class="room-option-capacity"><i class="pi pi-users"></i>{{ room.capacity }}</span>
-									}
-								</div>
-							</ng-template>
-						</p-select>
+							[showClear]="!isReadOnly()"
+							[indent]="true"
+							(roomSelected)="selectedRoom.set($event)"
+						/>
 						<label for="room">{{ 'reservation.room' | translate | required }}</label>
 					</p-floatlabel>
 				</p-iconfield>

@@ -29,8 +29,6 @@ enum AppActionType {
 	GET_ROOM = '[ROOM] Get Room',
 	GET_ROOM_SUCCESS = '[ROOM] Get Room Success',
 	CLEAR_ROOM = '[ROOM] Clear Room',
-	GET_ROOMS = '[ROOM] Get Rooms',
-	GET_ROOMS_SUCCESS = '[ROOM] Get Rooms Success',
 	SEARCH_ROOMS = '[ROOM] Search Rooms',
 	SEARCH_ROOMS_SUCCESS = '[ROOM] Search Rooms Success',
 	CREATE_ROOM = '[ROOM] Create Room',
@@ -78,8 +76,6 @@ export const userFailure = createAction(AppActionType.USER_FAILURE, props<{ erro
 export const getRoom = createAction(AppActionType.GET_ROOM, props<{ uuid: string }>());
 export const getRoomSuccess = createAction(AppActionType.GET_ROOM_SUCCESS, props<{ room: Room }>());
 export const clearRoom = createAction(AppActionType.CLEAR_ROOM);
-export const getRooms = createAction(AppActionType.GET_ROOMS);
-export const getRoomsSuccess = createAction(AppActionType.GET_ROOMS_SUCCESS, props<{ rooms: Room[] }>());
 export const searchRooms = createAction(AppActionType.SEARCH_ROOMS, props<{ searchRequest: SearchRequest<RoomFilter> }>());
 export const searchRoomsSuccess = createAction(AppActionType.SEARCH_ROOMS_SUCCESS, props<{ searchResponse: SearchResponse<Room> }>());
 export const createRoom = createAction(AppActionType.CREATE_ROOM, props<{ room: Room }>());

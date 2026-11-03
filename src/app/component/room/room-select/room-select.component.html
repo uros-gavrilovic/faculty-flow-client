@@ -1,0 +1,59 @@
+<p-select
+	[inputId]="inputId()"
+	[options]="options()"
+	[ngModel]="value()"
+	(ngModelChange)="onSelect($event)"
+	optionLabel="name"
+	optionValue="code"
+	[filter]="true"
+	filterBy="name"
+	[resetFilterOnHide]="true"
+	[placeholder]="placeholder()"
+	[showClear]="showClear() && !readonly()"
+	[readonly]="readonly()"
+	[disabled]="disabled()"
+	[loading]="loading()"
+	[emptyMessage]="(loading() ? 'common.loading' : 'room.select.empty') | translate"
+	[emptyFilterMessage]="(loading() ? 'common.loading' : 'room.select.empty') | translate"
+	[virtualScroll]="true"
+	[virtualScrollItemSize]="itemSize"
+	[virtualScrollOptions]="virtualScrollOptions"
+	scrollHeight="18rem"
+	appendTo="body"
+	class="w-full"
+	(onShow)="onShow()"
+	(onHide)="onHide()"
+	(onFilter)="onFilter($event.filter)"
+	(onBlur)="onBlur()"
+>
+	<ng-template #selectedItem let-room>
+		@if (room) {
+			<div class="room-selected" [class.ml-4]="indent()">
+				<span class="room-selected-name">{{ room.name }}</span>
+				<span class="room-code">{{ room.code }}</span>
+			</div>
+		}
+	</ng-template>
+
+	<ng-template #item let-room>
+		<div class="room-option">
+			<span class="room-option-icon">
+				<i [class]="roomTypeIcons[$any(room.type)] ?? 'pi pi-building'"></i>
+			</span>
+			<span class="room-option-name">{{ room.name }}</span>
+			<span class="room-code">{{ room.code }}</span>
+			@if (room.capacity) {
+				<span class="room-option-capacity"><i class="pi pi-users"></i>{{ room.capacity }}</span>
+			}
+		</div>
+	</ng-template>
+
+	<ng-template #footer>
+		@if (loadingMore()) {
+			<div class="room-select-footer">
+				<i class="pi pi-spinner pi-spin"></i>
+				<span>{{ 'common.loading' | translate }}</span>
+			</div>
+		}
+	</ng-template>
+</p-select>
