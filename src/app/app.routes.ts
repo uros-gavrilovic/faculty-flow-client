@@ -10,10 +10,12 @@ import { UserTableComponent } from './component/user/user-table/user-table.compo
 import { roleGuard } from './guard/authorization.guard';
 import { UserRole } from './model/user.model';
 import { RoomsPageComponent } from './page/rooms-page/rooms-page.component';
+import { VerifyAccountPageComponent } from './page/verify-account-page/verify-account-page.component';
 
 export const routes: Routes = [
 	{ path: '', canActivate: [authRedirectGuard], pathMatch: 'full', component: LoginPageComponent },
 	{ path: 'login', canActivate: [loginGuard], component: LoginPageComponent },
+	{ path: 'verify-account', component: VerifyAccountPageComponent },
 	{
 		path: '',
 		canActivate: [authenticationGuard],

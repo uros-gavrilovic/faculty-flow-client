@@ -2,7 +2,14 @@
 	"auth": {
 		"sign-in": "Sign In",
 		"username": "Username",
-		"password": "Password"
+		"password": "Password",
+		"verify": {
+			"loading": "Verifying your account...",
+			"success": "User account successfully validated.",
+			"redirect": "Returning you back to Login Page in {{seconds}} sec.",
+			"error": "Verification link is invalid or has expired.",
+			"back-to-login": "Back to Login"
+		}
 	},
 	"reservation": {
 		"panel-title": "Reservations",

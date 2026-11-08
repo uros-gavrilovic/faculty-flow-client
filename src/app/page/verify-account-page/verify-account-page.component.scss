@@ -1,0 +1,52 @@
+.login-wrapper {
+	position: relative;
+	z-index: 2;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.login-card {
+	width: 320px;
+	padding: 2rem;
+	border-radius: 14px;
+
+	background: rgba(20, 25, 35, 0.55);
+	backdrop-filter: blur(12px);
+
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+
+.title {
+	color: #fff;
+	text-align: center;
+	margin-bottom: 1.5rem;
+}
+
+.status {
+	text-align: center;
+	color: rgba(255, 255, 255, 0.85);
+	margin-bottom: 1.5rem;
+}
+
+.status-icon {
+	display: block;
+	font-size: 3rem;
+	margin-bottom: 1rem;
+
+	&.success {
+		color: #4ade80;
+	}
+
+	&.error {
+		color: #f87171;
+	}
+}
+
+.headline {
+	color: #fff;
+	font-weight: 600;
+	font-size: 1.1rem;
+}

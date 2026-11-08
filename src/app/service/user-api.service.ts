@@ -23,6 +23,10 @@ export class UserApiService {
 		return this.httpClient.post<User>(`${this.AUTH_API}/register`, request);
 	}
 
+	verifyAccount(token: string): Observable<User> {
+		return this.httpClient.get<User>(`${this.AUTH_API}/verify-account`, { params: { token } });
+	}
+
 	getUser(request: { uuid?: string; username?: string }): Observable<User> {
 		return this.httpClient.get<User>(`${this.USER_API}`, {
 			params: {

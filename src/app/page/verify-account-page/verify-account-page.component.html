@@ -1,0 +1,41 @@
+<div class="login-wrapper">
+	<div class="login-card">
+		<h2 class="title">Faculty<i>Flow</i></h2>
+
+		@switch (status()) {
+			@case ('loading') {
+				<div class="status">
+					<i class="pi pi-spin pi-spinner status-icon"></i>
+					<p>{{ 'auth.verify.loading' | translate }}</p>
+				</div>
+			}
+			@case ('success') {
+				<div class="status">
+					<i class="pi pi-check-circle status-icon success"></i>
+					<p class="headline">{{ 'auth.verify.success' | translate }}</p>
+					<p>{{ 'auth.verify.redirect' | translate: { seconds: countdown() } }}</p>
+				</div>
+			}
+			@case ('error') {
+				<div class="status">
+					<i class="pi pi-times-circle status-icon error"></i>
+					<p class="headline">{{ 'auth.verify.error' | translate }}</p>
+				</div>
+			}
+		}
+
+		@if (status() !== 'loading') {
+			<p-button
+				styleClass="w-full"
+				[label]="'auth.verify.back-to-login' | translate"
+				[raised]="true"
+				(onClick)="goToLogin()">
+				<ng-template pTemplate="icon">
+					<i class="material-icons">login</i>
+				</ng-template>
+			</p-button>
+		}
+	</div>
+</div>
+
+<app-background />
