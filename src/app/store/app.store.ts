@@ -3,6 +3,7 @@ import { Token } from '../model/token.model';
 import { Reservation } from '../model/reservation.model';
 import { Room } from '../model/room.model';
 import { SearchRequest, SearchResponse } from '../model/search.model';
+import { DEFAULT_LANGUAGE, Language } from '../constant/language.constant';
 
 export const APP_STATE_KEY: string = 'app';
 
@@ -16,6 +17,7 @@ export interface AppState<F = unknown> {
 	reservation: Reservation;
 	reservations: SearchResponse<Reservation>;
 	searchRequest: SearchRequest<F>;
+	language: Language;
 }
 
 export const INITIAL_APP_STATE: AppState = (() => {
@@ -35,5 +37,6 @@ export const INITIAL_APP_STATE: AppState = (() => {
 		reservation: null,
 		reservations: null,
 		searchRequest: null,
+		language: DEFAULT_LANGUAGE,
 	};
 })();

@@ -5,6 +5,7 @@ import { User } from '../model/user.model';
 import { Room } from '../model/room.model';
 import { Reservation } from '../model/reservation.model';
 import { SearchRequest, SearchResponse } from '../model/search.model';
+import { DEFAULT_LANGUAGE, Language } from '../constant/language.constant';
 
 export const selectAppState = createFeatureSelector<AppState>(APP_STATE_KEY);
 
@@ -16,3 +17,4 @@ export const selectRoom = createSelector(selectAppState, (state: AppState): Room
 export const selectReservation = createSelector(selectAppState, (state: AppState): Reservation => state.reservation);
 export const selectReservations = createSelector(selectAppState, (state: AppState): SearchResponse<Reservation> => state.reservations);
 export const selectSearchRequest = createSelector(selectAppState, (state: AppState): SearchRequest<any> => state.searchRequest);
+export const selectLanguage = createSelector(selectAppState, (state: AppState): Language => state.language ?? DEFAULT_LANGUAGE);

@@ -95,4 +95,9 @@ export const appReducer = createReducer(
 		...state,
 		searchRequest,
 	})),
+
+	on(AppAction.setLanguage, (state: AppState, { language }): AppState => ({
+		...state,
+		language,
+	})),
 );

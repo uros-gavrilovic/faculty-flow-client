@@ -22,7 +22,7 @@
 						routerLinkActive="active"
 						[routerLinkActiveOptions]="{ exact: false }">
 						<i [class]="'pi ' + item.icon"></i>
-						{{ item.label }}
+						{{ item.label | translate }}
 					</button>
 				}
 			</nav>
@@ -30,6 +30,16 @@
 
 		<ng-template #end>
 			<div class="toolbar-end">
+				<p-button
+					[label]="currentLang().toUpperCase()"
+					icon="pi pi-globe"
+					[text]="true"
+					severity="secondary"
+					size="small"
+					[pTooltip]="'menu.change-language' | translate"
+					tooltipPosition="bottom"
+					(onClick)="onToggleLanguage()" />
+
 				<p-avatar
 					[label]="currentUserInitials()"
 					[style]="{ 'background-color': '#ece9fc', color: '#2a1261', width: '32px', height: '32px', cursor: 'pointer' }"
@@ -44,7 +54,7 @@
 					<hr>
 					<div class="menu-divider"></div>
 					<div class="menu-item danger" (click)="onLogout()">
-						<i class="pi pi-sign-out"></i> Log out
+						<i class="pi pi-sign-out"></i> {{ 'menu.logout' | translate }}
 					</div>
 				</p-popover>
 			</div>

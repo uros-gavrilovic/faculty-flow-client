@@ -1,19 +1,20 @@
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { inject } from '@angular/core';
-import { UserApiService } from '../service/user-api.service';
+import { UserApiService } from '../api/user-api.service';
 import * as AppAction from './app.action';
 import * as AppSelector from './app.selector';
-import { catchError, switchMap, map, tap, withLatestFrom, take, pipe, of } from 'rxjs';
+import { catchError, switchMap, map, tap, withLatestFrom, take, pipe, of, distinctUntilChanged } from 'rxjs';
 import { Router } from '@angular/router';
 import { MessageService } from '../service/message.service';
 import { MessageSeverity } from '../model/message-severity.model';
 import { PageUrl } from '../constant/page-url.constant';
-import { ReservationApiService } from '../service/reservation-api.service';
+import { ReservationApiService } from '../api/reservation-api.service';
 import { Reservation } from '../model/reservation.model';
 import { LoginResponse } from '../model/auth.model';
-import { RoomApiService } from '../service/room-api.service';
+import { RoomApiService } from '../api/room-api.service';
 import { Store } from '@ngrx/store';
 import { Room } from '../model/room.model';
+import { TranslateService } from '@ngx-translate/core';
 
 export const loginEffect = createEffect(
 	() => {
@@ -460,4 +461,16 @@ export const saveSearchRequestEffect = createEffect(
 			map(({ searchRequest }) => AppAction.saveSearchRequest({ searchRequest })),
 		);
 	}, { functional: true },
+);
+
+export const syncLanguageEffect = createEffect(
+	() => {
+		const store = inject(Store);
+		const translateService = inject(TranslateService);
+
+		return store.select(AppSelector.selectLanguage).pipe(
+			distinctUntilChanged(),
+			tap((language) => translateService.use(language)),
+		);
+	}, { functional: true, dispatch: false },
 );

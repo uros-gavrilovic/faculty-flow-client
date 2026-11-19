@@ -1,0 +1,275 @@
+{
+	"auth": {
+		"sign-in": "Prijavi se",
+		"username": "Korisničko ime",
+		"password": "Lozinka",
+		"verify": {
+			"loading": "Verifikacija naloga je u toku...",
+			"success": "Korisnički nalog je uspešno verifikovan.",
+			"redirect": "Vraćamo vas na stranicu za prijavu za {{seconds}} sek.",
+			"error": "Link za verifikaciju je nevažeći ili je istekao.",
+			"back-to-login": "Nazad na prijavu"
+		}
+	},
+	"reservation": {
+		"panel-title": "Rezervacije",
+		"panel-description": "Upravljajte rezervacijama prostorija, odobrenjima i zahtevima",
+		"preview": "Pregled rezervacije",
+		"title": "Naziv rezervacije",
+		"name": "Naziv",
+		"room": "Prostorija",
+		"start": "Vreme početka",
+		"start-time": "Vreme početka",
+		"end": "Vreme završetka",
+		"end-time": "Vreme završetka",
+		"requested-by": "Podnosilac zahteva",
+		"reserved-by": "Rezervisao/la",
+		"reviewed-by": "Pregledao/la",
+		"event-type": "Tip događaja",
+		"status": "Status",
+		"note": "Napomena",
+		"comment": "Komentar",
+		"selected": "izabrano",
+		"approve": "Odobri",
+		"reject": "Odbij",
+		"review": "Pregledaj",
+		"pagination": "Prikazano {first} do {last} od {totalRecords} rezervacija"
+	},
+	"room": {
+		"panel-title": "Prostorije",
+		"panel-description": "Upravljajte dostupnim prostorijama, dodajte nove ili izmenite/obrišite postojeće",
+		"name": "Naziv prostorije",
+		"code": "Šifra prostorije",
+		"type": "Tip prostorije",
+		"floor": "Sprat",
+		"building": "Zgrada",
+		"capacity": "Kapacitet",
+		"old-name": "Prethodni naziv",
+		"add-room": "Dodaj prostoriju",
+		"select": {
+			"empty": "Nije pronađena nijedna prostorija"
+		}
+	},
+	"employee": {
+		"panel-title": "Zaposleni",
+		"panel-description": "Upravljajte osobljem fakulteta, ovlašćenjima i nalozima",
+		"first-name": "Ime",
+		"last-name": "Prezime",
+		"email": "Email"
+	},
+	"user-management": {
+		"title": "Upravljanje korisnicima",
+		"user-information": "Podaci o korisniku",
+		"employee-information": "Podaci o zaposlenom",
+		"role-and-permissions": "Uloga i ovlašćenja",
+		"users-count": "Broj korisnika: {{count}}",
+		"user-not-verified": "Korisnik nije verifikovan",
+		"name": "Ime",
+		"surname": "Prezime",
+		"username": "Korisničko ime",
+		"password": "Lozinka",
+		"email": "Email",
+		"roles": "Uloge",
+		"actions": "Akcije",
+		"no-roles": "Nema dodeljenih uloga",
+		"settings": "Podešavanja korisnika",
+		"showing-users": "Prikazano {first} do {last} od {totalRecords} korisnika",
+		"add-user": "Dodaj zaposlenog",
+		"save": "Sačuvaj",
+		"personal-information": "Lični podaci",
+		"account": "Nalog",
+		"verified": "Verifikovan",
+		"pending": "Čeka verifikaciju",
+		"role-description": {
+			"administrator": "Upravlja prostorijama, zaposlenima i pregleda rezervacije",
+			"user": "Podnosi zahteve i upravlja sopstvenim rezervacijama"
+		}
+	},
+	"modal": {
+		"reservation-preview": {
+			"submit": "Pošalji zahtev",
+			"update": "Izmeni rezervaciju",
+			"title-create": "Zahtev za rezervaciju",
+			"new-reservation": "Nova rezervacija",
+			"new-reservation-hint": "Izaberite prostoriju, tip događaja i vreme ispod",
+			"details": "Detalji",
+			"schedule": "Termin",
+			"review": "Pregled",
+			"note-placeholder": "Sve što bi recenzent trebalo da zna (oprema, broj prisutnih…)",
+			"end-before-start": "Vreme završetka mora biti posle vremena početka",
+			"locked-status": "Ova rezervacija ima status {{status}} i više se ne može menjati.",
+			"locked-permission": "Samo podnosilac zahteva ili administrator mogu da menjaju ovu rezervaciju."
+		},
+		"edit-employee": {
+			"title": "Izmena podataka o zaposlenom",
+			"submit": "Sačuvaj izmene"
+		},
+		"add-employee": {
+			"title": "Dodavanje novog zaposlenog",
+			"submit": "Dodaj zaposlenog"
+		},
+		"room": {
+			"create": "Kreiranje prostorije",
+			"edit": "Izmena prostorije",
+			"new-room": "Nova prostorija",
+			"new-room-hint": "Popunite podatke ispod da biste dodali prostoriju",
+			"general": "Opšte",
+			"location": "Lokacija i kapacitet",
+			"old-name-hint": "Opciono — naziv pod kojim je prostorija ranije bila poznata",
+			"building-label": "Zgrada: {{building}}",
+			"floor-label": "Sprat {{floor}}",
+			"seats": "Broj mesta: {{count}}",
+			"submit-create": "Kreiraj prostoriju",
+			"submit-update": "Sačuvaj izmene",
+			"delete-confirm": {
+				"title": "Brisanje prostorije",
+				"message": "Da li ste sigurni da želite da obrišete <b>{{name}}</b>? Ova radnja se ne može poništiti."
+			}
+		},
+		"review-reservation": {
+			"title": "Pregled rezervacije",
+			"date": "Datum",
+			"time": "Vreme",
+			"decision": "Odluka",
+			"approve-description": "Prostorija će biti rezervisana",
+			"reject-description": "Zahtev će biti odbijen",
+			"comment-placeholder": "Dodajte napomenu za podnosioca zahteva (npr. razlog odbijanja)",
+			"confirm": "Potvrdi",
+			"confirm-approve": "Odobri rezervaciju",
+			"confirm-reject": "Odbij rezervaciju"
+		},
+		"employee-settings": {
+			"new-employee": "Novi zaposleni",
+			"new-employee-hint": "Popunite podatke ispod da biste kreirali nalog",
+			"username-locked": "Korisničko ime se ne može promeniti nakon kreiranja naloga"
+		}
+	},
+	"common": {
+		"actions": "Akcije",
+		"cancel": "Otkaži",
+		"submit": "Pošalji",
+		"create": "Kreiraj",
+		"save": "Sačuvaj",
+		"update": "Izmeni",
+		"edit": "Izmeni",
+		"delete": "Obriši",
+		"confirm": "Potvrdi",
+		"yes": "Da",
+		"no": "Ne",
+		"filters": "Filteri",
+		"no-results": "Nema rezultata",
+		"loading": "Učitavanje...",
+		"close": "Zatvori",
+		"optional": "opciono"
+	},
+	"validation": {
+		"required-field": "Ovo polje je obavezno",
+		"invalid-email": "Unesite ispravnu email adresu"
+	},
+	"enum": {
+		"building": {
+			"old": "Stara",
+			"new": "Nova"
+		},
+		"room-type": {
+			"classroom": "Učionica",
+			"amphitheater": "Amfiteatar",
+			"computer_lab": "Računarska laboratorija",
+			"office": "Kancelarija",
+			"other": "Ostalo"
+		},
+		"reservation": {
+			"event-type": {
+				"lecture": "Predavanje",
+				"exercise": "Vežbe",
+				"laboratory": "Laboratorijske vežbe",
+				"exam": "Ispit",
+				"consultation": "Konsultacije",
+				"other": "Ostalo"
+			},
+			"status": {
+				"pending": "Na čekanju",
+				"canceled": "Otkazana",
+				"accepted": "Odobrena",
+				"rejected": "Odbijena"
+			}
+		},
+		"user-role": {
+			"administrator": "Administrator",
+			"user": "Korisnik"
+		}
+	},
+	"messages": {
+		"error": {
+			"generic": "Došlo je do greške"
+		},
+		"auth": {
+			"login": {
+				"title": "Prijavljeni ste",
+				"message": "Drago nam je što ste ponovo tu!"
+			},
+			"logout": {
+				"title": "Odjavljeni ste",
+				"message": "Vidimo se!"
+			},
+			"login-failed": {
+				"title": "Neuspešna prijava",
+				"message": "Pogrešno korisničko ime ili lozinka. Pokušajte ponovo."
+			},
+			"token-expired": {
+				"title": "Sesija je istekla",
+				"message": "Vaša sesija je istekla. Prijavite se ponovo."
+			},
+			"insufficient-privileges": {
+				"title": "Pristup odbijen",
+				"message": "Nemate dovoljna ovlašćenja za pristup ovom resursu."
+			}
+		},
+		"user-management": {
+			"user-updated": {
+				"title": "Korisnik izmenjen",
+				"message": "Podešavanja korisnika su uspešno sačuvana."
+			},
+			"user-added": {
+				"title": "Korisnik dodat",
+				"message": "Novi korisnik je uspešno dodat."
+			}
+		},
+		"reservation": {
+			"requested": {
+				"title": "Rezervacija zatražena",
+				"message": "Zahtev za rezervaciju je uspešno poslat"
+			},
+			"updated": {
+				"title": "Rezervacija izmenjena",
+				"message": "Rezervacija je uspešno izmenjena"
+			},
+			"reviewed": {
+				"title": "Rezervacija izmenjena",
+				"message": "Rezervacija je uspešno pregledana"
+			}
+		},
+		"room": {
+			"created": {
+				"title": "Prostorija kreirana",
+				"message": "Prostorija je uspešno kreirana"
+			},
+			"updated": {
+				"title": "Prostorija izmenjena",
+				"message": "Prostorija je uspešno izmenjena"
+			},
+			"deleted": {
+				"title": "Prostorija obrisana",
+				"message": "Prostorija je uspešno obrisana"
+			}
+		}
+	},
+	"menu": {
+		"schedule": "Raspored",
+		"reservations": "Rezervacije",
+		"rooms": "Prostorije",
+		"employees": "Zaposleni",
+		"logout": "Odjavi se",
+		"change-language": "Promeni jezik"
+	}
+}

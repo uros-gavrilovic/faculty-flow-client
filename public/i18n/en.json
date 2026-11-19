@@ -263,5 +263,13 @@
 				"message": "Room has been successfully deleted"
 			}
 		}
+	},
+	"menu": {
+		"schedule": "Schedule",
+		"reservations": "Reservations",
+		"rooms": "Rooms",
+		"employees": "Employees",
+		"logout": "Log out",
+		"change-language": "Change language"
 	}
 }

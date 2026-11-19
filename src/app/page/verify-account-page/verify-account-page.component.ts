@@ -5,7 +5,7 @@ import { interval, take } from 'rxjs';
 import { BackgroundComponent } from '../../component/background/background.component';
 import { PRIMENG_MODULES } from '../../modules/ui.module';
 import { COMMON_MODULES } from '../../modules/common.module';
-import { UserApiService } from '../../service/user-api.service';
+import { UserApiService } from '../../api/user-api.service';
 import { PageUrl } from '../../constant/page-url.constant';
 
 type VerifyStatus = 'loading' | 'success' | 'error';

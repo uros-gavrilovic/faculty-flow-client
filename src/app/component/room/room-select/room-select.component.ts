@@ -6,7 +6,7 @@ import { COMMON_MODULES } from '../../../modules/common.module';
 import { PRIMENG_MODULES } from '../../../modules/ui.module';
 import { Room } from '../../../model/room.model';
 import { SearchResponse } from '../../../model/search.model';
-import { RoomApiService } from '../../../service/room-api.service';
+import { RoomApiService } from '../../../api/room-api.service';
 import { ROOM_TYPE_ICONS } from '../../../constant/icon.constant';
 
 interface PageQuery {

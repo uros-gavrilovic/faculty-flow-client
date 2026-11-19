@@ -6,12 +6,12 @@
 				pInputText
 				class="w-full"
 				formControlName="name"
-				placeholder="Reservation name">
+				[placeholder]="'reservation.title' | translate">
 		</p-iconfield>
 	</div>
 
 	<div class="col-12 md:col-3">
-		<app-room-select formControlName="room" placeholder="Room" />
+		<app-room-select formControlName="room" [placeholder]="'reservation.room' | translate" />
 	</div>
 
 	<div class="col-12 md:col-2">
@@ -19,10 +19,12 @@
 			class="w-full"
 			formControlName="status"
 			[options]="statuses"
-			placeholder="Status"
+			[placeholder]="'reservation.status' | translate"
 			[showClear]="true"
-			[appendTo]="'body'"
-		/>
+			[appendTo]="'body'">
+			<ng-template #selectedItem let-status>{{ status | translateEnum: 'enum.reservation.status' }}</ng-template>
+			<ng-template #item let-status>{{ status | translateEnum: 'enum.reservation.status' }}</ng-template>
+		</p-select>
 	</div>
 
 	<div class="col-12 md:col-2">
@@ -30,7 +32,7 @@
 			pInputText
 			class="w-full"
 			formControlName="reservedBy"
-			placeholder="Reserved by">
+			[placeholder]="'reservation.reserved-by' | translate">
 	</div>
 
 	<div class="md:col-1">

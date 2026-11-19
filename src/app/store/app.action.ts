@@ -4,8 +4,12 @@ import { Reservation, ReservationFilter, ReservationRequest, ReservationReview }
 import { LoginRequest, LoginResponse, RegisterRequest } from '../model/auth.model';
 import { Room, RoomFilter } from '../model/room.model';
 import { SearchRequest, SearchResponse } from '../model/search.model';
+import { Language } from '../constant/language.constant';
 
 enum AppActionType {
+	// App
+	SET_LANGUAGE = '[APP] Set Language',
+
 	// Auth
 	LOG_IN = '[AUTH] Log In',
 	LOG_IN_SUCCESS = '[AUTH] Log In Success',
@@ -55,6 +59,8 @@ enum AppActionType {
 
 	SAVE_SEARCH_REQUEST = '[SEARCH] Save Search Request',
 }
+
+export const setLanguage = createAction(AppActionType.SET_LANGUAGE, props<{ language: Language }>(),);
 
 export const loginUser = createAction(AppActionType.LOG_IN, props<{ request: LoginRequest }>());
 export const loginUserSuccess = createAction(AppActionType.LOG_IN_SUCCESS, props<{ loginResponse: LoginResponse }>());

@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 @Pipe({
 	name: 'translateEnum',
 	standalone: true,
+	pure: false,
 })
 export class TranslateEnumPipe implements PipeTransform {
 

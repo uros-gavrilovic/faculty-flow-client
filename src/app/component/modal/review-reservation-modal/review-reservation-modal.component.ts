@@ -11,7 +11,7 @@ import { Reservation, ReservationReview, ReservationStatus } from '../../../mode
 import { Room } from '../../../model/room.model';
 import { Severity } from '../../../model/ui.model';
 import * as AppAction from '../../../store/app.action';
-import { RoomApiService } from '../../../service/room-api.service';
+import { RoomApiService } from '../../../api/room-api.service';
 import { formatDuration } from '../../../util/util-functions';
 
 export interface ReviewDialogData {

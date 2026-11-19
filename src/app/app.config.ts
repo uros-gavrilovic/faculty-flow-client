@@ -17,6 +17,7 @@ import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { errorInterceptor } from './interceptor/error.interceptor';
+import { languageInterceptor } from './interceptor/language.interceptor';
 
 export const appConfig: ApplicationConfig = {
 	providers: [
@@ -35,7 +36,8 @@ export const appConfig: ApplicationConfig = {
 		}),
 		provideHttpClient(withInterceptors([
 			errorInterceptor,
-			authorizationInterceptor
+			authorizationInterceptor,
+			languageInterceptor,
 		])),
 		providePrimeNG({
 			theme: {
