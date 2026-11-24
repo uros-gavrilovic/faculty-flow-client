@@ -1,59 +1,65 @@
-# FacultyFlowClient
+# faculty-flow-client
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.10.
+Front-end for **Faculty Flow**, an app for managing faculty room reservations.
 
-## Development server
+## Tech stack
 
-To start a local development server, run:
+| Library                                 | Purpose                                  |
+|-----------------------------------------|------------------------------------------|
+| Angular 21                              | Framework                                |
+| NgRx (Store, Effects, Store DevTools)   | State management                         |
+| PrimeNG, PrimeFlex, Bootstrap           | UI components and layout                 |
+| Syncfusion Schedule                     | Reservation schedule / calendar view     |
+| ngx-translate                           | Translations (English and Serbian)       |
+| tsParticles                             | Animated background                      |
+| Vitest                                  | Unit tests                               |
 
-```bash
-ng serve
-```
+## Requirements
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- Node.js 24 (see `.nvmrc`; run `nvm use` if you use [nvm](https://github.com/nvm-sh/nvm))
+- npm
+- A running back-end (see the `faculty-flow-server` project), reachable at `http://localhost:9000`
+- Docker (optional, for building the production image)
 
-## Code scaffolding
+## Running
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Development mode
 
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Start the back-end in development mode first (`bash run.sh dev` in `faculty-flow-server`), then:
 
 ```bash
-ng build
+npm install      # Install dependencies
+ng serve   # Start the dev server at http://localhost:4200
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Production mode
 
-## Running unit tests
+The production image is built and pushed to GitHub Container Registry
+(`ghcr.io/uros-gavrilovic/faculty-flow-frontend:latest`) on every push to `main`.
+It is started automatically by `bash run.sh prod` in `faculty-flow-server`.
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+To build and run the image locally instead:
 
 ```bash
-ng test
+docker build -t faculty-flow-frontend .
+docker run -p 4200:80 faculty-flow-frontend
 ```
 
-## Running end-to-end tests
+The image serves the compiled app with nginx on port 80.
 
-For end-to-end (e2e) testing, run:
+## Configuration
 
-```bash
-ng e2e
-```
+Back-end URLs are set in `src/environment/environment.ts` (development) and
+`src/environment/environment.prod.ts` (production). Both point to the API gateway at
+`http://localhost:9000` by default:
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+| Key              | Default                                   |
+|------------------|-------------------------------------------|
+| `authApi`        | `http://localhost:9000/api/auth`          |
+| `userApi`        | `http://localhost:9000/api/user`          |
+| `roomApi`        | `http://localhost:9000/api/room`          |
+| `reservationApi` | `http://localhost:9000/api/reservation`   |
 
-## Additional Resources
+## License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+See [LICENSE](LICENSE).
